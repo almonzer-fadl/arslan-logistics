@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shipment Tracking &amp; Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-slate-900 font-display">
+<div class="relative flex min-h-screen flex-col bg-background-light">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-slate-200 bg-white px-8 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<span class="material-symbols-outlined text-3xl font-bold">sailing</span>
+<h2 class="text-slate-900 text-xl font-bold tracking-tight">SeaLogix Portal</h2>
+</div>
+<div class="hidden lg:flex items-center gap-6">
+<a class="text-slate-600 hover:text-primary text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-primary border-b-2 border-primary py-4 text-sm font-semibold" href="#">Shipments</a>
+<a class="text-slate-600 hover:text-primary text-sm font-medium transition-colors" href="#">Quotes</a>
+<a class="text-slate-600 hover:text-primary text-sm font-medium transition-colors" href="#">Carriers</a>
+<a class="text-slate-600 hover:text-primary text-sm font-medium transition-colors" href="#">Reports</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<label class="hidden md:flex flex-col w-64">
+<div class="flex items-stretch rounded-lg bg-slate-100 h-9">
+<div class="text-slate-400 flex items-center justify-center pl-3">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="w-full border-none bg-transparent focus:ring-0 text-sm placeholder:text-slate-400" placeholder="Global Search..."/>
+</div>
+</label>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-9 w-9 bg-slate-100 text-slate-600 hover:bg-slate-200">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-9 w-9 bg-slate-100 text-slate-600 hover:bg-slate-200">
+<span class="material-symbols-outlined text-xl">settings</span>
+</button>
+</div>
+<div class="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 overflow-hidden">
+<img alt="User" class="h-full w-full object-cover" data-alt="Professional user profile avatar photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJoTXURE8vL2mzxpE3BgjjYhlXsBl979mi-zNpa7SlZ13HhUR5p-DSl9ZX_MY7DTkuJ0EI0VUV_u0Op5uQonH1mSfL4BOfuw-yahMaiNQJzDBHlEwoewRxHcUb9T2WUmuWJUcjUABf--BBj83iDiMX2ROpsyOecaHTLGfrIqau21QPzUwWE-ZBMUS2vnulWZtweNesGPS12g3kbxSbjJpMFFd4KJK8G2bhHH0d6boD4l6zyg5Ywm_0ZzoXM1U4ZxziaDuckfe7Mlo"/>
+</div>
+</div>
+</header>
+<main class="flex-1 px-8 py-6">
+<!-- Header Section -->
+<div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-3xl font-black text-slate-900 tracking-tight">Shipment Tracking &amp; Management</h1>
+<p class="text-slate-500 mt-1">Real-time monitoring of your global sea freight operations.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 rounded-lg bg-white border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+<span class="material-symbols-outlined text-xl">download</span>
+                        Export Report
+                    </button>
+<button class="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90">
+<span class="material-symbols-outlined text-xl">add</span>
+                        New Shipment
+                    </button>
+</div>
+</div>
+<!-- Filters & Search -->
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-6">
+<div class="flex flex-wrap items-center gap-4">
+<div class="flex-1 min-w-[300px]">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-50 border-slate-200 rounded-lg focus:ring-primary focus:border-primary text-sm" placeholder="Search by Container ID, Carrier, or Route..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Filter By:</span>
+<div class="flex bg-slate-100 p-1 rounded-lg">
+<button class="px-4 py-1.5 text-sm font-medium rounded-md bg-white text-primary shadow-sm">All</button>
+<button class="px-4 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900">Shipped</button>
+<button class="px-4 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900">To Ship</button>
+</div>
+</div>
+<button class="flex items-center gap-2 rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-200">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+                        Advanced Filters
+                    </button>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+<!-- Data Table -->
+<div class="xl:col-span-3">
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 border-b border-slate-200">
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Container ID</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Carrier</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Route</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Status</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">ETA</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Cost Paid</th>
+<th class="px-6 py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-slate-50/80 transition-colors group cursor-pointer border-l-4 border-l-transparent hover:border-l-primary">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-bold text-slate-900">MSCU9021445</span>
+<span class="text-xs text-slate-400">40' High Cube</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-slate-100 flex items-center justify-center overflow-hidden">
+<img alt="Carrier" class="w-4" data-alt="MSC shipping line company logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACKf4nwcG3Pf1buiKmQ8nxL9ADrqKV4c1n6QffF7HBM9yReoijY-z8Vi21Npzy57V0L1ZcoexX3s0dT-gmKEaaBZ3nCbDgGSCqGRPBA6rCpf5mXPAB_9idHWnGYxq9SGv4kXp0uWO6UChKuaingLAbBebze_AnIP7YYScWPbZMBE_8Dz0Ybr9bDFzKTW-XcncoSiOqv47NZoua9yk2hLjKN9D3QR_EuRixzj4iDwzxn3R87DEMCFJyDRNW84NLZ3P6reQ7lgMIN0I"/>
+</div>
+<span class="text-sm font-medium">MSC Mediterranean</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-semibold">Shanghai (CNSHA)</span>
+<span class="text-xs text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">arrow_forward</span>
+                                                    Rotterdam (NLRTM)
+                                                </span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-700">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                                                On-vessel
+                                            </span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600">Oct 24, 2023</td>
+<td class="px-6 py-4 text-sm font-bold text-slate-900">$3,420.00</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/80 transition-colors group cursor-pointer border-l-4 border-l-transparent hover:border-l-primary">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-bold text-slate-900">MAEU4833210</span>
+<span class="text-xs text-slate-400">20' Standard</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-slate-100 flex items-center justify-center overflow-hidden">
+<img alt="Carrier" class="w-4" data-alt="Maersk shipping line company logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdBNtymMMVd1wyEG2HC2ISynoADvlxojJu1xmFIDKphslC8PuxBv69m6diRSVhWdC-wTjVVu2zLcQCamf0eKb75MteIe9FUx2FY4bjNew06ns5NLwND1HtpwcJtQtlcUug2SxlWp12JTcOBjPbajKhEnbnXQsHLYjbsc8i_Obtj3PJn774JUkk1vZI_VXHYGbUGTI37GbTlGj_4NGpgzImxcAtVDBTffmoZSNHuGxFL4wD1KsYoF5vU-q0GHB_56tVBAgWee6ikvw"/>
+</div>
+<span class="text-sm font-medium">Maersk Line</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-semibold">Singapore (SGSIN)</span>
+<span class="text-xs text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">arrow_forward</span>
+                                                    Los Angeles (USLAX)
+                                                </span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                                                Port Arrival
+                                            </span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600">Oct 19, 2023</td>
+<td class="px-6 py-4 text-sm font-bold text-slate-900">$2,850.00</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/80 transition-colors group cursor-pointer border-l-4 border-l-transparent hover:border-l-primary">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-bold text-slate-900">COSU2291034</span>
+<span class="text-xs text-slate-400">40' Reefer</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-slate-100 flex items-center justify-center overflow-hidden">
+<img alt="Carrier" class="w-4" data-alt="COSCO shipping line company logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzCaGUHPNsBFwm9kbfHxQY5fqGVWRlO59FpWNatHAdQgd5yxOujYSBxkUTU6Ao0YLBUuT5qGbz1aiAW1y3DEYqh87KOLoM14PJEAga8EHMUUcA92muNZHJEEdt2F7tNtjE6CZLTU_3T-msHV37ekIv2ofqRxavCS6w6AFjRfLYfDDokVijn2p4rZyNpF6EqavbHYX9W9UnMkEsCgZmjgE_EhLH-gsMnbNr2WdFdgHS3dGa6nL192sHHpJ0rD9FFvFVvvTR0glceFw"/>
+</div>
+<span class="text-sm font-medium">COSCO Shipping</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-semibold">Busan (KRPUS)</span>
+<span class="text-xs text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">arrow_forward</span>
+                                                    Hamburg (DEHAM)
+                                                </span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-700">
+<span class="w-1.5 h-1.5 rounded-full bg-green-600"></span>
+                                                Delivered
+                                            </span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600">Oct 12, 2023</td>
+<td class="px-6 py-4 text-sm font-bold text-slate-900">$5,100.00</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/80 transition-colors group cursor-pointer border-l-4 border-l-transparent hover:border-l-primary">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-bold text-slate-900">NYKU7765412</span>
+<span class="text-xs text-slate-400">40' Standard</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-slate-100 flex items-center justify-center overflow-hidden">
+<img alt="Carrier" class="w-4" data-alt="ONE Ocean Network Express shipping logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwXnq28DVAIevHF_TqXlG5EtjxpD_3PdIeAP_YN84J8vAElHXvBFu2LtkUJxYYwG0w-h3KJ81xTOybOiKVQKU6maB9Hn1inKJ8Y3xtRlkPqzeoF-TyV_qtr7e-txKiv4RemjxrMHcnzyfE0R69vRRJL3kscX8xQoqkDhZ17w2zJh0Db2jYBCYomQgnRVqYYLKw8rzPbtbOX_d6zAvotUr9Oy7OfUqmziwCh-4RJXzNbah4Qfq3BtwIUQPi3K7x73xtK-CbZBExR1k"/>
+</div>
+<span class="text-sm font-medium">Ocean Network Exp</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-semibold">Jebel Ali (AEJEA)</span>
+<span class="text-xs text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">arrow_forward</span>
+                                                    London (GBLON)
+                                                </span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-700">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                                                On-vessel
+                                            </span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600">Nov 02, 2023</td>
+<td class="px-6 py-4 text-sm font-bold text-slate-900">$4,220.00</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+<span class="text-sm text-slate-500 font-medium">Showing 1-10 of 42 shipments</span>
+<div class="flex gap-1">
+<button class="h-8 w-8 rounded flex items-center justify-center border border-slate-200 text-slate-400 bg-white">
+<span class="material-symbols-outlined text-lg">chevron_left</span>
+</button>
+<button class="h-8 w-8 rounded flex items-center justify-center bg-primary text-white font-bold text-sm">1</button>
+<button class="h-8 w-8 rounded flex items-center justify-center border border-slate-200 text-slate-600 bg-white hover:bg-slate-50">2</button>
+<button class="h-8 w-8 rounded flex items-center justify-center border border-slate-200 text-slate-600 bg-white hover:bg-slate-50">3</button>
+<button class="h-8 w-8 rounded flex items-center justify-center border border-slate-200 text-slate-400 bg-white hover:bg-slate-50">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Tracking Map Sidebar -->
+<div class="xl:col-span-1">
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden sticky top-[100px]">
+<div class="p-4 border-b border-slate-200 flex items-center justify-between">
+<h3 class="font-bold text-slate-900">Tracking Map</h3>
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-bold uppercase">Live Updates</span>
+</div>
+<div class="relative h-64 w-full bg-slate-100">
+<!-- Placeholder for Map -->
+<img class="w-full h-full object-cover grayscale opacity-50" data-alt="Satellite map view of global ocean shipping routes" data-location="Indian Ocean" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn3rbtwUebc56BBu_8ga2nOytrxFgdbUTkk7ABkbMq9JHo7Q--yiPf6SCLV47T3z5olXNZ17iFcaJp5W_9iqo6aCwZyUbFyKrZf5OV3_Q_iTUh_Fr2g_qT249ebONgyOfVR_k3eUS2tdXNiWjfK1YrOaEARSViiCSVBCpAQvWifiVOuqY-7zUfuKXkbQbdSL_9BLF0_Jw7tI0FS0VJrRpqRs6w1QnBT_-JfxwLyVAlrzUYI3X1huFKlHufD4prhXvijXoY3raN2f4"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="relative">
+<div class="absolute -top-12 -left-12 w-24 h-24 bg-primary/20 rounded-full animate-ping"></div>
+<div class="bg-white p-2 rounded-lg shadow-xl border border-primary relative z-10 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">directions_boat</span>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-slate-400 uppercase leading-none">Vessel Name</span>
+<span class="text-xs font-bold text-slate-900">MSC LORETO</span>
+</div>
+</div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-8">
+<span class="material-symbols-outlined text-primary scale-150">location_on</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 space-y-4">
+<div>
+<h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Selected Shipment Details</h4>
+<div class="bg-slate-50 rounded-lg p-3 border border-slate-100">
+<div class="flex justify-between items-start mb-2">
+<span class="text-sm font-bold text-slate-900">MSCU9021445</span>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 uppercase">On-vessel</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="text-slate-500">Current Speed</span>
+<span class="text-slate-900 font-medium">18.4 knots</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-500">Distance to Port</span>
+<span class="text-slate-900 font-medium">1,240 nm</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-500">Heading</span>
+<span class="text-slate-900 font-medium">284° WNW</span>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<h4 class="text-xs font-bold text-slate-400 uppercase">Vessel Progress</h4>
+<div class="relative pl-6 space-y-4">
+<div class="absolute left-[9px] top-1 bottom-1 w-0.5 bg-slate-200"></div>
+<div class="relative">
+<div class="absolute -left-[23px] top-1.5 w-4 h-4 rounded-full bg-green-500 ring-4 ring-white"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-slate-900">Origin: Shanghai, CN</span>
+<span class="text-[10px] text-slate-400">Departed: Oct 02, 2023</span>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -left-[23px] top-1.5 w-4 h-4 rounded-full bg-primary ring-4 ring-white"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-slate-900">Last Ping: Malacca Strait</span>
+<span class="text-[10px] text-primary font-bold">In Transit - 4h ago</span>
+</div>
+</div>
+<div class="relative opacity-50">
+<div class="absolute -left-[23px] top-1.5 w-4 h-4 rounded-full bg-slate-200 ring-4 ring-white"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-slate-900">Dest: Rotterdam, NL</span>
+<span class="text-[10px] text-slate-400">Expected: Oct 24, 2023</span>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full py-2 bg-slate-900 text-white rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors">
+                                View Full Vessel History
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Mini Stats -->
+<footer class="bg-white border-t border-slate-200 px-8 py-4 mt-auto">
+<div class="flex flex-wrap justify-center md:justify-start gap-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined">directions_boat</span>
+</div>
+<div class="flex flex-col">
+<span class="text-lg font-black text-slate-900">24</span>
+<span class="text-xs text-slate-500 font-medium">In Transit</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600">
+<span class="material-symbols-outlined">warehouse</span>
+</div>
+<div class="flex flex-col">
+<span class="text-lg font-black text-slate-900">12</span>
+<span class="text-xs text-slate-500 font-medium">At Port</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600">
+<span class="material-symbols-outlined">task_alt</span>
+</div>
+<div class="flex flex-col">
+<span class="text-lg font-black text-slate-900">158</span>
+<span class="text-xs text-slate-500 font-medium">Delivered (MTD)</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center text-red-600">
+<span class="material-symbols-outlined">error</span>
+</div>
+<div class="flex flex-col">
+<span class="text-lg font-black text-slate-900">3</span>
+<span class="text-xs text-slate-500 font-medium">Flagged Delay</span>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

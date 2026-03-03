@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Financial Analytics &amp; Spend Dashboard - Arslan Integrated Solutions</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 lg:px-10 py-3">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-8 flex items-center justify-center bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined">sailing</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Arslan Integrated Solutions</h2>
+</div>
+<div class="hidden md:flex">
+<label class="flex flex-col min-w-40 h-10 w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-slate-500 flex border-none bg-slate-100 dark:bg-slate-800 items-center justify-center pl-4 rounded-l-lg" data-icon="search">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-0 h-full placeholder:text-slate-500 px-4 rounded-r-lg pl-2 text-sm font-normal" placeholder="Search shipments, invoices..." value=""/>
+</div>
+</label>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-primary text-sm font-semibold leading-normal" href="#">Dashboard</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Shipments</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Quotes</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Carriers</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Reports</a>
+</nav>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-xl">settings</span>
+</button>
+</div>
+<div class="bg-primary/20 flex items-center justify-center rounded-full size-10 border border-primary/30 overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Professional user profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJJsGwKkSbB41-XT_P3-CwQC4qJVoVXm_TRAQ_RNFADxlxNrU5zpCm5MJv9wcOZ7MyQMGMZxQSZszueQv5FQFbaoauIrfeHg7aN7ipZhWeLCINXEeJkQ8ysD3kYDCCOkqYHTBjckYhngLMyViL5MXbd4JhII3VGUREYY4tmMixtLDpNlK1SWjNgciwh8wECkusJHgQdMYrUh8zuyzT5c-gbITcvCWejS5It7RRX2QJTAE8wcRWFYU_idx9fnKDMh9e3OFZuYHgCfs"/>
+</div>
+</div>
+</header>
+<main class="px-6 lg:px-10 py-8 mx-auto w-full max-w-7xl">
+<!-- Header Section -->
+<div class="flex flex-wrap justify-between items-end gap-4 mb-8">
+<div class="flex flex-col gap-1">
+<h1 class="text-slate-900 dark:text-white text-3xl font-black leading-tight tracking-tight">Financial Analytics &amp; Spend</h1>
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal">Monitor your sea freight logistics expenditure and carrier performance.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 rounded-lg h-10 px-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold shadow-sm">
+<span class="material-symbols-outlined text-lg">description</span>
+<span>Export CSV</span>
+</button>
+<button class="flex items-center gap-2 rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-md shadow-primary/20">
+<span class="material-symbols-outlined text-lg">download</span>
+<span>Download PDF</span>
+</button>
+</div>
+</div>
+<!-- Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Total Freight Spend</p>
+<span class="material-symbols-outlined text-primary">payments</span>
+</div>
+<p class="text-slate-900 dark:text-white text-3xl font-bold leading-tight">$1,240,500</p>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-emerald-500 text-sm">trending_up</span>
+<p class="text-emerald-500 text-sm font-bold">+12.5% <span class="text-slate-400 font-normal">vs last month</span></p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Avg. Cost per Container</p>
+<span class="material-symbols-outlined text-primary">inventory_2</span>
+</div>
+<p class="text-slate-900 dark:text-white text-3xl font-bold leading-tight">$3,150</p>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-rose-500 text-sm">trending_down</span>
+<p class="text-rose-500 text-sm font-bold">-2.1% <span class="text-slate-400 font-normal">vs last month</span></p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Outstanding Invoices</p>
+<span class="material-symbols-outlined text-primary">pending_actions</span>
+</div>
+<p class="text-slate-900 dark:text-white text-3xl font-bold leading-tight">$45,200</p>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-amber-500 text-sm">info</span>
+<p class="text-amber-500 text-sm font-bold">14 Pending <span class="text-slate-400 font-normal">payment cycles</span></p>
+</div>
+</div>
+</div>
+<!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<!-- Large Spending Trends Chart Placeholder -->
+<div class="lg:col-span-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold">Spending Trends by Carrier</h3>
+<select class="bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 focus:ring-primary">
+<option>Last 6 Months</option>
+<option>Last Year</option>
+</select>
+</div>
+<div class="relative h-64 w-full flex items-end justify-between gap-2">
+<!-- Simulated Bar Chart for Visuals -->
+<div class="flex flex-col items-center flex-1 gap-2 group">
+<div class="w-full bg-primary/10 dark:bg-primary/5 rounded-t-lg relative h-32 flex flex-col justify-end">
+<div class="w-full bg-primary/40 rounded-t-lg h-1/2"></div>
+<div class="w-full bg-primary rounded-t-lg h-1/4"></div>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">JAN</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2 group">
+<div class="w-full bg-primary/10 dark:bg-primary/5 rounded-t-lg relative h-48 flex flex-col justify-end">
+<div class="w-full bg-primary/40 rounded-t-lg h-2/3"></div>
+<div class="w-full bg-primary rounded-t-lg h-1/3"></div>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">FEB</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2 group">
+<div class="w-full bg-primary/10 dark:bg-primary/5 rounded-t-lg relative h-40 flex flex-col justify-end">
+<div class="w-full bg-primary/40 rounded-t-lg h-1/2"></div>
+<div class="w-full bg-primary rounded-t-lg h-1/5"></div>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">MAR</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2 group">
+<div class="w-full bg-primary/10 dark:bg-primary/5 rounded-t-lg relative h-56 flex flex-col justify-end">
+<div class="w-full bg-primary/40 rounded-t-lg h-3/4"></div>
+<div class="w-full bg-primary rounded-t-lg h-1/2"></div>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">APR</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2 group">
+<div class="w-full bg-primary/10 dark:bg-primary/5 rounded-t-lg relative h-44 flex flex-col justify-end">
+<div class="w-full bg-primary/40 rounded-t-lg h-1/2"></div>
+<div class="w-full bg-primary rounded-t-lg h-1/3"></div>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">MAY</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2 group">
+<div class="w-full bg-primary/10 dark:bg-primary/5 rounded-t-lg relative h-60 flex flex-col justify-end">
+<div class="w-full bg-primary/40 rounded-t-lg h-[80%]"></div>
+<div class="w-full bg-primary rounded-t-lg h-[40%]"></div>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">JUN</span>
+</div>
+</div>
+<div class="flex gap-4 mt-6 justify-center">
+<div class="flex items-center gap-2">
+<div class="size-3 rounded-full bg-primary"></div>
+<span class="text-xs font-medium text-slate-500">Maersk</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="size-3 rounded-full bg-primary/40"></div>
+<span class="text-xs font-medium text-slate-500">CMA CGM</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="size-3 rounded-full bg-primary/10 dark:bg-primary/20"></div>
+<span class="text-xs font-medium text-slate-500">Others</span>
+</div>
+</div>
+</div>
+<!-- Carrier Cost Breakdown (Donut Chart Style) -->
+<div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold mb-6">Cost Breakdown</h3>
+<div class="relative flex justify-center py-4">
+<div class="size-44 rounded-full border-[16px] border-slate-100 dark:border-slate-800 relative flex items-center justify-center">
+<!-- SVG for Donut Simulation -->
+<svg class="absolute inset-0 size-full -rotate-90">
+<circle cx="50%" cy="50%" fill="transparent" r="70" stroke="#137fec" stroke-dasharray="440" stroke-dashoffset="110" stroke-width="16"></circle>
+<circle cx="50%" cy="50%" fill="transparent" r="70" stroke="#137fec66" stroke-dasharray="440" stroke-dashoffset="330" stroke-width="16"></circle>
+</svg>
+<div class="text-center">
+<p class="text-2xl font-black text-slate-900 dark:text-white">72%</p>
+<p class="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">Direct Lines</p>
+</div>
+</div>
+</div>
+<div class="space-y-3 mt-4">
+<div class="flex items-center justify-between text-sm">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-primary"></div>
+<span class="text-slate-600 dark:text-slate-400">Maersk Line</span>
+</div>
+<span class="font-bold">$893k</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-primary/60"></div>
+<span class="text-slate-600 dark:text-slate-400">CMA CGM</span>
+</div>
+<span class="font-bold">$210k</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-slate-300 dark:bg-slate-600"></div>
+<span class="text-slate-600 dark:text-slate-400">MSC</span>
+</div>
+<span class="font-bold">$137k</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Transactions Table -->
+<div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold">Recent Transactions</h3>
+<button class="text-primary text-sm font-bold hover:underline">View All Invoices</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50">
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Container ID</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Carrier</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Service Type</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Amount Paid</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">MSKU-9283741</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="size-6 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-xs">directions_boat</span>
+</div>
+<span class="text-sm">Maersk</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">FCL (40' High Cube)</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">Completed</span>
+</td>
+<td class="px-6 py-4 text-sm font-bold text-right text-slate-900 dark:text-slate-100">$4,250.00</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">CMAC-1102933</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="size-6 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-xs">directions_boat</span>
+</div>
+<span class="text-sm">CMA CGM</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">LCL (Consolidated)</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">Processing</span>
+</td>
+<td class="px-6 py-4 text-sm font-bold text-right text-slate-900 dark:text-slate-100">$1,890.50</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">MEDU-0049281</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="size-6 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-xs">directions_boat</span>
+</div>
+<span class="text-sm">MSC</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">FCL (20' Standard)</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">Completed</span>
+</td>
+<td class="px-6 py-4 text-sm font-bold text-right text-slate-900 dark:text-slate-100">$2,400.00</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">HLCU-8827110</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="size-6 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-xs">directions_boat</span>
+</div>
+<span class="text-sm">Hapag-Lloyd</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">FCL (40' High Cube)</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">On Hold</span>
+</td>
+<td class="px-6 py-4 text-sm font-bold text-right text-slate-900 dark:text-slate-100">$4,100.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

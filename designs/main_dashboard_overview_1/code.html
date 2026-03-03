@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Main Dashboard Overview | Arslan Integrated Solutions</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="flex min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col fixed h-full">
+<div class="p-6 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+<div class="bg-primary size-10 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">directions_boat</span>
+</div>
+<div>
+<h1 class="text-slate-900 dark:text-white font-bold text-sm leading-tight">Arslan Integrated</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Solutions Portal</p>
+</div>
+</div>
+<nav class="flex-1 p-4 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-primary/10 text-primary font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">hub</span>
+<span class="text-sm">Carrier Hub</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">request_quote</span>
+<span class="text-sm">Quotes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-sm">Shipments</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">mail</span>
+<span class="text-sm">Messages</span>
+</a>
+<div class="mt-auto flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm">Settings</span>
+</a>
+</div>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 p-8">
+<!-- Header -->
+<header class="flex justify-between items-center mb-8">
+<div>
+<h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Main Dashboard Overview</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Manage your carrier links, quotes, and container shipments.</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="pl-10 pr-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm focus:ring-primary focus:border-primary w-64" placeholder="Search tracking # or carrier..." type="text"/>
+</div>
+<button class="p-2 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-800 bg-cover bg-center border-2 border-white dark:border-slate-900 shadow-sm" data-alt="User profile avatar circle" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCU3eimuX34wO-G_P39tilToh3HFPdL0TrsiZqV0YK7HLwzhlp58B5ZIwh1NxwkSIxCyTXajeuEcPkKglhhMfqzqbD6_5b6ZDgAGNlIRw_RfThFZQpvhQxK5-p7Hyw1nIvH-tnqo9fAVkxQXb3nq88jyDzoYGxJjAL2ejsQhnH2R1eoCbCAnelNcenYr2pkPylZGQRELhfY4oOKPHh_rfxIZBDG8QT1qgGIVEwpG2XY5It0TUZlk_sYYLkqesY3cDYzGdBIB34P10s')"></div>
+</div>
+</header>
+<!-- Quick Actions Bar -->
+<div class="flex gap-4 mb-8">
+<button class="bg-primary text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">add</span>
+                    Get New Quote
+                </button>
+<button class="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 px-6 py-3 rounded-lg font-bold border border-slate-200 dark:border-slate-800 flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+<span class="material-symbols-outlined">package_2</span>
+                    Add Shipment
+                </button>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<!-- Carrier Hub Grid -->
+<section class="col-span-12 lg:col-span-8">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white">Carrier Hub</h3>
+<a class="text-primary text-sm font-semibold hover:underline" href="#">View All Carriers</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Carrier Card 1 -->
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="size-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+<img alt="Maersk Logo" class="w-10 h-auto" data-alt="Blue Maersk shipping line logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWx54HyH0R0Vb76tp949eJ8OgMc4oVjJXI1eGiB5J8o8UsNXDSGWhI8qOp1UOjRhCcuSwLl-MEikarQzlJkxfLmWcflp-H_4i8XJR5-2-OmnyxAB59HJ7TnkCCacJ_bPdQYRhLPhCG5UtzhhoErJmEPyUedEQ7eTtW3VRDFjsEBCGTPHC4hns4NZ4YrLhagTxbAmK8U_KlS838BSV2tfYMTfDJmC_o4TGOrho5hDM8D1Gsga6hpjLrbMdeDIjmPtSdRfw0LXz2fvs"/>
+</div>
+<span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Authenticated</span>
+</div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-1">Maersk Line</h4>
+<p class="text-xs text-slate-500 mb-4">Account: ARS-****-8821</p>
+<div class="flex gap-2">
+<button class="flex-1 text-xs py-2 px-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">Quotation Page</button>
+<button class="size-8 flex items-center justify-center bg-slate-50 dark:bg-slate-800 text-slate-400 rounded-lg hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">info</span>
+</button>
+</div>
+</div>
+<!-- Carrier Card 2 -->
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="size-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+<img alt="CMA CGM Logo" class="w-10 h-auto" data-alt="Red and blue CMA CGM logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtKWKmOU2-Xc3G3lVF3Mioi1NBDQjJghMqahdn2i3RrqSNCp9BiTDK7PDOt2Lw75jwYKG4p58yKLNZussIh4VCgMIjwHon_dGf8rPT2eRHXToahD_hZV-V14tmCulSoHChGX7FBp07JAarqFuXaR7xd061SSwopwhCQTSn18Yvrao7D-2WIJl4uaLtcXx-HZjVgw5vjllBkH2XBEk-LojdfS3hias5MSEVGtDHTO-uQyzueNUbaOshgP1Tta6V1dZHGB2AymUQFWM"/>
+</div>
+<span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Authenticated</span>
+</div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-1">CMA CGM</h4>
+<p class="text-xs text-slate-500 mb-4">Account: CMA-****-0129</p>
+<div class="flex gap-2">
+<button class="flex-1 text-xs py-2 px-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">Quotation Page</button>
+<button class="size-8 flex items-center justify-center bg-slate-50 dark:bg-slate-800 text-slate-400 rounded-lg hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">info</span>
+</button>
+</div>
+</div>
+<!-- Carrier Card 3 -->
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow opacity-75">
+<div class="flex justify-between items-start mb-4">
+<div class="size-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden text-slate-400">
+<span class="material-symbols-outlined">add_link</span>
+</div>
+<span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Not Linked</span>
+</div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-1">Hapag-Lloyd</h4>
+<p class="text-xs text-slate-500 mb-4">Requires API key verification</p>
+<button class="w-full text-xs py-2 px-3 bg-primary/10 text-primary rounded-lg font-bold hover:bg-primary/20 transition-colors border border-primary/20">Connect Carrier</button>
+</div>
+<!-- Carrier Card 4 -->
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="size-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+<img alt="MSC Logo" class="w-10 h-auto" data-alt="Yellow and black MSC logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd3rk221BuERM3vXUmsPikDkxrJZ9kjyJDgyYRLj3QPBG8noBsxTsF8VhY0MaCMQC6oLH6rm6gho6pq4l23NftiUN7g48D43wPWdsdY0p8tVIjbZxJuNdxKzWTXHRnHAGIjqjoxJ_J-FfjkIUmkdtsl8MgGoygYyvN1RU5hnLVe_2acGVZtTkW8gSBf8nvvhwfJWMyGjV9zEyOUy9SwR1fRCKGut3PY826NzoMUTLvRMZA_wQOyNEOrdIDcOIT16pf4y1Wt-kpEu4"/>
+</div>
+<span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Authenticated</span>
+</div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-1">MSC Mediterranean</h4>
+<p class="text-xs text-slate-500 mb-4">Account: MSC-****-4412</p>
+<div class="flex gap-2">
+<button class="flex-1 text-xs py-2 px-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">Quotation Page</button>
+<button class="size-8 flex items-center justify-center bg-slate-50 dark:bg-slate-800 text-slate-400 rounded-lg hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">info</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Integrated Mail Sidebar -->
+<section class="col-span-12 lg:col-span-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white">Recent Replies</h3>
+<button class="text-primary text-sm font-semibold hover:underline">Inbox</button>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
+<div class="p-4 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-blue-500 text-sm">reply</span>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">CMA CGM - Regional</span>
+</div>
+<h5 class="text-sm font-bold text-slate-900 dark:text-white truncate">Quote #229381: Shenzhen to Dubai</h5>
+<p class="text-xs text-slate-500 mt-1 line-clamp-1">Revised rates for 40' HC containers are now available...</p>
+<p class="text-[10px] text-slate-400 mt-2">12 mins ago</p>
+</div>
+<div class="p-4 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-blue-500 text-sm">reply</span>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Maersk Sales</span>
+</div>
+<h5 class="text-sm font-bold text-slate-900 dark:text-white truncate">Rate Confirmation: Hamburg Express</h5>
+<p class="text-xs text-slate-500 mt-1 line-clamp-1">Thank you for your inquiry. Your spot rate has been locked...</p>
+<p class="text-[10px] text-slate-400 mt-2">2 hours ago</p>
+</div>
+<div class="p-4 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-blue-500 text-sm">reply</span>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Evergreen Desk</span>
+</div>
+<h5 class="text-sm font-bold text-slate-900 dark:text-white truncate">Availability Update - Week 42</h5>
+<p class="text-xs text-slate-500 mt-1 line-clamp-1">Please be advised of equipment shortage in Ningbo port...</p>
+<p class="text-[10px] text-slate-400 mt-2">Yesterday</p>
+</div>
+<div class="p-3 bg-slate-50 dark:bg-slate-800 text-center">
+<button class="text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-primary">Load more messages</button>
+</div>
+</div>
+</section>
+<!-- Shipment Overview Table -->
+<section class="col-span-12">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white">Active Shipments</h3>
+<div class="flex gap-2">
+<button class="flex items-center gap-1 text-xs font-bold px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                                Filter
+                            </button>
+<button class="flex items-center gap-1 text-xs font-bold px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-sm">download</span>
+                                Export CSV
+                            </button>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[800px]">
+<thead class="bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700">
+<tr>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tracking Number</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Carrier</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Route</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">ETA</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Cost</th>
+<th class="px-6 py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<td class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">MEDU6102831</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img class="h-4 w-4 rounded-sm" data-alt="Small MSC logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC81hUn3Pl2OTTttp9K4gtQkhHfIPIIQPfyuvXmcfgyYnuH1HEAModiS_AY2o4pFEhX3Psht7re8nNZrcKxvJFbLW0NoCBP9sTHx0lhip51MUa85_Pqf7ECvnRdFocmILjLoT2p5IMJZ0LuqeTV4W080x6RN4mx1YU_Ao6EgPk6MMAaFTod4CZdt6EGud0_rCT2Q03M_I4t9ezu0mmXIDk-dibTz7EsVxd4Xbm02B48L32hj4MFnm0TtiA6ZChhN_lDivjUP5HaKyY"/>
+<span class="text-sm text-slate-600 dark:text-slate-300">MSC</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
+<span class="font-bold">HKG</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+<span class="font-bold">LAX</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 uppercase">
+<span class="size-1 rounded-full bg-blue-500"></span>
+                                            On Water
+                                        </span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">Oct 24, 2024</td>
+<td class="px-6 py-4 text-sm font-bold text-slate-900 dark:text-white">$3,240.00</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<td class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">MAEU2001948</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img class="h-4 w-4 rounded-sm" data-alt="Small Maersk logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhra1GetUUXHP84IDeTdhq__7jVO0_e2SWC06x40jEIPavG6LIicL9MVUNhDDPDXdbh1YDTANNQB8pOwisIi5VECDH392OBkCbRu7GEnyxAvDN5nN4OKsE2b7N1X9LoRaQOujs2KDPW4tfnOAtFpqcbpbZZIJpQf9_qSu4TH6tMBE314x850niVp3-EcW2P_pI2mZkWef12LBTBryM4VsiffxsGVD8Mj1Kaa8wzdAHJKGPlVCyRcscMq-wiDSxfUVTiM_WDbQeWTk"/>
+<span class="text-sm text-slate-600 dark:text-slate-300">Maersk</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
+<span class="font-bold">SHA</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+<span class="font-bold">ROT</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 uppercase">
+<span class="size-1 rounded-full bg-amber-500"></span>
+                                            Port Entry
+                                        </span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">Oct 18, 2024</td>
+<td class="px-6 py-4 text-sm font-bold text-slate-900 dark:text-white">$4,850.50</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<td class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">CMAC0092384</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img class="h-4 w-4 rounded-sm" data-alt="Small CMA CGM logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBg7GmQvdG7MLNHFOY5I54eHpQsVsbaAalFythlBQkr8smDKwxX5_CBASG6itFeqlVutvCd20Q9Q2A_FDAirMa01EpAIURhmbPy1cLj4LiH35Nc5DbFuf1Bl1mutcuquNK3TCfSYZW8cckNJk-Dp89Xf_Y3lIqWHioGyIDIRstIFI2qhuboM9Dh2FVFE8au1jjDMiYR3LSvY0czxv4Z_AD1jw1XKUlY9IIALfmKSTEqFebViX-g64FwquguLnygBI1Ry4ZCKP0msFU"/>
+<span class="text-sm text-slate-600 dark:text-slate-300">CMA CGM</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
+<span class="font-bold">SIN</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+<span class="font-bold">JED</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700 uppercase">
+<span class="size-1 rounded-full bg-green-500"></span>
+                                            Delivered
+                                        </span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">Oct 12, 2024</td>
+<td class="px-6 py-4 text-sm font-bold text-slate-900 dark:text-white">$2,100.00</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>
