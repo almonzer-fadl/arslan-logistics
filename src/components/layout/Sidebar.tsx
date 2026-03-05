@@ -19,17 +19,17 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col fixed h-full">
+    <aside className="w-64 bg-white border-r border-slate-200 flex flex-col fixed h-full">
       {/* Logo Section */}
-      <div className="p-6 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <div className="p-6 flex items-center gap-3 border-b border-slate-100">
         <div className="bg-[#137fec] size-10 rounded-lg flex items-center justify-center text-white">
           <span className="material-symbols-outlined">anchor</span>
         </div>
         <div>
-          <h1 className="text-slate-900 dark:text-white font-bold text-sm leading-tight">
+          <h1 className="text-slate-900 font-bold text-sm leading-tight">
             Arslan Integrated
           </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-xs">
+          <p className="text-slate-500 text-xs">
             Solutions Portal
           </p>
         </div>
@@ -46,7 +46,7 @@ export default function Sidebar() {
               className={`flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors ${
                 active
                   ? "bg-[#137fec]/10 text-[#137fec]"
-                  : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+                  : "text-slate-600 hover:bg-slate-50"
               }`}
             >
               <span className="material-symbols-outlined">{item.icon}</span>
@@ -62,7 +62,7 @@ export default function Sidebar() {
             className={`flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors ${
               isActive("/dashboard/settings")
                 ? "bg-[#137fec]/10 text-[#137fec]"
-                : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+                : "text-slate-600 hover:bg-slate-50"
             }`}
           >
             <span className="material-symbols-outlined">settings</span>
