@@ -1,6 +1,6 @@
 export type ForwarderCategory = "global" | "regional" | "africa" | "roro";
 
-export type ContactStatus = "active" | "pending" | "not_contacted" | "approved";
+export type ContactStatus = "active" | "pending" | "not_contacted" | "approved" | "inactive";
 
 export interface Forwarder {
   id: string;
@@ -28,13 +28,17 @@ export interface Quote {
   forwarder_name?: string;
   origin_port: string;
   destination_port: string;
-  container_type: string; // 20ft, 40ft, 40ft HC
+  container_type: string;
+  cargo_description?: string;
+  weight_kg?: number;
+  incoterms?: string;
+  special_requirements?: string;
   price_usd: number;
   transit_days: number;
   insurance_included: boolean;
   insurance_cost?: number;
   valid_until?: string;
-  status: "pending" | "received" | "expired" | "accepted";
+  status: "pending" | "received" | "expired" | "accepted" | "draft" | "submitted";
   notes?: string;
   created_at: string;
 }
@@ -45,14 +49,16 @@ export interface Shipment {
   forwarder_name?: string;
   quote_id?: string;
   booking_reference?: string;
+  container_id?: string;
+  container_type?: string;
   origin_port: string;
   destination_port: string;
-  container_type: string;
   cargo_description: string;
-  status: "booked" | "in_transit" | "arrived" | "delivered" | "cancelled";
+  status: "booked" | "in_transit" | "on_vessel" | "port_arrival" | "customs" | "arrived" | "delivered" | "cancelled";
   departure_date?: string;
   arrival_date?: string;
   tracking_url?: string;
+  vessel_name?: string;
   cost_usd: number;
   notes?: string;
   created_at: string;
