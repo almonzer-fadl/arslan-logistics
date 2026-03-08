@@ -1,10 +1,13 @@
 import { createClient } from "./client";
 import type { Forwarder, Quote, Shipment, Client, Route, UserProfile } from "../types";
 
-const supabase = createClient();
+function getSupabase() {
+  return createClient();
+}
 
 // ---- Forwarders ----
 export async function getForwarders() {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("forwarders")
     .select("*")
@@ -15,6 +18,7 @@ export async function getForwarders() {
 }
 
 export async function getForwarder(id: string) {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("forwarders")
     .select("*")
@@ -25,6 +29,7 @@ export async function getForwarder(id: string) {
 }
 
 export async function upsertForwarder(forwarder: Partial<Forwarder>) {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("forwarders")
     .upsert(forwarder)
@@ -34,13 +39,27 @@ export async function upsertForwarder(forwarder: Partial<Forwarder>) {
   return data as Forwarder;
 }
 
+export async function updateForwarder(id: string, updates: Partial<Forwarder>) {
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from("forwarders")
+    .update(updates)
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data as Forwarder;
+}
+
 export async function deleteForwarder(id: string) {
+  const supabase = getSupabase();
   const { error } = await supabase.from("forwarders").delete().eq("id", id);
   if (error) throw error;
 }
 
 // ---- Quotes ----
 export async function getQuotes(forwarderId?: string) {
+  const supabase = getSupabase();
   let query = supabase
     .from("quotes")
     .select("*, forwarders(name)")
@@ -54,6 +73,7 @@ export async function getQuotes(forwarderId?: string) {
 }
 
 export async function upsertQuote(quote: Partial<Quote>) {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("quotes")
     .upsert(quote)
@@ -64,12 +84,14 @@ export async function upsertQuote(quote: Partial<Quote>) {
 }
 
 export async function deleteQuote(id: string) {
+  const supabase = getSupabase();
   const { error } = await supabase.from("quotes").delete().eq("id", id);
   if (error) throw error;
 }
 
 // ---- Shipments ----
 export async function getShipments() {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("shipments")
     .select("*, forwarders(name)")
@@ -79,6 +101,7 @@ export async function getShipments() {
 }
 
 export async function upsertShipment(shipment: Partial<Shipment>) {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("shipments")
     .upsert(shipment)
@@ -90,6 +113,7 @@ export async function upsertShipment(shipment: Partial<Shipment>) {
 
 // ---- Clients ----
 export async function getClients() {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("clients")
     .select("*")
@@ -99,6 +123,7 @@ export async function getClients() {
 }
 
 export async function upsertClient(client: Partial<Client>) {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("clients")
     .upsert(client)
@@ -109,12 +134,14 @@ export async function upsertClient(client: Partial<Client>) {
 }
 
 export async function deleteClient(id: string) {
+  const supabase = getSupabase();
   const { error } = await supabase.from("clients").delete().eq("id", id);
   if (error) throw error;
 }
 
 // ---- Routes ----
 export async function getRoutes() {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("routes")
     .select("*")
@@ -125,6 +152,7 @@ export async function getRoutes() {
 
 // ---- Profile ----
 export async function getProfile() {
+  const supabase = getSupabase();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
 
@@ -139,6 +167,7 @@ export async function getProfile() {
 
 // ---- Auth ----
 export async function signOut() {
+  const supabase = getSupabase();
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
 }
