@@ -83,10 +83,7 @@ export default function DashboardPage() {
               {topCarriers.map((carrier) => (
                 <CarrierCard
                   key={carrier.id}
-                  id={carrier.id}
-                  name={carrier.name}
-                  account={carrier.encrypted_credentials ? `${carrier.name.substring(0, 3).toUpperCase()}-****-${carrier.id.substring(0, 4)}` : undefined}
-                  status={carrier.encrypted_credentials ? "authenticated" : "not linked"}
+                  carrier={carrier}
                   onConnectClick={() => window.location.href = "/dashboard/carriers"}
                 />
               ))}

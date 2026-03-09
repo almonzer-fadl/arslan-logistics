@@ -2,115 +2,111 @@
 
 import { useState, useEffect } from "react";
 import Modal from "../ui/Modal";
-import { encryptCredentials, decryptCredentials } from "@/lib/encryption";
+import { encryptCredentials } from "@/lib/encryption";
 import type { Forwarder } from "@/lib/types";
 
 interface EditCarrierModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (id: string, updates: Partial<Forwarder>) => void;
-  onDelete: (id: string) => void;
   carrier: Forwarder | null;
+  decryptedUsername?: string;
+  decryptedPassword?: string;
 }
 
 export default function EditCarrierModal({
   isOpen,
   onClose,
   onSave,
-  onDelete,
   carrier,
+  decryptedUsername,
+  decryptedPassword,
 }: EditCarrierModalProps) {
   const [formData, setFormData] = useState({
     name: "",
     website: "",
     category: "global" as Forwarder["category"],
     dashboard_url: "",
+    contact_form_url: "",
     username: "",
     password: "",
     contact_email: "",
     contact_phone: "",
     sales_rep_name: "",
     sales_rep_email: "",
-    contact_form_url: "",
-    status: "active" as Forwarder["status"],
-    sudan_available: false,
     coverage: "",
+    sudan_available: false,
+    status: "active" as Forwarder["status"],
     notes: "",
   });
 
   useEffect(() => {
     if (carrier) {
-      let creds = { username: "", password: "" };
-      if (carrier.encrypted_credentials) {
-        try {
-          const d = decryptCredentials(carrier.encrypted_credentials);
-          creds = { username: d.username || "", password: d.password || "" };
-        } catch {}
-      }
       setFormData({
         name: carrier.name || "",
         website: carrier.website || "",
         category: carrier.category || "global",
         dashboard_url: carrier.dashboard_url || "",
-        username: creds.username,
-        password: creds.password,
+        contact_form_url: carrier.contact_form_url || "",
+        username: decryptedUsername || "",
+        password: decryptedPassword || "",
         contact_email: carrier.contact_email || "",
         contact_phone: carrier.contact_phone || "",
         sales_rep_name: carrier.sales_rep_name || "",
         sales_rep_email: carrier.sales_rep_email || "",
-        contact_form_url: carrier.contact_form_url || "",
-        status: carrier.status || "active",
+        coverage: carrier.coverage?.join(", ") || "",
         sudan_available: carrier.sudan_available || false,
-        coverage: (carrier.coverage || []).join(", "),
+        status: carrier.status || "active",
         notes: carrier.notes || "",
       });
     }
-  }, [carrier]);
+  }, [carrier, decryptedUsername, decryptedPassword]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!carrier) return;
 
-    const encrypted = (formData.username || formData.password)
-      ? encryptCredentials({ username: formData.username, password: formData.password })
-      : carrier.encrypted_credentials;
-
-    onSave(carrier.id, {
+    const updates: Partial<Forwarder> = {
       name: formData.name,
       website: formData.website,
       category: formData.category,
       dashboard_url: formData.dashboard_url || undefined,
-      encrypted_credentials: encrypted || undefined,
+      contact_form_url: formData.contact_form_url || undefined,
       contact_email: formData.contact_email || undefined,
       contact_phone: formData.contact_phone || undefined,
       sales_rep_name: formData.sales_rep_name || undefined,
       sales_rep_email: formData.sales_rep_email || undefined,
-      contact_form_url: formData.contact_form_url || undefined,
-      status: formData.status,
-      sudan_available: formData.sudan_available,
       coverage: formData.coverage.split(",").map((s) => s.trim()).filter(Boolean),
+      sudan_available: formData.sudan_available,
+      status: formData.status,
       notes: formData.notes || undefined,
-    });
-    onClose();
-  };
+    };
 
-  const handleDelete = () => {
-    if (!carrier) return;
-    if (confirm(`Delete ${carrier.name}? This cannot be undone.`)) {
-      onDelete(carrier.id);
-      onClose();
+    // Only re-encrypt credentials if changed
+    if (formData.username || formData.password) {
+      try {
+        updates.encrypted_credentials = encryptCredentials({
+          username: formData.username,
+          password: formData.password,
+        });
+      } catch {
+        // encryption key might not be set
+      }
     }
+
+    onSave(carrier.id, updates);
+    onClose();
   };
 
   if (!carrier) return null;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={`Edit: ${carrier.name}`} maxWidth="xl">
+    <Modal isOpen={isOpen} onClose={onClose} title={`Edit ${carrier.name}`} maxWidth="xl">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Info */}
         <div className="space-y-4">
           <h4 className="font-semibold text-slate-900 flex items-center gap-2">
-            <span className="material-symbols-outlined text-[18px]">business</span>
+            <span className="material-symbols-outlined text-[18px]">info</span>
             Basic Information
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -126,9 +122,9 @@ export default function EditCarrierModal({
               <span className="text-sm font-medium text-slate-700">Category</span>
               <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value as Forwarder["category"] })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm">
                 <option value="global">Global</option>
-                <option value="regional">Regional (Turkey)</option>
-                <option value="africa">Africa / Sudan Specialist</option>
-                <option value="roro">RORO (Vehicle)</option>
+                <option value="regional">Regional</option>
+                <option value="africa">Africa Specialist</option>
+                <option value="roro">RORO</option>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
@@ -142,12 +138,12 @@ export default function EditCarrierModal({
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className="text-sm font-medium text-slate-700">Portal / Dashboard URL</span>
+              <span className="text-sm font-medium text-slate-700">Portal URL</span>
               <input type="url" value={formData.dashboard_url} onChange={(e) => setFormData({ ...formData, dashboard_url: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="https://portal.carrier.com" />
             </label>
             <label className="flex flex-col gap-1.5">
               <span className="text-sm font-medium text-slate-700">Contact Form URL</span>
-              <input type="url" value={formData.contact_form_url} onChange={(e) => setFormData({ ...formData, contact_form_url: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" />
+              <input type="url" value={formData.contact_form_url} onChange={(e) => setFormData({ ...formData, contact_form_url: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="https://carrier.com/contact" />
             </label>
           </div>
         </div>
@@ -155,7 +151,7 @@ export default function EditCarrierModal({
         {/* Credentials */}
         <div className="space-y-4">
           <h4 className="font-semibold text-slate-900 flex items-center gap-2">
-            <span className="material-symbols-outlined text-[18px]">vpn_key</span>
+            <span className="material-symbols-outlined text-[18px]">lock</span>
             Portal Credentials (AES-256 Encrypted)
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -170,7 +166,7 @@ export default function EditCarrierModal({
           </div>
         </div>
 
-        {/* Contact Info */}
+        {/* Contact */}
         <div className="space-y-4">
           <h4 className="font-semibold text-slate-900 flex items-center gap-2">
             <span className="material-symbols-outlined text-[18px]">person</span>
@@ -202,14 +198,14 @@ export default function EditCarrierModal({
             <span className="material-symbols-outlined text-[18px]">public</span>
             Coverage & Notes
           </h4>
-          <div className="flex items-center gap-3 mb-2">
-            <input type="checkbox" id="sudan" checked={formData.sudan_available} onChange={(e) => setFormData({ ...formData, sudan_available: e.target.checked })} className="h-4 w-4 rounded border-slate-300 text-[#137fec] focus:ring-[#137fec]" />
-            <label htmlFor="sudan" className="text-sm text-slate-700">Sudan / Port Sudan available</label>
-          </div>
           <label className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-slate-700">Coverage Areas (comma separated)</span>
-            <input type="text" value={formData.coverage} onChange={(e) => setFormData({ ...formData, coverage: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="Turkey, Sudan, Saudi Arabia, China" />
+            <span className="text-sm font-medium text-slate-700">Coverage Areas (comma-separated)</span>
+            <input type="text" value={formData.coverage} onChange={(e) => setFormData({ ...formData, coverage: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="Turkey, Sudan, Saudi Arabia" />
           </label>
+          <div className="flex items-center gap-2">
+            <input type="checkbox" id="edit-sudan" checked={formData.sudan_available} onChange={(e) => setFormData({ ...formData, sudan_available: e.target.checked })} className="h-4 w-4 rounded border-slate-300 text-[#137fec] focus:ring-[#137fec]" />
+            <label htmlFor="edit-sudan" className="text-sm text-slate-700">Sudan coverage available</label>
+          </div>
           <label className="flex flex-col gap-1.5">
             <span className="text-sm font-medium text-slate-700">Notes</span>
             <textarea rows={3} value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" />
@@ -217,15 +213,9 @@ export default function EditCarrierModal({
         </div>
 
         {/* Actions */}
-        <div className="flex justify-between pt-4 border-t border-slate-200">
-          <button type="button" onClick={handleDelete} className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1">
-            <span className="material-symbols-outlined text-[18px]">delete</span>
-            Delete Carrier
-          </button>
-          <div className="flex gap-3">
-            <button type="button" onClick={onClose} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-semibold text-sm">Cancel</button>
-            <button type="submit" className="px-4 py-2 bg-[#137fec] text-white rounded-lg font-semibold text-sm hover:bg-[#137fec]/90">Save Changes</button>
-          </div>
+        <div className="flex gap-3 justify-end pt-4 border-t border-slate-200">
+          <button type="button" onClick={onClose} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-semibold transition-colors">Cancel</button>
+          <button type="submit" className="px-4 py-2 bg-[#137fec] text-white rounded-lg font-semibold hover:bg-[#137fec]/90 transition-colors">Save Changes</button>
         </div>
       </form>
     </Modal>
