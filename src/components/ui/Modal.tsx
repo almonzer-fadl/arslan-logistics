@@ -61,15 +61,24 @@ export default function Modal({
         className={`relative bg-white rounded-xl shadow-2xl w-full ${maxWidthClasses[maxWidth]} max-h-[90vh] overflow-y-auto`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-200">
-          <h3 className="text-xl font-bold text-slate-900">{title}</h3>
+        {title ? (
+          <div className="flex items-center justify-between p-6 border-b border-slate-200">
+            <h3 className="text-xl font-bold text-slate-900">{title}</h3>
+            <button
+              onClick={onClose}
+              className="p-1 text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+          </div>
+        ) : (
           <button
             onClick={onClose}
-            className="p-1 text-slate-400 hover:text-slate-600 transition-colors"
+            className="absolute top-4 right-4 p-1 text-slate-400 hover:text-slate-600 transition-colors z-10"
           >
             <span className="material-symbols-outlined">close</span>
           </button>
-        </div>
+        )}
 
         {/* Content */}
         <div className="p-6">{children}</div>
