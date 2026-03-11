@@ -7,7 +7,7 @@ import { encryptCredentials } from "@/lib/encryption";
 interface AddCarrierModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (carrier: any) => void;
+  onAdd: (carrier: Record<string, unknown>) => Promise<void>;
 }
 
 export default function AddCarrierModal({
@@ -15,247 +15,225 @@ export default function AddCarrierModal({
   onClose,
   onAdd,
 }: AddCarrierModalProps) {
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
-    scac_code: "",
     website: "",
-    portal_url: "",
+    category: "global" as "global" | "regional" | "africa" | "roro",
+    dashboard_url: "",
+    contact_form_url: "",
     username: "",
     password: "",
-    contact_name: "",
+    sales_rep_name: "",
     contact_email: "",
     contact_phone: "",
-    status: "active",
+    coverage: "",
+    sudan_available: false,
+    status: "active" as "active" | "pending" | "not_contacted" | "approved",
+    notes: "",
   });
+
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      website: "",
+      category: "global",
+      dashboard_url: "",
+      contact_form_url: "",
+      username: "",
+      password: "",
+      sales_rep_name: "",
+      contact_email: "",
+      contact_phone: "",
+      coverage: "",
+      sudan_available: false,
+      status: "active",
+      notes: "",
+    });
+    setError("");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSaving(true);
+    setError("");
 
-    // Encrypt credentials
-    const encryptedCreds = encryptCredentials({
-      username: formData.username,
-      password: formData.password,
-    });
+    try {
+      let encrypted_credentials: string | undefined;
+      if (formData.username || formData.password) {
+        encrypted_credentials = encryptCredentials({
+          username: formData.username,
+          password: formData.password,
+        });
+      }
 
-    const newCarrier = {
-      name: formData.name,
-      scac_code: formData.scac_code,
-      website: formData.website,
-      dashboard_url: formData.portal_url,
-      encrypted_credentials: encryptedCreds,
-      contact_email: formData.contact_email,
-      contact_phone: formData.contact_phone,
-      sales_rep_name: formData.contact_name,
-      status: formData.status,
-    };
+      const newCarrier = {
+        name: formData.name,
+        website: formData.website || undefined,
+        category: formData.category,
+        dashboard_url: formData.dashboard_url || undefined,
+        contact_form_url: formData.contact_form_url || undefined,
+        encrypted_credentials,
+        sales_rep_name: formData.sales_rep_name || undefined,
+        contact_email: formData.contact_email || undefined,
+        contact_phone: formData.contact_phone || undefined,
+        coverage: formData.coverage
+          ? formData.coverage.split(",").map((s) => s.trim()).filter(Boolean)
+          : [],
+        sudan_available: formData.sudan_available,
+        status: formData.status,
+        notes: formData.notes || undefined,
+      };
 
-    onAdd(newCarrier);
-    onClose();
-    // Reset form
-    setFormData({
-      name: "",
-      scac_code: "",
-      website: "",
-      portal_url: "",
-      username: "",
-      password: "",
-      contact_name: "",
-      contact_email: "",
-      contact_phone: "",
-      status: "active",
-    });
+      await onAdd(newCarrier);
+      resetForm();
+      onClose();
+    } catch (err: unknown) {
+      console.error("Add carrier error:", err);
+      setError(err instanceof Error ? err.message : "Failed to add carrier. Check console for details.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Add New Carrier" maxWidth="xl">
+    <Modal isOpen={isOpen} onClose={() => { resetForm(); onClose(); }} title="Add New Carrier" maxWidth="xl">
       <form onSubmit={handleSubmit} className="space-y-6">
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700 flex items-center gap-2">
+            <span className="material-symbols-outlined text-red-500 text-[18px]">error</span>
+            {error}
+          </div>
+        )}
+
         {/* Basic Info */}
         <div className="space-y-4">
-          <h4 className="font-semibold text-slate-900">Basic Information</h4>
+          <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+            <span className="material-symbols-outlined text-[18px]">info</span>
+            Basic Information
+          </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">
-                Carrier Name <span className="text-red-500">*</span>
-              </span>
-              <input
-                type="text"
-                required
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]"
-                placeholder="e.g., Maersk Line"
-              />
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-700">Carrier Name <span className="text-red-500">*</span></span>
+              <input type="text" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="e.g., Maersk Line" />
             </label>
 
-            <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">
-                SCAC Code
-              </span>
-              <input
-                type="text"
-                value={formData.scac_code}
-                onChange={(e) =>
-                  setFormData({ ...formData, scac_code: e.target.value })
-                }
-                className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]"
-                placeholder="e.g., MAEU"
-              />
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-700">Website</span>
+              <input type="url" value={formData.website} onChange={(e) => setFormData({ ...formData, website: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="https://www.carrier.com" />
             </label>
 
-            <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">
-                Website
-              </span>
-              <input
-                type="url"
-                value={formData.website}
-                onChange={(e) =>
-                  setFormData({ ...formData, website: e.target.value })
-                }
-                className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]"
-                placeholder="https://www.carrier.com"
-              />
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-700">Category <span className="text-red-500">*</span></span>
+              <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value as typeof formData.category })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm">
+                <option value="global">Global Carrier</option>
+                <option value="regional">Turkey Regional</option>
+                <option value="africa">Africa Specialist</option>
+                <option value="roro">RORO Vehicle</option>
+              </select>
             </label>
 
-            <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">
-                Portal URL
-              </span>
-              <input
-                type="url"
-                value={formData.portal_url}
-                onChange={(e) =>
-                  setFormData({ ...formData, portal_url: e.target.value })
-                }
-                className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]"
-                placeholder="https://portal.carrier.com"
-              />
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-700">Status</span>
+              <select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value as typeof formData.status })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm">
+                <option value="active">Active</option>
+                <option value="approved">Approved</option>
+                <option value="pending">Pending</option>
+                <option value="not_contacted">Not Contacted</option>
+              </select>
+            </label>
+
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-700">Portal URL</span>
+              <input type="url" value={formData.dashboard_url} onChange={(e) => setFormData({ ...formData, dashboard_url: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="https://portal.carrier.com" />
+            </label>
+
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-700">Contact / Quote Form URL</span>
+              <input type="url" value={formData.contact_form_url} onChange={(e) => setFormData({ ...formData, contact_form_url: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="https://carrier.com/quote" />
             </label>
           </div>
         </div>
 
         {/* Credentials */}
         <div className="space-y-4">
-          <h4 className="font-semibold text-slate-900">Portal Credentials (Encrypted)</h4>
+          <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+            <span className="material-symbols-outlined text-[18px]">lock</span>
+            Portal Credentials
+          </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">
-                Username
-              </span>
-              <input
-                type="text"
-                value={formData.username}
-                onChange={(e) =>
-                  setFormData({ ...formData, username: e.target.value })
-                }
-                className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]"
-                placeholder="Portal username"
-              />
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-700">Username</span>
+              <input type="text" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="Portal username" />
             </label>
-
-            <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">
-                Password
-              </span>
-              <input
-                type="password"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-                className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]"
-                placeholder="Portal password"
-              />
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-700">Password</span>
+              <input type="password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="Portal password" />
             </label>
           </div>
-          <p className="text-xs text-slate-500">
-            <span className="material-symbols-outlined text-[14px] inline-block mr-1 align-text-bottom">lock</span>
-            Credentials are encrypted with AES-256 before storage
+          <p className="text-xs text-slate-500 flex items-center gap-1">
+            <span className="material-symbols-outlined text-[14px]">lock</span>
+            Encrypted with AES-256 before storage
           </p>
         </div>
 
         {/* Contact Info */}
         <div className="space-y-4">
-          <h4 className="font-semibold text-slate-900">Primary Contact</h4>
+          <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+            <span className="material-symbols-outlined text-[18px]">person</span>
+            Primary Contact
+          </h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">
-                Contact Name
-              </span>
-              <input
-                type="text"
-                value={formData.contact_name}
-                onChange={(e) =>
-                  setFormData({ ...formData, contact_name: e.target.value })
-                }
-                className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]"
-                placeholder="Sales Rep Name"
-              />
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-700">Contact Name</span>
+              <input type="text" value={formData.sales_rep_name} onChange={(e) => setFormData({ ...formData, sales_rep_name: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="Sales Rep Name" />
             </label>
-
-            <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">
-                Email
-              </span>
-              <input
-                type="email"
-                value={formData.contact_email}
-                onChange={(e) =>
-                  setFormData({ ...formData, contact_email: e.target.value })
-                }
-                className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]"
-                placeholder="contact@carrier.com"
-              />
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-700">Email</span>
+              <input type="email" value={formData.contact_email} onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="contact@carrier.com" />
             </label>
-
-            <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">
-                Phone
-              </span>
-              <input
-                type="tel"
-                value={formData.contact_phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, contact_phone: e.target.value })
-                }
-                className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]"
-                placeholder="+1 234 567 8900"
-              />
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-700">Phone</span>
+              <input type="tel" value={formData.contact_phone} onChange={(e) => setFormData({ ...formData, contact_phone: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="+1 234 567 8900" />
             </label>
           </div>
         </div>
 
-        {/* Status */}
-        <label className="flex flex-col gap-2">
-          <span className="text-sm font-medium text-slate-700">Status</span>
-          <select
-            value={formData.status}
-            onChange={(e) =>
-              setFormData({ ...formData, status: e.target.value })
-            }
-            className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]"
-          >
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-        </label>
+        {/* Coverage & Notes */}
+        <div className="space-y-4">
+          <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+            <span className="material-symbols-outlined text-[18px]">public</span>
+            Coverage & Notes
+          </h4>
+          <label className="flex flex-col gap-1.5">
+            <span className="text-sm font-medium text-slate-700">Coverage Areas (comma-separated)</span>
+            <input type="text" value={formData.coverage} onChange={(e) => setFormData({ ...formData, coverage: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="Turkey, Sudan, Saudi Arabia, China" />
+          </label>
+          <div className="flex items-center gap-2">
+            <input type="checkbox" id="add-sudan" checked={formData.sudan_available} onChange={(e) => setFormData({ ...formData, sudan_available: e.target.checked })} className="h-4 w-4 rounded border-slate-300 text-[#137fec] focus:ring-[#137fec]" />
+            <label htmlFor="add-sudan" className="text-sm text-slate-700">Sudan coverage available</label>
+          </div>
+          <label className="flex flex-col gap-1.5">
+            <span className="text-sm font-medium text-slate-700">Notes</span>
+            <textarea rows={2} value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" placeholder="Any additional notes..." />
+          </label>
+        </div>
 
         {/* Actions */}
         <div className="flex gap-3 justify-end pt-4 border-t border-slate-200">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-semibold transition-colors"
-          >
+          <button type="button" onClick={() => { resetForm(); onClose(); }} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-semibold transition-colors">
             Cancel
           </button>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-[#137fec] text-white rounded-lg font-semibold hover:bg-[#137fec]/90 transition-colors"
-          >
-            Add Carrier
+          <button type="submit" disabled={saving} className="px-5 py-2 bg-[#137fec] text-white rounded-lg font-semibold hover:bg-[#137fec]/90 transition-colors disabled:opacity-50 flex items-center gap-2">
+            {saving ? (
+              <>
+                <div className="animate-spin h-4 w-4 border-2 border-white/30 border-t-white rounded-full" />
+                Saving...
+              </>
+            ) : (
+              "Add Carrier"
+            )}
           </button>
         </div>
       </form>

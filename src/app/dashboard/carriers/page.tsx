@@ -89,13 +89,8 @@ export default function CarriersPage() {
   };
 
   const handleAddCarrier = async (carrierData: Record<string, unknown>) => {
-    try {
-      await upsertForwarder(carrierData as Partial<Forwarder>);
-      await loadCarriers();
-    } catch (error) {
-      console.error("Error adding carrier:", error);
-      alert("Failed to add carrier.");
-    }
+    await upsertForwarder(carrierData as Partial<Forwarder>);
+    await loadCarriers();
   };
 
   const handleEditClick = (carrier: Forwarder) => {
