@@ -109,13 +109,8 @@ export default function CarriersPage() {
   };
 
   const handleSaveEdit = async (id: string, updates: Partial<Forwarder>) => {
-    try {
-      await updateForwarder(id, updates);
-      await loadCarriers();
-    } catch (error) {
-      console.error("Error updating carrier:", error);
-      alert("Failed to update carrier.");
-    }
+    await updateForwarder(id, updates);
+    await loadCarriers();
   };
 
   const handleDelete = async (id: string) => {

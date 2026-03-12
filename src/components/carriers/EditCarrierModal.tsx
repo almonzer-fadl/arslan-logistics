@@ -8,7 +8,7 @@ import type { Forwarder } from "@/lib/types";
 interface EditCarrierModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (id: string, updates: Partial<Forwarder>) => void;
+  onSave: (id: string, updates: Partial<Forwarder>) => Promise<void>;
   carrier: Forwarder | null;
   decryptedUsername?: string;
   decryptedPassword?: string;
@@ -22,6 +22,8 @@ export default function EditCarrierModal({
   decryptedUsername,
   decryptedPassword,
 }: EditCarrierModalProps) {
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     website: "",
@@ -59,43 +61,53 @@ export default function EditCarrierModal({
         status: carrier.status || "active",
         notes: carrier.notes || "",
       });
+      setError("");
     }
   }, [carrier, decryptedUsername, decryptedPassword]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!carrier) return;
 
-    const updates: Partial<Forwarder> = {
-      name: formData.name,
-      website: formData.website,
-      category: formData.category,
-      dashboard_url: formData.dashboard_url || undefined,
-      contact_form_url: formData.contact_form_url || undefined,
-      contact_email: formData.contact_email || undefined,
-      contact_phone: formData.contact_phone || undefined,
-      sales_rep_name: formData.sales_rep_name || undefined,
-      sales_rep_email: formData.sales_rep_email || undefined,
-      coverage: formData.coverage.split(",").map((s) => s.trim()).filter(Boolean),
-      sudan_available: formData.sudan_available,
-      status: formData.status,
-      notes: formData.notes || undefined,
-    };
+    setSaving(true);
+    setError("");
 
-    // Only re-encrypt credentials if changed
-    if (formData.username || formData.password) {
-      try {
+    try {
+      const updates: Partial<Forwarder> = {
+        name: formData.name,
+        website: formData.website,
+        category: formData.category,
+        dashboard_url: formData.dashboard_url || undefined,
+        contact_form_url: formData.contact_form_url || undefined,
+        contact_email: formData.contact_email || undefined,
+        contact_phone: formData.contact_phone || undefined,
+        sales_rep_name: formData.sales_rep_name || undefined,
+        sales_rep_email: formData.sales_rep_email || undefined,
+        coverage: formData.coverage.split(",").map((s) => s.trim()).filter(Boolean),
+        sudan_available: formData.sudan_available,
+        status: formData.status,
+        notes: formData.notes || undefined,
+      };
+
+      // Encrypt credentials
+      if (formData.username || formData.password) {
         updates.encrypted_credentials = encryptCredentials({
           username: formData.username,
           password: formData.password,
         });
-      } catch {
-        // encryption key might not be set
+      } else {
+        // Clear credentials if both removed
+        updates.encrypted_credentials = undefined;
       }
-    }
 
-    onSave(carrier.id, updates);
-    onClose();
+      await onSave(carrier.id, updates);
+      onClose();
+    } catch (err: unknown) {
+      console.error("Edit carrier error:", err);
+      setError(err instanceof Error ? err.message : "Failed to save. Check console for details.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (!carrier) return null;
@@ -103,6 +115,13 @@ export default function EditCarrierModal({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={`Edit ${carrier.name}`} maxWidth="xl">
       <form onSubmit={handleSubmit} className="space-y-6">
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700 flex items-center gap-2">
+            <span className="material-symbols-outlined text-red-500 text-[18px]">error</span>
+            {error}
+          </div>
+        )}
+
         {/* Basic Info */}
         <div className="space-y-4">
           <h4 className="font-semibold text-slate-900 flex items-center gap-2">
@@ -131,8 +150,8 @@ export default function EditCarrierModal({
               <span className="text-sm font-medium text-slate-700">Status</span>
               <select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value as Forwarder["status"] })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm">
                 <option value="active">Active</option>
-                <option value="pending">Pending</option>
                 <option value="approved">Approved</option>
+                <option value="pending">Pending</option>
                 <option value="not_contacted">Not Contacted</option>
                 <option value="inactive">Inactive</option>
               </select>
@@ -215,7 +234,16 @@ export default function EditCarrierModal({
         {/* Actions */}
         <div className="flex gap-3 justify-end pt-4 border-t border-slate-200">
           <button type="button" onClick={onClose} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-semibold transition-colors">Cancel</button>
-          <button type="submit" className="px-4 py-2 bg-[#137fec] text-white rounded-lg font-semibold hover:bg-[#137fec]/90 transition-colors">Save Changes</button>
+          <button type="submit" disabled={saving} className="px-5 py-2 bg-[#137fec] text-white rounded-lg font-semibold hover:bg-[#137fec]/90 transition-colors disabled:opacity-50 flex items-center gap-2">
+            {saving ? (
+              <>
+                <div className="animate-spin h-4 w-4 border-2 border-white/30 border-t-white rounded-full" />
+                Saving...
+              </>
+            ) : (
+              "Save Changes"
+            )}
+          </button>
         </div>
       </form>
     </Modal>
