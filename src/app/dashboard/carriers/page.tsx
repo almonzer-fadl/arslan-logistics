@@ -140,22 +140,31 @@ export default function CarriersPage() {
 
   const isLinked = (c: Forwarder) => ["active", "approved"].includes(c.status);
 
-  const filtered = carriers.filter((c) => {
-    if (filter === "active" && !isLinked(c)) return false;
-    if (filter === "pending" && c.status !== "pending") return false;
-    if (filter === "inactive" && !["not_contacted", "inactive"].includes(c.status)) return false;
-    if (categoryFilter !== "all" && c.category !== categoryFilter) return false;
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      return (
-        c.name.toLowerCase().includes(q) ||
-        c.website?.toLowerCase().includes(q) ||
-        c.sales_rep_name?.toLowerCase().includes(q) ||
-        c.coverage?.some((area) => area.toLowerCase().includes(q))
-      );
-    }
-    return true;
-  });
+  const statusOrder: Record<string, number> = {
+    active: 0, approved: 0,
+    pending: 1,
+    not_contacted: 2,
+    inactive: 3,
+  };
+
+  const filtered = carriers
+    .filter((c) => {
+      if (filter === "active" && !isLinked(c)) return false;
+      if (filter === "pending" && c.status !== "pending") return false;
+      if (filter === "inactive" && !["not_contacted", "inactive"].includes(c.status)) return false;
+      if (categoryFilter !== "all" && c.category !== categoryFilter) return false;
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        return (
+          c.name.toLowerCase().includes(q) ||
+          c.website?.toLowerCase().includes(q) ||
+          c.sales_rep_name?.toLowerCase().includes(q) ||
+          c.coverage?.some((area) => area.toLowerCase().includes(q))
+        );
+      }
+      return true;
+    })
+    .sort((a, b) => (statusOrder[a.status] ?? 9) - (statusOrder[b.status] ?? 9));
 
   const stats = {
     total: carriers.length,

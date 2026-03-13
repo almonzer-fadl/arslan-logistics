@@ -27,7 +27,9 @@ export default function DashboardPage() {
     load();
   }, []);
 
-  const topCarriers = forwarders.slice(0, 4);
+  const topCarriers = forwarders
+    .filter((f) => ["active", "approved"].includes(f.status))
+    .slice(0, 4);
   const activeShipments = shipments
     .filter((s) => !["cancelled", "delivered"].includes(s.status))
     .slice(0, 10);
