@@ -86,7 +86,7 @@ export default function DashboardPage() {
                 <CarrierCard
                   key={carrier.id}
                   carrier={carrier}
-                  onConnectClick={() => window.location.href = "/dashboard/carriers"}
+                  onClick={() => window.location.href = "/dashboard/carriers"}
                 />
               ))}
             </div>
