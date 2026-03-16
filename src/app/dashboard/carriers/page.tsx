@@ -5,7 +5,7 @@ import { getForwarders, upsertForwarder, updateForwarder, deleteForwarder } from
 import type { Forwarder } from "@/lib/types";
 import StatusBadge from "@/components/ui/StatusBadge";
 import CarrierCard from "@/components/ui/CarrierCard";
-import Modal from "@/components/ui/Modal";
+import CarrierDetailModal from "@/components/carriers/CarrierDetailModal";
 import AddCarrierModal from "@/components/carriers/AddCarrierModal";
 import EditCarrierModal from "@/components/carriers/EditCarrierModal";
 import { decryptCredentials } from "@/lib/encryption";
@@ -19,7 +19,6 @@ export default function CarriersPage() {
   const [editUsername, setEditUsername] = useState("");
   const [editPassword, setEditPassword] = useState("");
   const [detailCarrier, setDetailCarrier] = useState<Forwarder | null>(null);
-  const [showCredentials, setShowCredentials] = useState(false);
   const [filter, setFilter] = useState<"all" | "active" | "pending" | "inactive">("all");
   const [categoryFilter, setCategoryFilter] = useState<"all" | "global" | "regional" | "africa" | "roro">("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -76,19 +75,6 @@ export default function CarriersPage() {
       console.error("Error deleting carrier:", error);
       alert("Failed to delete carrier.");
     }
-  };
-
-  const getCredentials = (carrier: Forwarder) => {
-    if (!carrier.encrypted_credentials) return null;
-    try {
-      return decryptCredentials(carrier.encrypted_credentials);
-    } catch {
-      return null;
-    }
-  };
-
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
   };
 
   const isLinked = (c: Forwarder) => ["active", "approved"].includes(c.status);
@@ -243,7 +229,7 @@ export default function CarriersPage() {
               <CarrierCard
                 key={carrier.id}
                 carrier={carrier}
-                onClick={() => { setDetailCarrier(carrier); setShowCredentials(false); }}
+                onClick={() => setDetailCarrier(carrier)}
                 onEditClick={() => handleEditClick(carrier)}
               />
             ))}
@@ -253,13 +239,13 @@ export default function CarriersPage() {
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden divide-y divide-slate-100">
             {filtered.map((carrier) => {
               const mono = getMonogram(carrier.name);
-              const linked = isLinked(carrier);
-              const creds = getCredentials(carrier);
+              let hasCreds = false;
+              if (carrier.encrypted_credentials) { try { decryptCredentials(carrier.encrypted_credentials); hasCreds = true; } catch {} }
 
               return (
                 <div
                   key={carrier.id}
-                  onClick={() => { setDetailCarrier(carrier); setShowCredentials(false); }}
+                  onClick={() => setDetailCarrier(carrier)}
                   className="flex items-center gap-5 p-5 hover:bg-slate-50 transition-colors cursor-pointer group"
                 >
                   <div className={`w-12 h-12 rounded-lg ${mono.bg} ${mono.text} flex items-center justify-center font-black text-sm shadow-sm shrink-0`}>
@@ -283,7 +269,7 @@ export default function CarriersPage() {
                   </div>
 
                   <div className="hidden md:flex items-center gap-2">
-                    {creds ? (
+                    {hasCreds ? (
                       <span className="material-symbols-outlined text-emerald-500 text-[18px]" title="Credentials stored">lock</span>
                     ) : (
                       <span className="material-symbols-outlined text-slate-300 text-[18px]" title="No credentials">lock_open</span>
@@ -345,23 +331,12 @@ export default function CarriersPage() {
       )}
 
       {/* Detail Modal */}
-      {detailCarrier && (
-        <Modal
-          isOpen={!!detailCarrier}
-          onClose={() => setDetailCarrier(null)}
-          title=""
-          maxWidth="2xl"
-        >
-          <DetailView
-            carrier={detailCarrier}
-            onEdit={() => { setDetailCarrier(null); handleEditClick(detailCarrier); }}
-            onDelete={() => handleDelete(detailCarrier.id)}
-            showCredentials={showCredentials}
-            setShowCredentials={setShowCredentials}
-            copyToClipboard={copyToClipboard}
-          />
-        </Modal>
-      )}
+      <CarrierDetailModal
+        carrier={detailCarrier}
+        onClose={() => setDetailCarrier(null)}
+        onEdit={() => { const c = detailCarrier; setDetailCarrier(null); if (c) handleEditClick(c); }}
+        onDelete={() => { if (detailCarrier) handleDelete(detailCarrier.id); }}
+      />
 
       {/* Add/Edit Modals */}
       <AddCarrierModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onAdd={handleAddCarrier} />
@@ -373,235 +348,6 @@ export default function CarriersPage() {
         decryptedUsername={editUsername}
         decryptedPassword={editPassword}
       />
-    </div>
-  );
-}
-
-/* ─── Detail View (inside modal) ─── */
-
-function DetailView({
-  carrier,
-  onEdit,
-  onDelete,
-  showCredentials,
-  setShowCredentials,
-  copyToClipboard,
-}: {
-  carrier: Forwarder;
-  onEdit: () => void;
-  onDelete: () => void;
-  showCredentials: boolean;
-  setShowCredentials: (v: boolean) => void;
-  copyToClipboard: (t: string) => void;
-}) {
-  const mono = getMonogram(carrier.name);
-  const linked = ["active", "approved"].includes(carrier.status);
-  const [showPw, setShowPw] = useState(false);
-
-  let creds: { username?: string; password?: string } | null = null;
-  if (carrier.encrypted_credentials) {
-    try {
-      creds = decryptCredentials(carrier.encrypted_credentials);
-    } catch {}
-  }
-
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-start gap-4">
-        <div className={`w-16 h-16 rounded-xl ${mono.bg} ${mono.text} flex items-center justify-center font-black text-xl shadow-md`}>
-          {getInitials(carrier.name)}
-        </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-3 mb-1">
-            <h2 className="text-xl font-black text-slate-900">{carrier.name}</h2>
-            <StatusBadge status={carrier.status} />
-          </div>
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <span className="material-symbols-outlined text-[16px]">{getCategoryIcon(carrier.category)}</span>
-            <span>{getCategoryLabel(carrier.category)}</span>
-            {carrier.sudan_available && (
-              <span className="text-green-600 font-semibold ml-2">🇸🇩 Sudan Ready</span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Links */}
-      <div className="flex flex-wrap gap-2">
-        {carrier.website && (
-          <a href={carrier.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-200 transition-colors">
-            <span className="material-symbols-outlined text-[16px]">language</span>
-            Website
-          </a>
-        )}
-        {carrier.dashboard_url && (
-          <a href={carrier.dashboard_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#137fec]/10 text-[#137fec] rounded-lg text-sm font-bold hover:bg-[#137fec]/20 transition-colors">
-            <span className="material-symbols-outlined text-[16px]">open_in_new</span>
-            Open Portal
-          </a>
-        )}
-        {carrier.contact_form_url && (
-          <a href={carrier.contact_form_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-4 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-semibold hover:bg-green-100 transition-colors">
-            <span className="material-symbols-outlined text-[16px]">request_quote</span>
-            Request Quote
-          </a>
-        )}
-      </div>
-
-      {/* Two-column layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Portal Credentials */}
-        <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
-          <div className="flex items-center justify-between mb-4">
-            <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-              <span className="material-symbols-outlined text-[18px]">vpn_key</span>
-              Portal Credentials
-            </h5>
-            {creds && (
-              <span className="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">AES-256</span>
-            )}
-          </div>
-
-          {creds ? (
-            <div className="space-y-3">
-              <div>
-                <label className="text-xs text-slate-500 mb-1 block">Username</label>
-                <div className="flex items-center gap-2 bg-white px-3 py-2.5 rounded-lg border border-slate-200">
-                  <span className="text-sm text-slate-900 flex-1 font-mono">{showCredentials ? creds.username : "••••••••••••"}</span>
-                  <button onClick={() => copyToClipboard(creds!.username || "")} className="text-slate-400 hover:text-[#137fec] transition-colors" title="Copy">
-                    <span className="material-symbols-outlined text-[18px]">content_copy</span>
-                  </button>
-                </div>
-              </div>
-              <div>
-                <label className="text-xs text-slate-500 mb-1 block">Password</label>
-                <div className="flex items-center gap-2 bg-white px-3 py-2.5 rounded-lg border border-slate-200">
-                  <span className="text-sm text-slate-900 flex-1 font-mono">
-                    {showCredentials && showPw ? creds.password : "••••••••••••"}
-                  </span>
-                  <button onClick={() => { setShowCredentials(true); setShowPw(!showPw); }} className="text-slate-400 hover:text-[#137fec] transition-colors" title={showPw ? "Hide" : "Show"}>
-                    <span className="material-symbols-outlined text-[18px]">{showCredentials && showPw ? "visibility_off" : "visibility"}</span>
-                  </button>
-                  <button onClick={() => copyToClipboard(creds!.password || "")} className="text-slate-400 hover:text-[#137fec] transition-colors" title="Copy">
-                    <span className="material-symbols-outlined text-[18px]">content_copy</span>
-                  </button>
-                </div>
-              </div>
-              {!showCredentials && (
-                <button
-                  onClick={() => setShowCredentials(true)}
-                  className="w-full mt-1 text-sm font-semibold text-[#137fec] hover:bg-[#137fec]/5 py-2 rounded-lg transition-colors"
-                >
-                  Reveal Credentials
-                </button>
-              )}
-            </div>
-          ) : (
-            <div className="text-center py-4">
-              <span className="material-symbols-outlined text-slate-300 text-3xl mb-2 block">lock_open</span>
-              <p className="text-sm text-slate-400">No credentials stored</p>
-              <button onClick={onEdit} className="text-sm font-semibold text-[#137fec] mt-2 hover:underline">Add credentials</button>
-            </div>
-          )}
-        </div>
-
-        {/* Contact Info */}
-        <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
-          <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2 mb-4">
-            <span className="material-symbols-outlined text-[18px]">person</span>
-            Primary Contact
-          </h5>
-
-          {(carrier.sales_rep_name || carrier.contact_email || carrier.contact_phone) ? (
-            <div className="space-y-3">
-              {carrier.sales_rep_name && (
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#137fec]/10 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[#137fec] text-[20px]">person</span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-slate-900">{carrier.sales_rep_name}</p>
-                    <p className="text-[10px] text-slate-500 uppercase">Account Manager</p>
-                  </div>
-                </div>
-              )}
-              <div className="space-y-2 mt-2">
-                {(carrier.contact_email || carrier.sales_rep_email) && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <span className="material-symbols-outlined text-slate-400 text-[16px]">mail</span>
-                    <a href={`mailto:${carrier.contact_email || carrier.sales_rep_email}`} className="text-[#137fec] hover:underline">
-                      {carrier.contact_email || carrier.sales_rep_email}
-                    </a>
-                  </div>
-                )}
-                {carrier.contact_phone && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <span className="material-symbols-outlined text-slate-400 text-[16px]">call</span>
-                    <a href={`tel:${carrier.contact_phone}`} className="text-[#137fec] hover:underline">{carrier.contact_phone}</a>
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : (
-            <div className="text-center py-4">
-              <span className="material-symbols-outlined text-slate-300 text-3xl mb-2 block">person_off</span>
-              <p className="text-sm text-slate-400">No contact info yet</p>
-              <button onClick={onEdit} className="text-sm font-semibold text-[#137fec] mt-2 hover:underline">Add contact</button>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Coverage Areas */}
-      {carrier.coverage && carrier.coverage.length > 0 && (
-        <div>
-          <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Coverage Areas</h5>
-          <div className="flex flex-wrap gap-2">
-            {carrier.coverage.map((area) => (
-              <span key={area} className="text-xs bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full font-medium">
-                {area}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Notes */}
-      {carrier.notes && (
-        <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
-          <h5 className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-1.5 flex items-center gap-1">
-            <span className="material-symbols-outlined text-[16px]">sticky_note_2</span>
-            Notes
-          </h5>
-          <p className="text-sm text-slate-700 leading-relaxed">{carrier.notes}</p>
-        </div>
-      )}
-
-      {/* Footer Actions */}
-      <div className="flex items-center justify-between pt-4 border-t border-slate-200">
-        <div className="flex gap-2 text-[11px] text-slate-400">
-          <span>Added {new Date(carrier.created_at).toLocaleDateString()}</span>
-          <span>·</span>
-          <span>Updated {new Date(carrier.updated_at).toLocaleDateString()}</span>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={onDelete}
-            className="px-3 py-1.5 text-sm text-red-500 hover:bg-red-50 rounded-lg transition-colors font-medium flex items-center gap-1"
-          >
-            <span className="material-symbols-outlined text-[16px]">delete</span>
-            Delete
-          </button>
-          <button
-            onClick={onEdit}
-            className="px-4 py-1.5 text-sm bg-[#137fec] text-white rounded-lg font-semibold hover:bg-[#137fec]/90 transition-colors flex items-center gap-1"
-          >
-            <span className="material-symbols-outlined text-[16px]">edit</span>
-            Edit
-          </button>
-        </div>
-      </div>
     </div>
   );
 }

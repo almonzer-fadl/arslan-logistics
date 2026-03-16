@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getForwarders, getShipments } from "@/lib/supabase/api";
 import type { Forwarder, Shipment } from "@/lib/types";
 import CarrierCard from "@/components/ui/CarrierCard";
+import CarrierDetailModal from "@/components/carriers/CarrierDetailModal";
 import ShipmentRow from "@/components/ui/ShipmentRow";
 import Link from "next/link";
 
@@ -11,6 +12,7 @@ export default function DashboardPage() {
   const [forwarders, setForwarders] = useState<Forwarder[]>([]);
   const [shipments, setShipments] = useState<(Shipment & { forwarders?: { name: string } })[]>([]);
   const [loading, setLoading] = useState(true);
+  const [detailCarrier, setDetailCarrier] = useState<Forwarder | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -86,7 +88,7 @@ export default function DashboardPage() {
                 <CarrierCard
                   key={carrier.id}
                   carrier={carrier}
-                  onClick={() => window.location.href = "/dashboard/carriers"}
+                  onClick={() => setDetailCarrier(carrier)}
                 />
               ))}
             </div>
@@ -203,6 +205,12 @@ export default function DashboardPage() {
           </div>
         </section>
       </div>
+
+      {/* Carrier Detail Modal */}
+      <CarrierDetailModal
+        carrier={detailCarrier}
+        onClose={() => setDetailCarrier(null)}
+      />
     </div>
   );
 }
