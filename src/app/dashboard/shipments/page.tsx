@@ -5,6 +5,9 @@ import { getShipments, getForwarders, upsertShipment } from "@/lib/supabase/api"
 import type { Shipment, Forwarder } from "@/lib/types";
 import StatusBadge from "@/components/ui/StatusBadge";
 import Modal from "@/components/ui/Modal";
+import { useToast } from "@/components/ui/Toast";
+import FieldError from "@/components/ui/FieldError";
+import { validateShipmentForm, type FieldErrors } from "@/lib/validation";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -38,6 +41,8 @@ function ShipmentsPage() {
     cost_usd: 0,
     status: "booked" as Shipment["status"],
   });
+  const [formErrors, setFormErrors] = useState<FieldErrors>({});
+  const toast = useToast();
 
   useEffect(() => {
     loadData();
@@ -61,6 +66,14 @@ function ShipmentsPage() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
+    const errors = validateShipmentForm({
+      forwarder_id: newShipment.forwarder_id,
+      origin_port: newShipment.origin_port,
+      destination_port: newShipment.destination_port,
+      cargo_description: newShipment.cargo_description,
+    });
+    setFormErrors(errors);
+    if (Object.keys(errors).length > 0) return;
     try {
       await upsertShipment({
         forwarder_id: newShipment.forwarder_id,
@@ -77,10 +90,11 @@ function ShipmentsPage() {
         status: newShipment.status,
       });
       setShowNewModal(false);
+      toast.success("Shipment created successfully.");
       await loadData();
     } catch (e) {
       console.error("Failed to create shipment:", e);
-      alert("Failed to create shipment. Check console for details.");
+      toast.error("Failed to create shipment. Check console for details.");
     }
   };
 

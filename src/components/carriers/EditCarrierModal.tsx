@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import Modal from "../ui/Modal";
 import { encryptCredentials } from "@/lib/encryption";
+import { validateCarrierForm, type FieldErrors } from "@/lib/validation";
+import FieldError from "@/components/ui/FieldError";
 import type { Forwarder } from "@/lib/types";
 
 interface EditCarrierModalProps {
@@ -24,6 +26,7 @@ export default function EditCarrierModal({
 }: EditCarrierModalProps) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formData, setFormData] = useState({
     name: "",
     website: "",
@@ -68,6 +71,17 @@ export default function EditCarrierModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!carrier) return;
+
+    const errors = validateCarrierForm({
+      name: formData.name,
+      website: formData.website,
+      dashboard_url: formData.dashboard_url,
+      contact_form_url: formData.contact_form_url,
+      contact_email: formData.contact_email,
+      sales_rep_email: formData.sales_rep_email,
+    });
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) return;
 
     setSaving(true);
     setError("");
@@ -131,11 +145,13 @@ export default function EditCarrierModal({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <label className="flex flex-col gap-1.5">
               <span className="text-sm font-medium text-slate-700">Carrier Name *</span>
-              <input required type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" />
+              <input required type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className={`px-3 py-2 border rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm ${fieldErrors.name ? "border-red-300" : "border-slate-200"}`} />
+              <FieldError error={fieldErrors.name} />
             </label>
             <label className="flex flex-col gap-1.5">
               <span className="text-sm font-medium text-slate-700">Website</span>
-              <input type="url" value={formData.website} onChange={(e) => setFormData({ ...formData, website: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm" />
+              <input type="url" value={formData.website} onChange={(e) => setFormData({ ...formData, website: e.target.value })} className={`px-3 py-2 border rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm ${fieldErrors.website ? "border-red-300" : "border-slate-200"}`} />
+              <FieldError error={fieldErrors.website} />
             </label>
             <label className="flex flex-col gap-1.5">
               <span className="text-sm font-medium text-slate-700">Category</span>

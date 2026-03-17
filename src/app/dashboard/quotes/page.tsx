@@ -5,6 +5,10 @@ import { getQuotes, getForwarders, upsertQuote, deleteQuote } from "@/lib/supaba
 import type { Quote, Forwarder } from "@/lib/types";
 import StatusBadge from "@/components/ui/StatusBadge";
 import Modal from "@/components/ui/Modal";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import { useToast } from "@/components/ui/Toast";
+import FieldError from "@/components/ui/FieldError";
+import { validateQuoteForm, type FieldErrors } from "@/lib/validation";
 import Link from "next/link";
 
 export default function QuotesPage() {
@@ -28,6 +32,10 @@ export default function QuotesPage() {
     valid_until: "",
     status: "pending" as Quote["status"],
   });
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [formErrors, setFormErrors] = useState<FieldErrors>({});
+  const toast = useToast();
 
   useEffect(() => {
     loadData();
@@ -47,6 +55,14 @@ export default function QuotesPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const errors = validateQuoteForm({
+      forwarder_id: form.forwarder_id,
+      origin_port: form.origin_port,
+      destination_port: form.destination_port,
+      cargo_description: form.cargo_description,
+    });
+    setFormErrors(errors);
+    if (Object.keys(errors).length > 0) return;
     try {
       await upsertQuote({
         forwarder_id: form.forwarder_id,
@@ -64,20 +80,27 @@ export default function QuotesPage() {
         status: form.status,
       });
       setShowForm(false);
+      toast.success("Quote request submitted.");
       await loadData();
     } catch (e) {
       console.error("Error creating quote:", e);
-      alert("Failed to create quote.");
+      toast.error("Failed to create quote.");
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Delete this quote?")) return;
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+    setDeleteLoading(true);
     try {
-      await deleteQuote(id);
+      await deleteQuote(deleteTarget);
+      toast.success("Quote deleted.");
       await loadData();
     } catch (e) {
       console.error("Error deleting quote:", e);
+      toast.error("Failed to delete quote.");
+    } finally {
+      setDeleteLoading(false);
+      setDeleteTarget(null);
     }
   };
 
@@ -158,7 +181,7 @@ export default function QuotesPage() {
                     Accept
                   </button>
                 )}
-                <button onClick={() => handleDelete(q.id)} className="text-xs py-2 px-3 text-red-500 hover:bg-red-50 rounded-lg font-semibold">
+                <button onClick={() => setDeleteTarget(q.id)} className="text-xs py-2 px-3 text-red-500 hover:bg-red-50 rounded-lg font-semibold">
                   Delete
                 </button>
               </div>
@@ -176,6 +199,16 @@ export default function QuotesPage() {
           </button>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={!!deleteTarget}
+        title="Delete Quote"
+        message="This will permanently delete this quote request. This action cannot be undone."
+        confirmLabel="Delete Quote"
+        loading={deleteLoading}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTarget(null)}
+      />
 
       {/* New Quote Form Modal */}
       <Modal isOpen={showForm} onClose={() => setShowForm(false)} title="New Quotation Request" maxWidth="xl">

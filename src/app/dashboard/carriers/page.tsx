@@ -8,6 +8,8 @@ import CarrierCard from "@/components/ui/CarrierCard";
 import CarrierDetailModal from "@/components/carriers/CarrierDetailModal";
 import AddCarrierModal from "@/components/carriers/AddCarrierModal";
 import EditCarrierModal from "@/components/carriers/EditCarrierModal";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import { useToast } from "@/components/ui/Toast";
 import { decryptCredentials } from "@/lib/encryption";
 import { getMonogram, getInitials, getCategoryIcon, getCategoryLabel } from "@/lib/carrier-utils";
 
@@ -23,6 +25,9 @@ export default function CarriersPage() {
   const [categoryFilter, setCategoryFilter] = useState<"all" | "global" | "regional" | "africa" | "roro">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     loadCarriers();
@@ -65,15 +70,24 @@ export default function CarriersPage() {
     await loadCarriers();
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Delete this carrier? This cannot be undone.")) return;
+  const handleDeleteRequest = (id: string) => {
+    setDeleteTarget(id);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
     try {
-      await deleteForwarder(id);
+      await deleteForwarder(deleteTarget);
       setDetailCarrier(null);
+      toast.success("Carrier deleted successfully.");
       await loadCarriers();
     } catch (error) {
       console.error("Error deleting carrier:", error);
-      alert("Failed to delete carrier.");
+      toast.error("Failed to delete carrier.");
+    } finally {
+      setDeleting(false);
+      setDeleteTarget(null);
     }
   };
 
@@ -335,7 +349,7 @@ export default function CarriersPage() {
         carrier={detailCarrier}
         onClose={() => setDetailCarrier(null)}
         onEdit={() => { const c = detailCarrier; setDetailCarrier(null); if (c) handleEditClick(c); }}
-        onDelete={() => { if (detailCarrier) handleDelete(detailCarrier.id); }}
+        onDelete={() => { if (detailCarrier) handleDeleteRequest(detailCarrier.id); }}
       />
 
       {/* Add/Edit Modals */}
@@ -347,6 +361,16 @@ export default function CarriersPage() {
         carrier={editingCarrier}
         decryptedUsername={editUsername}
         decryptedPassword={editPassword}
+      />
+
+      <ConfirmDialog
+        isOpen={!!deleteTarget}
+        title="Delete Carrier"
+        message="This will permanently delete this carrier and all associated credentials. This action cannot be undone."
+        confirmLabel="Delete Carrier"
+        loading={deleting}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTarget(null)}
       />
     </div>
   );

@@ -1,12 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#137fec]" /></div>}>
+      <LoginContent />
+    </Suspense>
+  );
+}
+
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isExpired = searchParams.get("expired") === "1";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -53,6 +63,14 @@ export default function LoginPage() {
             <p className="text-slate-500 text-base">Enter your credentials to access your dashboard.</p>
           </div>
 
+          {/* Session Expired */}
+          {isExpired && (
+            <div className="bg-amber-50 text-amber-700 border border-amber-200 rounded-lg p-3 text-sm flex items-center gap-2">
+              <span className="material-symbols-outlined text-[18px]">schedule</span>
+              Your session has expired. Please sign in again.
+            </div>
+          )}
+
           {/* Error */}
           {error && (
             <div className="bg-red-50 text-red-700 border border-red-200 rounded-lg p-3 text-sm">{error}</div>
@@ -75,7 +93,7 @@ export default function LoginPage() {
               <label className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-slate-700">Password</span>
-                  <a className="text-xs font-medium text-[#137fec] hover:underline" href="#">Forgot password?</a>
+                  <Link className="text-xs font-medium text-[#137fec] hover:underline" href="/auth/forgot-password">Forgot password?</Link>
                 </div>
                 <div className="relative">
                   <input
