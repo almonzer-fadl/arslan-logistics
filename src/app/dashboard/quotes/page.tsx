@@ -10,8 +10,10 @@ import { useToast } from "@/components/ui/Toast";
 import FieldError from "@/components/ui/FieldError";
 import { validateQuoteForm, type FieldErrors } from "@/lib/validation";
 import Link from "next/link";
+import { useUser } from "@/contexts/UserContext";
 
 export default function QuotesPage() {
+  const { canEdit } = useUser();
   const [quotes, setQuotes] = useState<(Quote & { forwarders?: { name: string } })[]>([]);
   const [forwarders, setForwarders] = useState<Forwarder[]>([]);
   const [loading, setLoading] = useState(true);
@@ -122,10 +124,12 @@ export default function QuotesPage() {
           <h1 className="text-3xl font-black text-slate-900 tracking-tight">Quotation Management</h1>
           <p className="text-slate-500 mt-1">Request, compare, and manage freight quotes from carriers.</p>
         </div>
-        <button onClick={() => setShowForm(true)} className="flex items-center gap-2 rounded-lg bg-[#137fec] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-[#137fec]/20 hover:bg-[#137fec]/90">
-          <span className="material-symbols-outlined">add</span>
-          New Quote Request
-        </button>
+        {canEdit && (
+          <button onClick={() => setShowForm(true)} className="flex items-center gap-2 rounded-lg bg-[#137fec] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-[#137fec]/20 hover:bg-[#137fec]/90">
+            <span className="material-symbols-outlined">add</span>
+            New Quote Request
+          </button>
+        )}
       </div>
 
       {/* Filter Tabs */}
@@ -172,19 +176,21 @@ export default function QuotesPage() {
                 </div>
               </div>
               {q.cargo_description && <p className="text-xs text-slate-500 mb-3 line-clamp-2">{q.cargo_description}</p>}
-              <div className="flex gap-2 pt-3 border-t border-slate-100">
-                {q.status === "received" && (
-                  <button
-                    onClick={async () => { await upsertQuote({ ...q, status: "accepted" }); await loadData(); }}
-                    className="flex-1 text-xs py-2 bg-green-50 text-green-700 rounded-lg font-semibold hover:bg-green-100"
-                  >
-                    Accept
+              {canEdit && (
+                <div className="flex gap-2 pt-3 border-t border-slate-100">
+                  {q.status === "received" && (
+                    <button
+                      onClick={async () => { await upsertQuote({ ...q, status: "accepted" }); await loadData(); }}
+                      className="flex-1 text-xs py-2 bg-green-50 text-green-700 rounded-lg font-semibold hover:bg-green-100"
+                    >
+                      Accept
+                    </button>
+                  )}
+                  <button onClick={() => setDeleteTarget(q.id)} className="text-xs py-2 px-3 text-red-500 hover:bg-red-50 rounded-lg font-semibold">
+                    Delete
                   </button>
-                )}
-                <button onClick={() => setDeleteTarget(q.id)} className="text-xs py-2 px-3 text-red-500 hover:bg-red-50 rounded-lg font-semibold">
-                  Delete
-                </button>
-              </div>
+                </div>
+              )}
             </div>
           ))}
         </div>

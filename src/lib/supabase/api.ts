@@ -30,6 +30,15 @@ export async function getForwarder(id: string) {
 
 export async function upsertForwarder(forwarder: Partial<Forwarder>) {
   const supabase = getSupabase();
+  
+  // Add created_by for new records (no id means new)
+  if (!forwarder.id) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      forwarder.created_by = user.id;
+    }
+  }
+  
   const { data, error } = await supabase
     .from("forwarders")
     .upsert(forwarder)
@@ -74,6 +83,15 @@ export async function getQuotes(forwarderId?: string) {
 
 export async function upsertQuote(quote: Partial<Quote>) {
   const supabase = getSupabase();
+  
+  // Add created_by for new records (no id means new)
+  if (!quote.id) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      quote.created_by = user.id;
+    }
+  }
+  
   const { data, error } = await supabase
     .from("quotes")
     .upsert(quote)
@@ -102,6 +120,15 @@ export async function getShipments() {
 
 export async function upsertShipment(shipment: Partial<Shipment>) {
   const supabase = getSupabase();
+  
+  // Add created_by for new records (no id means new)
+  if (!shipment.id) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      shipment.created_by = user.id;
+    }
+  }
+  
   const { data, error } = await supabase
     .from("shipments")
     .upsert(shipment)
@@ -124,6 +151,15 @@ export async function getClients() {
 
 export async function upsertClient(client: Partial<Client>) {
   const supabase = getSupabase();
+  
+  // Add created_by for new records (no id means new)
+  if (!client.id) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      client.created_by = user.id;
+    }
+  }
+  
   const { data, error } = await supabase
     .from("clients")
     .upsert(client)

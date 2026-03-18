@@ -10,6 +10,7 @@ import FieldError from "@/components/ui/FieldError";
 import { validateShipmentForm, type FieldErrors } from "@/lib/validation";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useUser } from "@/contexts/UserContext";
 
 export default function ShipmentsPageWrapper() {
   return (
@@ -20,6 +21,7 @@ export default function ShipmentsPageWrapper() {
 }
 
 function ShipmentsPage() {
+  const { canEdit } = useUser();
   const searchParams = useSearchParams();
   const [shipments, setShipments] = useState<(Shipment & { forwarders?: { name: string } })[]>([]);
   const [forwarders, setForwarders] = useState<Forwarder[]>([]);
@@ -154,10 +156,12 @@ function ShipmentsPage() {
             <span className="material-symbols-outlined text-xl">download</span>
             Export Report
           </button>
-          <button onClick={() => setShowNewModal(true)} className="flex items-center gap-2 rounded-lg bg-[#137fec] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#137fec]/90">
-            <span className="material-symbols-outlined text-xl">add</span>
-            New Shipment
-          </button>
+          {canEdit && (
+            <button onClick={() => setShowNewModal(true)} className="flex items-center gap-2 rounded-lg bg-[#137fec] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#137fec]/90">
+              <span className="material-symbols-outlined text-xl">add</span>
+              New Shipment
+            </button>
+          )}
         </div>
       </div>
 

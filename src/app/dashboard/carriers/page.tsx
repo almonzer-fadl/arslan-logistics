@@ -12,8 +12,10 @@ import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useToast } from "@/components/ui/Toast";
 import { decryptCredentials } from "@/lib/encryption";
 import { getMonogram, getInitials, getCategoryIcon, getCategoryLabel } from "@/lib/carrier-utils";
+import { useUser } from "@/contexts/UserContext";
 
 export default function CarriersPage() {
+  const { canEdit } = useUser();
   const [carriers, setCarriers] = useState<Forwarder[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -142,13 +144,15 @@ export default function CarriersPage() {
           <h1 className="text-3xl font-black text-slate-900 tracking-tight">Carrier Directory</h1>
           <p className="text-slate-500 mt-1">Manage carrier portals, credentials, and account representatives.</p>
         </div>
-        <button
-          onClick={() => setIsAddModalOpen(true)}
-          className="bg-[#137fec] text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-[#137fec]/90 transition-all shadow-lg shadow-[#137fec]/20"
-        >
-          <span className="material-symbols-outlined">add</span>
-          Add New Carrier
-        </button>
+        {canEdit && (
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="bg-[#137fec] text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-[#137fec]/90 transition-all shadow-lg shadow-[#137fec]/20"
+          >
+            <span className="material-symbols-outlined">add</span>
+            Add New Carrier
+          </button>
+        )}
       </div>
 
       {/* Stats Row */}
@@ -244,7 +248,7 @@ export default function CarriersPage() {
                 key={carrier.id}
                 carrier={carrier}
                 onClick={() => setDetailCarrier(carrier)}
-                onEditClick={() => handleEditClick(carrier)}
+                onEditClick={canEdit ? () => handleEditClick(carrier) : undefined}
               />
             ))}
           </div>
@@ -304,13 +308,15 @@ export default function CarriersPage() {
                         <span className="material-symbols-outlined text-[20px]">open_in_new</span>
                       </a>
                     )}
-                    <button
-                      onClick={() => handleEditClick(carrier)}
-                      className="p-2 text-slate-400 hover:text-[#137fec] transition-colors"
-                      title="Edit"
-                    >
-                      <span className="material-symbols-outlined text-[20px]">edit</span>
-                    </button>
+                    {canEdit && (
+                      <button
+                        onClick={() => handleEditClick(carrier)}
+                        className="p-2 text-slate-400 hover:text-[#137fec] transition-colors"
+                        title="Edit"
+                      >
+                        <span className="material-symbols-outlined text-[20px]">edit</span>
+                      </button>
+                    )}
                   </div>
 
                   <span className="material-symbols-outlined text-slate-300 group-hover:text-[#137fec] transition-colors">
@@ -348,8 +354,8 @@ export default function CarriersPage() {
       <CarrierDetailModal
         carrier={detailCarrier}
         onClose={() => setDetailCarrier(null)}
-        onEdit={() => { const c = detailCarrier; setDetailCarrier(null); if (c) handleEditClick(c); }}
-        onDelete={() => { if (detailCarrier) handleDeleteRequest(detailCarrier.id); }}
+        onEdit={canEdit ? () => { const c = detailCarrier; setDetailCarrier(null); if (c) handleEditClick(c); } : undefined}
+        onDelete={canEdit ? () => { if (detailCarrier) handleDeleteRequest(detailCarrier.id); } : undefined}
       />
 
       {/* Add/Edit Modals */}

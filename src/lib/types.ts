@@ -18,6 +18,7 @@ export interface Forwarder {
   sudan_available: boolean;
   status: ContactStatus;
   notes?: string;
+  created_by?: string;
   created_at: string;
   updated_at: string;
 }
@@ -40,6 +41,7 @@ export interface Quote {
   valid_until?: string;
   status: "pending" | "received" | "expired" | "accepted" | "draft" | "submitted";
   notes?: string;
+  created_by?: string;
   created_at: string;
 }
 
@@ -61,6 +63,7 @@ export interface Shipment {
   vessel_name?: string;
   cost_usd: number;
   notes?: string;
+  created_by?: string;
   created_at: string;
   updated_at: string;
 }
@@ -74,6 +77,7 @@ export interface Client {
   city?: string;
   country: string;
   notes?: string;
+  created_by?: string;
   created_at: string;
 }
 

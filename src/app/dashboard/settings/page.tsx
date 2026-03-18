@@ -5,9 +5,11 @@ import { getProfile, signOut } from "@/lib/supabase/api";
 import { createClient } from "@/lib/supabase/client";
 import type { UserProfile } from "@/lib/types";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/contexts/UserContext";
 
 export default function SettingsPage() {
   const router = useRouter();
+  const { isViewer } = useUser();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -124,21 +126,23 @@ export default function SettingsPage() {
       </section>
 
       {/* Security Section */}
-      <section className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
-        <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-          <span className="material-symbols-outlined text-[20px]">lock</span>
-          Security
-        </h3>
-        <div className="space-y-4">
-          <div>
-            <label className="text-sm font-medium text-slate-700 block mb-1">New Password</label>
-            <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-[#137fec] focus:border-[#137fec]" placeholder="Enter new password (min 6 chars)" />
+      {!isViewer && (
+        <section className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+          <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <span className="material-symbols-outlined text-[20px]">lock</span>
+            Security
+          </h3>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-slate-700 block mb-1">New Password</label>
+              <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-[#137fec] focus:border-[#137fec]" placeholder="Enter new password (min 6 chars)" />
+            </div>
+            <button onClick={changePassword} disabled={saving} className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-semibold hover:bg-slate-800 disabled:opacity-50">
+              Change Password
+            </button>
           </div>
-          <button onClick={changePassword} disabled={saving} className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-semibold hover:bg-slate-800 disabled:opacity-50">
-            Change Password
-          </button>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Encryption */}
       <section className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
