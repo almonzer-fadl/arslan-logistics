@@ -3,19 +3,35 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation, type Language } from "@/lib/i18n";
 
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: "grid_view" },
-  { name: "Carrier Hub", href: "/dashboard/carriers", icon: "hub" },
-  { name: "Quotes", href: "/dashboard/quotes", icon: "description" },
-  { name: "Shipments", href: "/dashboard/shipments", icon: "inventory_2" },
-  { name: "Analytics", href: "/dashboard/analytics", icon: "analytics" },
-  { name: "Messages", href: "/dashboard/messages", icon: "mail" },
+const navigationKeys = [
+  { key: "dashboard" as const, href: "/dashboard", icon: "grid_view" },
+  { key: "carrierHub" as const, href: "/dashboard/carriers", icon: "hub" },
+  { key: "quotes" as const, href: "/dashboard/quotes", icon: "description" },
+  { key: "shipments" as const, href: "/dashboard/shipments", icon: "inventory_2" },
+  { key: "tracker" as const, href: "/dashboard/tracker", icon: "map" },
+  { key: "analytics" as const, href: "/dashboard/analytics", icon: "analytics" },
+  { key: "messages" as const, href: "/dashboard/messages", icon: "mail" },
+];
+
+const languages: { code: Language; label: string; flag: string }[] = [
+  { code: "en", label: "English", flag: "🇬🇧" },
+  { code: "ar", label: "العربية", flag: "🇸🇦" },
+  { code: "tr", label: "Türkçe", flag: "🇹🇷" },
 ];
 
 export default function TopBar() {
   const pathname = usePathname();
+  const { t, language, setLanguage } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+
+  const navigation = navigationKeys.map((item) => ({
+    name: t.nav[item.key],
+    href: item.href,
+    icon: item.icon,
+  }));
 
   const isActive = (href: string) => pathname === href;
 
@@ -83,6 +99,45 @@ export default function TopBar() {
               />
             </div>
 
+            {/* Language Switcher */}
+            <div className="relative">
+              <button
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors flex items-center gap-1"
+              >
+                <span className="text-lg">
+                  {languages.find((l) => l.code === language)?.flag}
+                </span>
+              </button>
+              {langMenuOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setLangMenuOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-xl border border-slate-200 py-1 z-50">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => {
+                          setLanguage(lang.code);
+                          setLangMenuOpen(false);
+                        }}
+                        className={`w-full px-4 py-2 text-left text-sm flex items-center gap-2 transition-colors ${
+                          language === lang.code
+                            ? "bg-[#137fec]/10 text-[#137fec] font-semibold"
+                            : "text-slate-700 hover:bg-slate-50"
+                        }`}
+                      >
+                        <span>{lang.flag}</span>
+                        <span>{lang.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
             {/* Notifications */}
             <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors relative">
               <span className="material-symbols-outlined text-[22px]">notifications</span>
@@ -147,7 +202,7 @@ export default function TopBar() {
                 }`}
               >
                 <span className="material-symbols-outlined text-[20px]">settings</span>
-                Settings
+                {t.nav.settings}
               </Link>
             </div>
           </nav>

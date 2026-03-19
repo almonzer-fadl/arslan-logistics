@@ -10,7 +10,7 @@ export default function DashboardLayout({
   return (
     <AuthGuard>
       <UserProvider>
-        <div className="min-h-screen bg-[#f6f7f8]">
+        <div className="min-h-screen bg-[#f6f7f8] dark:bg-slate-900">
           <TopBar />
           <main>{children}</main>
         </div>
