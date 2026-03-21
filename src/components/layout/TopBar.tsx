@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation, type Language } from "@/lib/i18n";
+// import { useTheme } from "@/components/ui/ThemeProvider";
 
 const navigationKeys = [
   { key: "dashboard" as const, href: "/dashboard", icon: "grid_view" },
@@ -24,6 +25,7 @@ const languages: { code: Language; label: string; flag: string }[] = [
 export default function TopBar() {
   const pathname = usePathname();
   const { t, language, setLanguage } = useTranslation();
+  // const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
 
@@ -37,12 +39,12 @@ export default function TopBar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-white border-b border-slate-200">
+      <header className="sticky top-0 z-50 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
         <div className="px-4 md:px-6 flex items-center justify-between h-16">
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg"
+            className="lg:hidden p-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg"
           >
             <span className="material-symbols-outlined text-[24px]">
               {mobileMenuOpen ? "close" : "menu"}
@@ -55,10 +57,10 @@ export default function TopBar() {
               <span className="material-symbols-outlined text-[20px]">anchor</span>
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-slate-900 font-bold text-sm leading-tight">
+              <h1 className="text-slate-900 dark:text-white font-bold text-sm leading-tight">
                 Arslan Integrated
               </h1>
-              <p className="text-slate-400 text-[11px]">Solutions Portal</p>
+              <p className="text-slate-400 dark:text-slate-500 text-[11px]">Solutions Portal</p>
             </div>
           </Link>
 
@@ -73,7 +75,7 @@ export default function TopBar() {
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     active
                       ? "bg-[#137fec]/10 text-[#137fec]"
-                      : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700"
                   }`}
                 >
                   <span className="material-symbols-outlined text-[20px]">
@@ -89,11 +91,11 @@ export default function TopBar() {
           <div className="flex items-center gap-2 md:gap-3 shrink-0">
             {/* Search */}
             <div className="relative hidden md:block">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-[18px]">
                 search
               </span>
               <input
-                className="pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-[#137fec] focus:border-[#137fec] w-56 outline-none placeholder:text-slate-400"
+                className="pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-white focus:ring-[#137fec] focus:border-[#137fec] w-56 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                 placeholder="Search tracking #..."
                 type="text"
               />
@@ -103,7 +105,7 @@ export default function TopBar() {
             <div className="relative">
               <button
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors flex items-center gap-1"
+                className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors flex items-center gap-1"
               >
                 <span className="text-lg">
                   {languages.find((l) => l.code === language)?.flag}
@@ -115,7 +117,7 @@ export default function TopBar() {
                     className="fixed inset-0 z-40"
                     onClick={() => setLangMenuOpen(false)}
                   />
-                  <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-xl border border-slate-200 py-1 z-50">
+                  <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 py-1 z-50">
                     {languages.map((lang) => (
                       <button
                         key={lang.code}
@@ -126,7 +128,7 @@ export default function TopBar() {
                         className={`w-full px-4 py-2 text-left text-sm flex items-center gap-2 transition-colors ${
                           language === lang.code
                             ? "bg-[#137fec]/10 text-[#137fec] font-semibold"
-                            : "text-slate-700 hover:bg-slate-50"
+                            : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
                         }`}
                       >
                         <span>{lang.flag}</span>
@@ -139,7 +141,7 @@ export default function TopBar() {
             </div>
 
             {/* Notifications */}
-            <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors relative">
+            <button className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors relative">
               <span className="material-symbols-outlined text-[22px]">notifications</span>
             </button>
 
@@ -149,15 +151,15 @@ export default function TopBar() {
               className={`p-2 rounded-lg transition-colors hidden sm:block ${
                 isActive("/dashboard/settings")
                   ? "text-[#137fec] bg-[#137fec]/10"
-                  : "text-slate-400 hover:text-slate-600 hover:bg-slate-50"
+                  : "text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
               }`}
             >
               <span className="material-symbols-outlined text-[22px]">settings</span>
             </Link>
 
             {/* User Avatar */}
-            <div className="size-9 rounded-full bg-slate-100 border-2 border-slate-200 flex items-center justify-center cursor-pointer hover:border-[#137fec]/30 transition-colors">
-              <span className="text-slate-600 font-semibold text-xs">AF</span>
+            <div className="size-9 rounded-full bg-slate-100 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 flex items-center justify-center cursor-pointer hover:border-[#137fec]/30 transition-colors">
+              <span className="text-slate-600 dark:text-slate-300 font-semibold text-xs">AF</span>
             </div>
           </div>
         </div>
@@ -170,7 +172,7 @@ export default function TopBar() {
             className="fixed inset-0 bg-slate-900/50 z-40 lg:hidden"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <nav className="fixed top-16 left-0 right-0 bg-white border-b border-slate-200 shadow-lg z-40 lg:hidden">
+          <nav className="fixed top-16 left-0 right-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-lg z-40 lg:hidden">
             <div className="p-2 space-y-1">
               {navigation.map((item) => {
                 const active = isActive(item.href);
@@ -182,7 +184,7 @@ export default function TopBar() {
                     className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                       active
                         ? "bg-[#137fec]/10 text-[#137fec]"
-                        : "text-slate-600 hover:bg-slate-50"
+                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
                     }`}
                   >
                     <span className="material-symbols-outlined text-[20px]">
@@ -198,7 +200,7 @@ export default function TopBar() {
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors sm:hidden ${
                   isActive("/dashboard/settings")
                     ? "bg-[#137fec]/10 text-[#137fec]"
-                    : "text-slate-600 hover:bg-slate-50"
+                    : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
                 }`}
               >
                 <span className="material-symbols-outlined text-[20px]">settings</span>

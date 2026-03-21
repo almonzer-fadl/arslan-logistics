@@ -13,6 +13,7 @@ import { useToast } from "@/components/ui/Toast";
 import { decryptCredentials } from "@/lib/encryption";
 import { getMonogram, getInitials, getCategoryIcon, getCategoryLabel } from "@/lib/carrier-utils";
 import { useUser } from "@/contexts/UserContext";
+import { CarriersSkeleton } from "@/components/ui/Skeleton";
 
 export default function CarriersPage() {
   const { canEdit } = useUser();
@@ -129,11 +130,7 @@ export default function CarriersPage() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#137fec]" />
-      </div>
-    );
+    return <CarriersSkeleton />;
   }
 
   return (
