@@ -58,15 +58,15 @@ export default function Modal({
       {/* Modal */}
       <div
         ref={modalRef}
-        className={`relative bg-white rounded-t-xl sm:rounded-xl shadow-2xl w-full ${maxWidthClasses[maxWidth]} max-h-[90vh] overflow-y-auto`}
+        className={`relative bg-white dark:bg-slate-800 rounded-t-xl sm:rounded-xl shadow-2xl w-full ${maxWidthClasses[maxWidth]} max-h-[90vh] overflow-y-auto`}
       >
         {/* Header */}
         {title ? (
-          <div className="flex items-center justify-between p-6 border-b border-slate-200">
-            <h3 className="text-xl font-bold text-slate-900">{title}</h3>
+          <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white">{title}</h3>
             <button
               onClick={onClose}
-              className="p-1 text-slate-400 hover:text-slate-600 transition-colors"
+              className="p-1 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
             >
               <span className="material-symbols-outlined">close</span>
             </button>
@@ -74,7 +74,7 @@ export default function Modal({
         ) : (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-1 text-slate-400 hover:text-slate-600 transition-colors z-10"
+            className="absolute top-4 right-4 p-1 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors z-10"
           >
             <span className="material-symbols-outlined">close</span>
           </button>
