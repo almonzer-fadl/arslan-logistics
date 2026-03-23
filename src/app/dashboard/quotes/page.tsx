@@ -11,6 +11,7 @@ import FieldError from "@/components/ui/FieldError";
 import { validateQuoteForm, type FieldErrors } from "@/lib/validation";
 import Link from "next/link";
 import { useUser } from "@/contexts/UserContext";
+import { QuotesSkeleton } from "@/components/ui/Skeleton";
 
 export default function QuotesPage() {
   const { canEdit } = useUser();
@@ -109,11 +110,7 @@ export default function QuotesPage() {
   const filtered = quotes.filter((q) => filter === "all" || q.status === filter);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#137fec]" />
-      </div>
-    );
+    return <QuotesSkeleton />;
   }
 
   return (

@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { UserProfile } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/contexts/UserContext";
+import { SettingsSkeleton } from "@/components/ui/Skeleton";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -81,11 +82,7 @@ export default function SettingsPage() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#137fec]" />
-      </div>
-    );
+    return <SettingsSkeleton />;
   }
 
   return (

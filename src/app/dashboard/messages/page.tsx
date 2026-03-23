@@ -100,7 +100,7 @@ export default function MessagesPage() {
       {/* Email List */}
       <div className="w-full md:w-[380px] border-r border-slate-200 bg-white flex flex-col">
         {/* Header */}
-        <div className="p-4 border-b border-slate-200">
+        <div className="p-4 border-b border-slate-200 dark:border-slate-700">
           <h2 className="text-xl font-bold text-slate-900 mb-3">Integrated Carrier Inbox</h2>
           <div className="flex gap-2 overflow-x-auto">
             {["all", "quotation", "booking", "alerts"].map((t) => (
@@ -116,16 +116,16 @@ export default function MessagesPage() {
         </div>
 
         {/* Email Items */}
-        <div className="flex-1 overflow-y-auto divide-y divide-slate-100">
+        <div className="flex-1 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700">
           {demoEmails.map((email) => (
             <div
               key={email.id}
               onClick={() => setSelected(email)}
-              className={`p-4 cursor-pointer transition-colors ${selected.id === email.id ? "bg-[#137fec]/5 border-l-2 border-l-[#137fec]" : "hover:bg-slate-50 border-l-2 border-l-transparent"}`}
+              className={`p-4 cursor-pointer transition-colors ${selected.id === email.id ? "bg-[#137fec]/5 border-l-2 border-l-[#137fec]" : "hover:bg-slate-50 dark:bg-slate-900 border-l-2 border-l-transparent"}`}
             >
               <div className="flex justify-between items-start mb-1">
-                <span className="font-bold text-sm text-slate-900">{email.carrier}</span>
-                <span className="text-[11px] text-slate-400">{email.time}</span>
+                <span className="font-bold text-sm text-slate-900 dark:text-white">{email.carrier}</span>
+                <span className="text-[11px] text-slate-400 dark:text-slate-500">{email.time}</span>
               </div>
               <h5 className="text-sm font-semibold text-slate-800 truncate mb-1">{email.subject}</h5>
               <p className="text-xs text-slate-500 line-clamp-1">{email.preview}</p>
@@ -143,10 +143,10 @@ export default function MessagesPage() {
       {/* Email Detail */}
       <div className="hidden md:flex flex-1 flex-col bg-white">
         {/* Actions Bar */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-200">
+        <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
           <div className="flex gap-2">
             {["check", "flag", "delete", "forward"].map((icon) => (
-              <button key={icon} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg">
+              <button key={icon} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:bg-slate-900 rounded-lg">
                 <span className="material-symbols-outlined text-[20px]">{icon}</span>
               </button>
             ))}
@@ -163,7 +163,7 @@ export default function MessagesPage() {
         <div className="flex-1 overflow-y-auto p-6">
           <div className="max-w-3xl">
             <div className="flex justify-between items-start mb-4">
-              <h2 className="text-2xl font-bold text-slate-900">{selected.subject}</h2>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{selected.subject}</h2>
               {selected.detected && (
                 <span className="inline-flex items-center gap-1 text-xs text-green-600 font-bold">
                   <span className="w-2 h-2 rounded-full bg-green-500" />
@@ -171,8 +171,8 @@ export default function MessagesPage() {
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-2 mb-6 text-sm text-slate-500">
-              <span className="font-semibold text-slate-700">{selected.carrier}</span>
+            <div className="flex items-center gap-2 mb-6 text-sm text-slate-500 dark:text-slate-400 dark:text-slate-500">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">{selected.carrier}</span>
               <span>·</span>
               <span>{selected.time}</span>
             </div>
@@ -184,19 +184,19 @@ export default function MessagesPage() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div>
                     <p className="text-[10px] text-amber-600 font-bold uppercase tracking-wider">Ocean Freight</p>
-                    <p className="text-xl font-black text-slate-900">{selected.detected.freight}</p>
+                    <p className="text-xl font-black text-slate-900 dark:text-white">{selected.detected.freight}</p>
                   </div>
                   <div>
                     <p className="text-[10px] text-amber-600 font-bold uppercase tracking-wider">Vessel / Voyage</p>
-                    <p className="text-sm font-bold text-slate-900">{selected.detected.vessel}</p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">{selected.detected.vessel}</p>
                   </div>
                   <div>
                     <p className="text-[10px] text-amber-600 font-bold uppercase tracking-wider">ETD</p>
-                    <p className="text-sm font-bold text-slate-900">{selected.detected.etd}</p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">{selected.detected.etd}</p>
                   </div>
                   <div>
                     <p className="text-[10px] text-amber-600 font-bold uppercase tracking-wider">ETA</p>
-                    <p className="text-sm font-bold text-slate-900">{selected.detected.eta}</p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">{selected.detected.eta}</p>
                   </div>
                 </div>
                 <div className="flex gap-3 mt-4 pt-3 border-t border-[#137fec]/10">
@@ -223,10 +223,10 @@ export default function MessagesPage() {
               type="text"
               value={reply}
               onChange={(e) => setReply(e.target.value)}
-              className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-[#137fec] focus:border-[#137fec]"
+              className="flex-1 px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 rounded-lg text-sm focus:ring-[#137fec] focus:border-[#137fec]"
               placeholder={`Reply to ${selected.carrier}...`}
             />
-            <button className="p-2 text-slate-400 hover:text-slate-600"><span className="material-symbols-outlined">attach_file</span></button>
+            <button className="p-2 text-slate-400 hover:text-slate-600 dark:text-slate-400 dark:text-slate-500"><span className="material-symbols-outlined">attach_file</span></button>
             <button className="w-10 h-10 bg-[#137fec] text-white rounded-full flex items-center justify-center hover:bg-[#137fec]/90">
               <span className="material-symbols-outlined text-[20px]">send</span>
             </button>
