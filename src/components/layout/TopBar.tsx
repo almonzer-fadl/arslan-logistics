@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation, type Language } from "@/lib/i18n";
-// import { useTheme } from "@/components/ui/ThemeProvider";
+import { useTheme } from "@/components/ui/ThemeProvider";
 
 const navigationKeys = [
   { key: "dashboard" as const, href: "/dashboard", icon: "grid_view" },
@@ -25,7 +25,7 @@ const languages: { code: Language; label: string; flag: string }[] = [
 export default function TopBar() {
   const pathname = usePathname();
   const { t, language, setLanguage } = useTranslation();
-  // const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
 
@@ -100,6 +100,17 @@ export default function TopBar() {
                 type="text"
               />
             </div>
+
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors"
+              aria-label="Toggle dark mode"
+            >
+              <span className="material-symbols-outlined text-[22px]">
+                {theme === "dark" ? "light_mode" : "dark_mode"}
+              </span>
+            </button>
 
             {/* Language Switcher */}
             <div className="relative">
