@@ -13,7 +13,6 @@ const navigationKeys = [
   { key: "shipments" as const, href: "/dashboard/shipments", icon: "inventory_2" },
   { key: "tracker" as const, href: "/dashboard/tracker", icon: "map" },
   { key: "analytics" as const, href: "/dashboard/analytics", icon: "analytics" },
-  { key: "messages" as const, href: "/dashboard/messages", icon: "mail" },
 ];
 
 const languages: { code: Language; label: string; flag: string }[] = [

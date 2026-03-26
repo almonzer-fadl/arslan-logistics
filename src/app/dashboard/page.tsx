@@ -71,7 +71,7 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-12 gap-8">
         {/* Carrier Hub Grid */}
-        <section className="col-span-12 lg:col-span-8">
+        <section className="col-span-12">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xl font-bold text-slate-900 dark:text-white">Carrier Hub</h3>
             <Link href="/dashboard/carriers" className="text-[#137fec] text-sm font-semibold hover:underline">
@@ -100,46 +100,6 @@ export default function DashboardPage() {
               </Link>
             </div>
           )}
-        </section>
-
-        {/* Recent Replies */}
-        <section className="col-span-12 lg:col-span-4">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Recent Replies</h3>
-            <Link href="/dashboard/messages" className="text-[#137fec] text-sm font-semibold hover:underline">Inbox</Link>
-          </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col divide-y divide-slate-100 dark:divide-slate-700 overflow-hidden">
-            <div className="p-4 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="material-symbols-outlined text-blue-500 text-sm">reply</span>
-                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">CMA CGM - Regional</span>
-              </div>
-              <h5 className="text-sm font-bold text-slate-900 dark:text-white truncate">Quote #229381: Shenzhen to Dubai</h5>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">Revised rates for 40&apos; HC containers are now available...</p>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-2">12 mins ago</p>
-            </div>
-            <div className="p-4 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="material-symbols-outlined text-blue-500 text-sm">reply</span>
-                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Maersk Sales</span>
-              </div>
-              <h5 className="text-sm font-bold text-slate-900 dark:text-white truncate">Rate Confirmation: Hamburg Express</h5>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">Thank you for your inquiry. Your spot rate has been locked...</p>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-2">2 hours ago</p>
-            </div>
-            <div className="p-4 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="material-symbols-outlined text-blue-500 text-sm">reply</span>
-                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Evergreen Desk</span>
-              </div>
-              <h5 className="text-sm font-bold text-slate-900 dark:text-white truncate">Availability Update - Week 42</h5>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">Please be advised of equipment shortage in Ningbo port...</p>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-2">Yesterday</p>
-            </div>
-            <div className="p-3 bg-slate-50 dark:bg-slate-900 text-center">
-              <Link href="/dashboard/messages" className="text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-[#137fec]">Load more messages</Link>
-            </div>
-          </div>
         </section>
 
         {/* Active Shipments Table */}

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui/Toast";
@@ -10,6 +10,10 @@ const inter = Inter({
   variable: "--font-inter",
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  themeColor: "#137fec",
+};
 
 export const metadata: Metadata = {
   title: "Arslan Integrated Solutions — Logistics Dashboard",
@@ -25,7 +29,6 @@ export const metadata: Metadata = {
     description: "Freight forwarding management portal for global trade operations. Manage carriers, quotes, shipments, and analytics.",
     type: "website",
   },
-  themeColor: "#137fec",
 };
 
 export default function RootLayout({
