@@ -155,33 +155,33 @@ export default function CarriersPage() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {[
-          { label: "Total Carriers", count: stats.total, icon: "corporate_fare", color: "bg-slate-50 text-slate-600 dark:text-slate-400 dark:text-slate-500" },
+          { label: "Total Carriers", count: stats.total, icon: "corporate_fare", color: "bg-slate-50 text-slate-600 dark:text-slate-400 dark:text-slate-400" },
           { label: "Authenticated", count: stats.active, icon: "verified", color: "bg-emerald-50 text-emerald-600" },
           { label: "Pending Setup", count: stats.pending, icon: "hourglass_top", color: "bg-amber-50 text-amber-600" },
           { label: "Sudan Ready", count: stats.sudan, icon: "flag", color: "bg-blue-50 text-blue-600" },
         ].map((s) => (
-          <div key={s.label} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 p-4 flex items-center gap-3 shadow-sm">
+          <div key={s.label} className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 p-4 flex items-center gap-3 shadow-sm">
             <div className={`w-11 h-11 rounded-lg flex items-center justify-center ${s.color}`}>
               <span className="material-symbols-outlined">{s.icon}</span>
             </div>
             <div>
               <p className="text-2xl font-black text-slate-900 dark:text-white">{s.count}</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 dark:text-slate-500">{s.label}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 dark:text-slate-400">{s.label}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 p-4 mb-6 shadow-sm">
+      <div className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 p-4 mb-6 shadow-sm">
         <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
           <div className="relative flex-1 max-w-md">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500">search</span>
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400">search</span>
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm"
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm"
               placeholder="Search by name, website, or coverage area..."
             />
           </div>
@@ -208,7 +208,7 @@ export default function CarriersPage() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value as typeof categoryFilter)}
-              className="text-xs font-medium px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 rounded-lg text-slate-600 focus:ring-[#137fec] focus:border-[#137fec]"
+              className="text-xs font-medium px-3 py-2 bg-slate-50 dark:bg-dark-bg border border-slate-200 rounded-lg text-slate-600 focus:ring-[#137fec] focus:border-[#137fec]"
             >
               <option value="all">All Categories</option>
               <option value="global">Global</option>
@@ -221,13 +221,13 @@ export default function CarriersPage() {
             <div className="flex bg-slate-100 p-1 rounded-lg">
               <button
                 onClick={() => setViewMode("grid")}
-                className={`p-1.5 rounded-md transition-all ${viewMode === "grid" ? "bg-white text-[#137fec] shadow-sm" : "text-slate-400 dark:text-slate-500"}`}
+                className={`p-1.5 rounded-md transition-all ${viewMode === "grid" ? "bg-white text-[#137fec] shadow-sm" : "text-slate-400 dark:text-slate-400"}`}
               >
                 <span className="material-symbols-outlined text-[20px]">grid_view</span>
               </button>
               <button
                 onClick={() => setViewMode("list")}
-                className={`p-1.5 rounded-md transition-all ${viewMode === "list" ? "bg-white text-[#137fec] shadow-sm" : "text-slate-400 dark:text-slate-500"}`}
+                className={`p-1.5 rounded-md transition-all ${viewMode === "list" ? "bg-white text-[#137fec] shadow-sm" : "text-slate-400 dark:text-slate-400"}`}
               >
                 <span className="material-symbols-outlined text-[20px]">view_list</span>
               </button>
@@ -251,7 +251,7 @@ export default function CarriersPage() {
           </div>
         ) : (
           /* List View */
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 shadow-sm overflow-hidden divide-y divide-slate-100 dark:divide-slate-700">
+          <div className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 shadow-sm overflow-hidden divide-y divide-slate-100 dark:divide-dark-border">
             {filtered.map((carrier) => {
               const mono = getMonogram(carrier.name);
               let hasCreds = false;
@@ -275,7 +275,7 @@ export default function CarriersPage() {
                         <span className="text-[10px] text-green-600 bg-green-50 px-2 py-0.5 rounded font-semibold">🇸🇩 Sudan</span>
                       )}
                     </div>
-                    <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 dark:text-slate-500">
+                    <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 dark:text-slate-400">
                       <span className="truncate max-w-[200px]">{carrier.website?.replace(/https?:\/\/(www\.)?/, "")}</span>
                       {carrier.coverage && carrier.coverage.length > 0 && (
                         <span className="hidden md:inline">· {carrier.coverage.slice(0, 3).join(", ")}{carrier.coverage.length > 3 ? ` +${carrier.coverage.length - 3}` : ""}</span>
@@ -325,7 +325,7 @@ export default function CarriersPage() {
           </div>
         )
       ) : (
-        <div className="bg-white dark:bg-slate-800 p-16 rounded-xl border border-slate-200 text-center shadow-sm">
+        <div className="bg-white dark:bg-dark-card p-16 rounded-xl border border-slate-200 text-center shadow-sm">
           <span className="material-symbols-outlined text-slate-200 text-7xl mb-4 block">corporate_fare</span>
           <h4 className="text-lg font-bold text-slate-900 mb-2">
             {searchQuery || filter !== "all" || categoryFilter !== "all" ? "No carriers match your filters" : "No carriers yet"}

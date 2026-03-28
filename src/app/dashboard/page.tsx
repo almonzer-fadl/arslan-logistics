@@ -62,7 +62,7 @@ export default function DashboardPage() {
         </Link>
         <Link
           href="/dashboard/shipments?action=new"
-          className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-6 py-3 rounded-lg font-bold border border-slate-200 dark:border-slate-700 flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
+          className="bg-white dark:bg-dark-card text-slate-700 dark:text-slate-200 px-6 py-3 rounded-lg font-bold border border-slate-200 dark:border-dark-border flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
         >
           <span className="material-symbols-outlined">package_2</span>
           Add Shipment
@@ -90,7 +90,7 @@ export default function DashboardPage() {
               ))}
             </div>
           ) : (
-            <div className="bg-white dark:bg-slate-800 p-12 rounded-xl border border-slate-200 dark:border-slate-700 text-center">
+            <div className="bg-white dark:bg-dark-card p-12 rounded-xl border border-slate-200 dark:border-dark-border text-center">
               <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 text-6xl mb-4 block">hub</span>
               <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No Carriers Yet</h4>
               <p className="text-slate-500 dark:text-slate-400 mb-4">Add your first carrier to start managing quotes and shipments</p>
@@ -107,21 +107,21 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xl font-bold text-slate-900 dark:text-white">Active Shipments</h3>
             <div className="flex gap-2">
-              <button className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+              <button className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
                 <span className="material-symbols-outlined text-sm">filter_list</span>
                 Filter
               </button>
-              <button className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+              <button className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
                 <span className="material-symbols-outlined text-sm">download</span>
                 Export CSV
               </button>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden overflow-x-auto">
+          <div className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 dark:border-dark-border shadow-sm overflow-hidden overflow-x-auto">
             {activeShipments.length > 0 ? (
               <table className="w-full text-left border-collapse min-w-[800px]">
-                <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-700">
+                <thead className="bg-slate-50 dark:bg-dark-bg border-b border-slate-100 dark:border-dark-border">
                   <tr>
                     <th className="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tracking Number</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Carrier</th>
@@ -132,7 +132,7 @@ export default function DashboardPage() {
                     <th className="px-6 py-4"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                <tbody className="divide-y divide-slate-100 dark:divide-dark-border">
                   {activeShipments.map((shipment) => (
                     <ShipmentRow
                       key={shipment.id}

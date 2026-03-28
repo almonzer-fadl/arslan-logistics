@@ -138,7 +138,7 @@ export default function EditCarrierModal({
 
         {/* Basic Info */}
         <div className="space-y-4">
-          <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+          <h4 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <span className="material-symbols-outlined text-[18px]">info</span>
             Basic Information
           </h4>
@@ -185,7 +185,7 @@ export default function EditCarrierModal({
 
         {/* Credentials */}
         <div className="space-y-4">
-          <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+          <h4 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <span className="material-symbols-outlined text-[18px]">lock</span>
             Portal Credentials (AES-256 Encrypted)
           </h4>
@@ -203,7 +203,7 @@ export default function EditCarrierModal({
 
         {/* Contact */}
         <div className="space-y-4">
-          <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+          <h4 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <span className="material-symbols-outlined text-[18px]">person</span>
             Contact Information
           </h4>
@@ -229,7 +229,7 @@ export default function EditCarrierModal({
 
         {/* Coverage & Notes */}
         <div className="space-y-4">
-          <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+          <h4 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <span className="material-symbols-outlined text-[18px]">public</span>
             Coverage & Notes
           </h4>
@@ -248,7 +248,7 @@ export default function EditCarrierModal({
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3 justify-end pt-4 border-t border-slate-200">
+        <div className="flex gap-3 justify-end pt-4 border-t border-slate-200 dark:border-dark-border">
           <button type="button" onClick={onClose} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-semibold transition-colors">Cancel</button>
           <button type="submit" disabled={saving} className="px-5 py-2 bg-[#137fec] text-white rounded-lg font-semibold hover:bg-[#137fec]/90 transition-colors disabled:opacity-50 flex items-center gap-2">
             {saving ? (

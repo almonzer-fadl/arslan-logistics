@@ -122,7 +122,7 @@ export default function AddCarrierModal({
 
         {/* Basic Info */}
         <div className="space-y-4">
-          <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+          <h4 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <span className="material-symbols-outlined text-[18px]">info</span>
             Basic Information
           </h4>
@@ -173,7 +173,7 @@ export default function AddCarrierModal({
 
         {/* Credentials */}
         <div className="space-y-4">
-          <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+          <h4 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <span className="material-symbols-outlined text-[18px]">lock</span>
             Portal Credentials
           </h4>
@@ -195,7 +195,7 @@ export default function AddCarrierModal({
 
         {/* Contact Info */}
         <div className="space-y-4">
-          <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+          <h4 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <span className="material-symbols-outlined text-[18px]">person</span>
             Primary Contact
           </h4>
@@ -217,7 +217,7 @@ export default function AddCarrierModal({
 
         {/* Coverage & Notes */}
         <div className="space-y-4">
-          <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+          <h4 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <span className="material-symbols-outlined text-[18px]">public</span>
             Coverage & Notes
           </h4>
@@ -236,7 +236,7 @@ export default function AddCarrierModal({
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3 justify-end pt-4 border-t border-slate-200">
+        <div className="flex gap-3 justify-end pt-4 border-t border-slate-200 dark:border-dark-border">
           <button type="button" onClick={() => { resetForm(); onClose(); }} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-semibold transition-colors">
             Cancel
           </button>

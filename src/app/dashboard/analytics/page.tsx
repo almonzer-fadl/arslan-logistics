@@ -80,7 +80,7 @@ export default function AnalyticsPage() {
           { label: "Pending Quotes", value: pendingQuotes.toString(), icon: "pending", color: "amber" },
           { label: "Quote Acceptance", value: totalQuotes > 0 ? `${Math.round((acceptedQuotes / totalQuotes) * 100)}%` : "0%", icon: "thumb_up", color: "purple" },
         ].map((kpi) => (
-          <div key={kpi.label} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
+          <div key={kpi.label} className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 dark:border-dark-border p-5">
             <div className="flex items-center gap-3 mb-3">
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${kpi.color === "blue" ? "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400" : kpi.color === "green" ? "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400" : kpi.color === "amber" ? "bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400" : "bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400"}`}>
                 <span className="material-symbols-outlined">{kpi.icon}</span>
@@ -94,7 +94,7 @@ export default function AnalyticsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Carrier Spend Breakdown */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+        <div className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 dark:border-dark-border p-6">
           <h3 className="font-bold text-slate-900 dark:text-white mb-4">Spend by Carrier</h3>
           {topCarriers.length > 0 ? (
             <div className="space-y-4">
@@ -104,39 +104,39 @@ export default function AnalyticsPage() {
                     <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{name}</span>
                     <span className="text-sm font-bold text-slate-900 dark:text-white">${amount.toLocaleString()}</span>
                   </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
+                  <div className="w-full bg-slate-100 dark:bg-dark-elevated rounded-full h-2">
                     <div className="bg-[#137fec] h-2 rounded-full transition-all" style={{ width: `${(amount / maxCarrierSpend) * 100}%` }} />
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-slate-400 dark:text-slate-500 text-center py-8">No shipment data yet</p>
+            <p className="text-sm text-slate-400 dark:text-slate-400 text-center py-8">No shipment data yet</p>
           )}
         </div>
 
         {/* Top Routes */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+        <div className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 dark:border-dark-border p-6">
           <h3 className="font-bold text-slate-900 dark:text-white mb-4">Top Routes</h3>
           {topRoutes.length > 0 ? (
             <div className="space-y-3">
               {topRoutes.map(([route, count], i) => (
-                <div key={route} className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-lg">
+                <div key={route} className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-dark-bg rounded-lg">
                   <span className="text-lg font-black text-[#137fec] w-8 text-center">#{i + 1}</span>
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-slate-900 dark:text-white">{route}</p>
-                    <p className="text-xs text-slate-400 dark:text-slate-500">{count} shipment{count > 1 ? "s" : ""}</p>
+                    <p className="text-xs text-slate-400 dark:text-slate-400">{count} shipment{count > 1 ? "s" : ""}</p>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-slate-400 dark:text-slate-500 text-center py-8">No route data yet</p>
+            <p className="text-sm text-slate-400 dark:text-slate-400 text-center py-8">No route data yet</p>
           )}
         </div>
 
         {/* Monthly Spend */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+        <div className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 dark:border-dark-border p-6">
           <h3 className="font-bold text-slate-900 dark:text-white mb-4">Monthly Spend</h3>
           {Object.keys(monthlySpend).length > 0 ? (
             <div className="space-y-3">
@@ -148,12 +148,12 @@ export default function AnalyticsPage() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-slate-400 dark:text-slate-500 text-center py-8">No data yet</p>
+            <p className="text-sm text-slate-400 dark:text-slate-400 text-center py-8">No data yet</p>
           )}
         </div>
 
         {/* Shipment Status Breakdown */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+        <div className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 dark:border-dark-border p-6">
           <h3 className="font-bold text-slate-900 dark:text-white mb-4">Shipment Status</h3>
           <div className="space-y-3">
             {[
@@ -169,7 +169,7 @@ export default function AnalyticsPage() {
                 <span className="text-sm font-bold text-slate-900 dark:text-white">{stat.count}</span>
               </div>
             ))}
-            {shipments.length === 0 && <p className="text-sm text-slate-400 dark:text-slate-500 text-center py-4">No shipments yet</p>}
+            {shipments.length === 0 && <p className="text-sm text-slate-400 dark:text-slate-400 text-center py-4">No shipments yet</p>}
           </div>
         </div>
       </div>

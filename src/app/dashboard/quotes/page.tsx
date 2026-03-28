@@ -118,8 +118,8 @@ export default function QuotesPage() {
       {/* Header */}
       <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Quotation Management</h1>
-          <p className="text-slate-500 mt-1">Request, compare, and manage freight quotes from carriers.</p>
+          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Quotation Management</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Request, compare, and manage freight quotes from carriers.</p>
         </div>
         {canEdit && (
           <button onClick={() => setShowForm(true)} className="flex items-center gap-2 rounded-lg bg-[#137fec] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-[#137fec]/20 hover:bg-[#137fec]/90">
@@ -135,7 +135,7 @@ export default function QuotesPage() {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-4 py-2 rounded-full text-sm font-semibold capitalize transition-colors ${filter === f ? "bg-[#137fec] text-white" : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"}`}
+            className={`px-4 py-2 rounded-full text-sm font-semibold capitalize transition-colors ${filter === f ? "bg-[#137fec] text-white" : "bg-white dark:bg-dark-card text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-dark-border hover:bg-slate-50 dark:hover:bg-dark-elevated"}`}
           >
             {f === "all" ? "All Quotes" : f}
           </button>
@@ -146,35 +146,35 @@ export default function QuotesPage() {
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filtered.map((q) => (
-            <div key={q.id} className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition-shadow">
+            <div key={q.id} className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 dark:border-dark-border p-5 hover:shadow-md transition-shadow">
               <div className="flex justify-between items-start mb-3">
                 <div>
-                  <p className="text-xs text-slate-400 uppercase tracking-wider">{q.forwarders?.name || q.forwarder_name || "Unknown"}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-400 uppercase tracking-wider">{q.forwarders?.name || q.forwarder_name || "Unknown"}</p>
                   <h4 className="font-bold text-slate-900 mt-1">{q.origin_port} → {q.destination_port}</h4>
                 </div>
                 <StatusBadge status={q.status} variant="quote" />
               </div>
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div>
-                  <p className="text-xs text-slate-400">Container</p>
-                  <p className="text-sm font-medium text-slate-900">{q.container_type}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-400">Container</p>
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">{q.container_type}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400">Transit</p>
-                  <p className="text-sm font-medium text-slate-900">{q.transit_days} days</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-400">Transit</p>
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">{q.transit_days} days</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400">Price</p>
-                  <p className="text-lg font-black text-slate-900">${q.price_usd.toLocaleString()}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-400">Price</p>
+                  <p className="text-lg font-black text-slate-900 dark:text-white">${q.price_usd.toLocaleString()}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400">Valid Until</p>
-                  <p className="text-sm font-medium text-slate-900">{q.valid_until ? new Date(q.valid_until).toLocaleDateString() : "N/A"}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-400">Valid Until</p>
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">{q.valid_until ? new Date(q.valid_until).toLocaleDateString() : "N/A"}</p>
                 </div>
               </div>
               {q.cargo_description && <p className="text-xs text-slate-500 mb-3 line-clamp-2">{q.cargo_description}</p>}
               {canEdit && (
-                <div className="flex gap-2 pt-3 border-t border-slate-100">
+                <div className="flex gap-2 pt-3 border-t border-slate-100 dark:border-dark-border">
                   {q.status === "received" && (
                     <button
                       onClick={async () => { await upsertQuote({ ...q, status: "accepted" }); await loadData(); }}
@@ -193,7 +193,7 @@ export default function QuotesPage() {
         </div>
       ) : (
         <div className="bg-white p-12 rounded-xl border border-slate-200 text-center">
-          <span className="material-symbols-outlined text-slate-300 text-6xl mb-4 block">description</span>
+          <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 text-6xl mb-4 block">description</span>
           <h4 className="text-lg font-bold text-slate-900 mb-2">No Quotes Yet</h4>
           <p className="text-slate-500 mb-4">Request your first quote from a carrier</p>
           <button onClick={() => setShowForm(true)} className="inline-flex items-center gap-2 bg-[#137fec] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#137fec]/90">
@@ -218,15 +218,15 @@ export default function QuotesPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Preferred Carrier *</span>
-              <select required value={form.forwarder_id} onChange={(e) => setForm({ ...form, forwarder_id: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Preferred Carrier *</span>
+              <select required value={form.forwarder_id} onChange={(e) => setForm({ ...form, forwarder_id: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
                 <option value="">Select carrier...</option>
                 {forwarders.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
               </select>
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Container Type *</span>
-              <select value={form.container_type} onChange={(e) => setForm({ ...form, container_type: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Container Type *</span>
+              <select value={form.container_type} onChange={(e) => setForm({ ...form, container_type: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
                 <option>20ft Standard</option>
                 <option>40ft Standard</option>
                 <option>40ft HC</option>
@@ -234,20 +234,20 @@ export default function QuotesPage() {
               </select>
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Origin Port *</span>
-              <input required type="text" value={form.origin_port} onChange={(e) => setForm({ ...form, origin_port: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., Istanbul (TRIST)" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Origin Port *</span>
+              <input required type="text" value={form.origin_port} onChange={(e) => setForm({ ...form, origin_port: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., Istanbul (TRIST)" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Destination Port *</span>
-              <input required type="text" value={form.destination_port} onChange={(e) => setForm({ ...form, destination_port: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., Port Sudan (SDPZU)" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Destination Port *</span>
+              <input required type="text" value={form.destination_port} onChange={(e) => setForm({ ...form, destination_port: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., Port Sudan (SDPZU)" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Weight (kg)</span>
-              <input type="number" value={form.weight_kg || ""} onChange={(e) => setForm({ ...form, weight_kg: parseFloat(e.target.value) || 0 })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="Estimated weight" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Weight (kg)</span>
+              <input type="number" value={form.weight_kg || ""} onChange={(e) => setForm({ ...form, weight_kg: parseFloat(e.target.value) || 0 })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="Estimated weight" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Incoterms</span>
-              <select value={form.incoterms} onChange={(e) => setForm({ ...form, incoterms: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Incoterms</span>
+              <select value={form.incoterms} onChange={(e) => setForm({ ...form, incoterms: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
                 <option>FOB</option>
                 <option>CIF</option>
                 <option>CFR</option>
@@ -257,28 +257,28 @@ export default function QuotesPage() {
               </select>
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Expected Price (USD)</span>
-              <input type="number" step="0.01" value={form.price_usd || ""} onChange={(e) => setForm({ ...form, price_usd: parseFloat(e.target.value) || 0 })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Expected Price (USD)</span>
+              <input type="number" step="0.01" value={form.price_usd || ""} onChange={(e) => setForm({ ...form, price_usd: parseFloat(e.target.value) || 0 })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Transit Days</span>
-              <input type="number" value={form.transit_days || ""} onChange={(e) => setForm({ ...form, transit_days: parseInt(e.target.value) || 0 })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Transit Days</span>
+              <input type="number" value={form.transit_days || ""} onChange={(e) => setForm({ ...form, transit_days: parseInt(e.target.value) || 0 })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" />
             </label>
           </div>
           <label className="flex flex-col gap-2">
-            <span className="text-sm font-medium text-slate-700">Cargo Description *</span>
-            <textarea required rows={3} value={form.cargo_description} onChange={(e) => setForm({ ...form, cargo_description: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="Describe the cargo being shipped..." />
+            <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Cargo Description *</span>
+            <textarea required rows={3} value={form.cargo_description} onChange={(e) => setForm({ ...form, cargo_description: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="Describe the cargo being shipped..." />
           </label>
           <label className="flex flex-col gap-2">
-            <span className="text-sm font-medium text-slate-700">Special Requirements</span>
-            <textarea rows={2} value={form.special_requirements} onChange={(e) => setForm({ ...form, special_requirements: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="Temperature control, hazardous materials, oversized cargo..." />
+            <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Special Requirements</span>
+            <textarea rows={2} value={form.special_requirements} onChange={(e) => setForm({ ...form, special_requirements: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="Temperature control, hazardous materials, oversized cargo..." />
           </label>
           <div className="flex items-center gap-2">
             <input type="checkbox" id="insurance" checked={form.insurance_included} onChange={(e) => setForm({ ...form, insurance_included: e.target.checked })} className="h-4 w-4 rounded border-slate-300 text-[#137fec] focus:ring-[#137fec]" />
-            <label htmlFor="insurance" className="text-sm text-slate-700">Include cargo insurance</label>
+            <label htmlFor="insurance" className="text-sm text-slate-700 dark:text-slate-200">Include cargo insurance</label>
           </div>
           <div className="flex gap-3 justify-end pt-4 border-t border-slate-200">
-            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-semibold">Cancel</button>
+            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-100 dark:hover:bg-dark-elevated rounded-lg font-semibold">Cancel</button>
             <button type="submit" className="px-4 py-2 bg-[#137fec] text-white rounded-lg font-semibold hover:bg-[#137fec]/90">Submit Quote Request</button>
           </div>
         </form>

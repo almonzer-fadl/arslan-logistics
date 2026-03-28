@@ -145,11 +145,11 @@ function ShipmentsPage() {
       {/* Header */}
       <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Shipment Tracking & Management</h1>
-          <p className="text-slate-500 mt-1">Real-time monitoring of your global sea freight operations.</p>
+          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Shipment Tracking & Management</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Real-time monitoring of your global sea freight operations.</p>
         </div>
         <div className="flex gap-3">
-          <button onClick={exportCSV} className="flex items-center gap-2 rounded-lg bg-white border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+          <button onClick={exportCSV} className="flex items-center gap-2 rounded-lg bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:hover:bg-dark-elevated">
             <span className="material-symbols-outlined text-xl">download</span>
             Export Report
           </button>
@@ -163,27 +163,27 @@ function ShipmentsPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-6">
+      <div className="bg-white dark:bg-dark-card rounded-xl shadow-sm border border-slate-200 dark:border-dark-border p-4 mb-6">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex-1 min-w-[300px]">
             <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400">search</span>
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-slate-50 border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm"
+                className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-dark-elevated border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm"
                 placeholder="Search by Container ID, Carrier, or Route..."
               />
             </div>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Filter By:</span>
-            <div className="flex bg-slate-100 p-1 rounded-lg">
+            <div className="flex bg-slate-100 dark:bg-dark-elevated p-1 rounded-lg">
               {(["all", "shipped", "to_ship"] as const).map((f) => (
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${filter === f ? "bg-white text-[#137fec] shadow-sm" : "text-slate-600 hover:text-slate-900"}`}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${filter === f ? "bg-white dark:bg-dark-card text-[#137fec] shadow-sm" : "text-slate-600 hover:text-slate-900"}`}
                 >
                   {f === "all" ? "All" : f === "shipped" ? "Shipped" : "To Ship"}
                 </button>
@@ -206,7 +206,7 @@ function ShipmentsPage() {
               <span className="material-symbols-outlined">{stat.icon}</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-black text-slate-900">{stat.count}</span>
+              <span className="text-lg font-black text-slate-900 dark:text-white">{stat.count}</span>
               <span className="text-xs text-slate-500 font-medium">{stat.label}</span>
             </div>
           </div>
@@ -214,12 +214,12 @@ function ShipmentsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="bg-white dark:bg-dark-card rounded-xl shadow-sm border border-slate-200 dark:border-dark-border overflow-hidden">
         <div className="overflow-x-auto">
           {filtered.length > 0 ? (
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50 border-b border-slate-200">
+                <tr className="bg-slate-50 dark:bg-dark-bg border-b border-slate-200 dark:border-dark-border">
                   <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Container ID</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Carrier</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Route</th>
@@ -229,13 +229,13 @@ function ShipmentsPage() {
                   <th className="px-6 py-4"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-dark-border">
                 {filtered.map((s) => (
-                  <tr key={s.id} className="hover:bg-slate-50/80 transition-colors cursor-pointer border-l-4 border-l-transparent hover:border-l-[#137fec]">
+                  <tr key={s.id} className="hover:bg-slate-50/80 dark:hover:bg-dark-elevated transition-colors cursor-pointer border-l-4 border-l-transparent hover:border-l-[#137fec]">
                     <td className="px-6 py-4">
                       <Link href={`/dashboard/shipments/${s.id}`} className="flex flex-col">
-                        <span className="font-bold text-slate-900">{s.booking_reference || s.id.substring(0, 11).toUpperCase()}</span>
-                        <span className="text-xs text-slate-400">{s.container_type || "40&apos; HC"}</span>
+                        <span className="font-bold text-slate-900 dark:text-white">{s.booking_reference || s.id.substring(0, 11).toUpperCase()}</span>
+                        <span className="text-xs text-slate-400 dark:text-slate-400">{s.container_type || "40&apos; HC"}</span>
                       </Link>
                     </td>
                     <td className="px-6 py-4">
@@ -251,8 +251,8 @@ function ShipmentsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4"><StatusBadge status={s.status} /></td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{s.arrival_date ? new Date(s.arrival_date).toLocaleDateString() : "TBD"}</td>
-                    <td className="px-6 py-4 text-sm font-bold text-slate-900">${s.cost_usd.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">{s.arrival_date ? new Date(s.arrival_date).toLocaleDateString() : "TBD"}</td>
+                    <td className="px-6 py-4 text-sm font-bold text-slate-900 dark:text-white">${s.cost_usd.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
                     <td className="px-6 py-4 text-right">
                       <button className="text-slate-400 hover:text-[#137fec] transition-colors">
                         <span className="material-symbols-outlined">more_vert</span>
@@ -264,9 +264,9 @@ function ShipmentsPage() {
             </table>
           ) : (
             <div className="p-12 text-center">
-              <span className="material-symbols-outlined text-slate-300 text-6xl mb-4 block">inventory_2</span>
+              <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 text-6xl mb-4 block">inventory_2</span>
               <h4 className="text-lg font-bold text-slate-900 mb-2">No Shipments Found</h4>
-              <p className="text-slate-500">Add a shipment or adjust your filters</p>
+              <p className="text-slate-500 dark:text-slate-400">Add a shipment or adjust your filters</p>
             </div>
           )}
         </div>
@@ -277,27 +277,27 @@ function ShipmentsPage() {
         <form onSubmit={handleCreate} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Carrier *</span>
-              <select required value={newShipment.forwarder_id} onChange={(e) => setNewShipment({ ...newShipment, forwarder_id: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Carrier *</span>
+              <select required value={newShipment.forwarder_id} onChange={(e) => setNewShipment({ ...newShipment, forwarder_id: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
                 <option value="">Select carrier...</option>
                 {forwarders.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
               </select>
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Booking Reference</span>
-              <input type="text" value={newShipment.booking_reference} onChange={(e) => setNewShipment({ ...newShipment, booking_reference: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., MEDU6102831" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Booking Reference</span>
+              <input type="text" value={newShipment.booking_reference} onChange={(e) => setNewShipment({ ...newShipment, booking_reference: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., MEDU6102831" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Origin Port *</span>
-              <input type="text" required value={newShipment.origin_port} onChange={(e) => setNewShipment({ ...newShipment, origin_port: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., Shanghai (CNSHA)" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Origin Port *</span>
+              <input type="text" required value={newShipment.origin_port} onChange={(e) => setNewShipment({ ...newShipment, origin_port: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., Shanghai (CNSHA)" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Destination Port *</span>
-              <input type="text" required value={newShipment.destination_port} onChange={(e) => setNewShipment({ ...newShipment, destination_port: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., Port Sudan (SDPZU)" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Destination Port *</span>
+              <input type="text" required value={newShipment.destination_port} onChange={(e) => setNewShipment({ ...newShipment, destination_port: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., Port Sudan (SDPZU)" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Container Type</span>
-              <select value={newShipment.container_type} onChange={(e) => setNewShipment({ ...newShipment, container_type: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Container Type</span>
+              <select value={newShipment.container_type} onChange={(e) => setNewShipment({ ...newShipment, container_type: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
                 <option>20ft Standard</option>
                 <option>40ft Standard</option>
                 <option>40ft HC</option>
@@ -305,24 +305,24 @@ function ShipmentsPage() {
               </select>
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Vessel Name</span>
-              <input type="text" value={newShipment.vessel_name} onChange={(e) => setNewShipment({ ...newShipment, vessel_name: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., MSC LORETO" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Vessel Name</span>
+              <input type="text" value={newShipment.vessel_name} onChange={(e) => setNewShipment({ ...newShipment, vessel_name: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., MSC LORETO" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Departure Date</span>
-              <input type="date" value={newShipment.departure_date} onChange={(e) => setNewShipment({ ...newShipment, departure_date: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Departure Date</span>
+              <input type="date" value={newShipment.departure_date} onChange={(e) => setNewShipment({ ...newShipment, departure_date: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">ETA</span>
-              <input type="date" value={newShipment.arrival_date} onChange={(e) => setNewShipment({ ...newShipment, arrival_date: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">ETA</span>
+              <input type="date" value={newShipment.arrival_date} onChange={(e) => setNewShipment({ ...newShipment, arrival_date: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Cost (USD) *</span>
-              <input type="number" required step="0.01" value={newShipment.cost_usd} onChange={(e) => setNewShipment({ ...newShipment, cost_usd: parseFloat(e.target.value) || 0 })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Cost (USD) *</span>
+              <input type="number" required step="0.01" value={newShipment.cost_usd} onChange={(e) => setNewShipment({ ...newShipment, cost_usd: parseFloat(e.target.value) || 0 })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700">Status</span>
-              <select value={newShipment.status} onChange={(e) => setNewShipment({ ...newShipment, status: e.target.value as Shipment["status"] })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Status</span>
+              <select value={newShipment.status} onChange={(e) => setNewShipment({ ...newShipment, status: e.target.value as Shipment["status"] })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
                 <option value="booked">Booked</option>
                 <option value="in_transit">In Transit</option>
                 <option value="on_vessel">On Vessel</option>
@@ -332,11 +332,11 @@ function ShipmentsPage() {
             </label>
           </div>
           <label className="flex flex-col gap-2">
-            <span className="text-sm font-medium text-slate-700">Cargo Description *</span>
-            <textarea required rows={3} value={newShipment.cargo_description} onChange={(e) => setNewShipment({ ...newShipment, cargo_description: e.target.value })} className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="Describe the cargo..." />
+            <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Cargo Description *</span>
+            <textarea required rows={3} value={newShipment.cargo_description} onChange={(e) => setNewShipment({ ...newShipment, cargo_description: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="Describe the cargo..." />
           </label>
           <div className="flex gap-3 justify-end pt-4 border-t border-slate-200">
-            <button type="button" onClick={() => setShowNewModal(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-semibold">Cancel</button>
+            <button type="button" onClick={() => setShowNewModal(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-100 dark:hover:bg-dark-elevated rounded-lg font-semibold">Cancel</button>
             <button type="submit" className="px-4 py-2 bg-[#137fec] text-white rounded-lg font-semibold hover:bg-[#137fec]/90">Create Shipment</button>
           </div>
         </form>
