@@ -192,7 +192,7 @@ export default function QuotesPage() {
           ))}
         </div>
       ) : (
-        <div className="bg-white p-12 rounded-xl border border-slate-200 text-center">
+        <div className="bg-white dark:bg-dark-card p-12 rounded-xl border border-slate-200 dark:border-dark-border text-center">
           <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 text-6xl mb-4 block">description</span>
           <h4 className="text-lg font-bold text-slate-900 mb-2">No Quotes Yet</h4>
           <p className="text-slate-500 mb-4">Request your first quote from a carrier</p>
@@ -274,10 +274,10 @@ export default function QuotesPage() {
             <textarea rows={2} value={form.special_requirements} onChange={(e) => setForm({ ...form, special_requirements: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="Temperature control, hazardous materials, oversized cargo..." />
           </label>
           <div className="flex items-center gap-2">
-            <input type="checkbox" id="insurance" checked={form.insurance_included} onChange={(e) => setForm({ ...form, insurance_included: e.target.checked })} className="h-4 w-4 rounded border-slate-300 text-[#137fec] focus:ring-[#137fec]" />
+            <input type="checkbox" id="insurance" checked={form.insurance_included} onChange={(e) => setForm({ ...form, insurance_included: e.target.checked })} className="h-4 w-4 rounded border-slate-300 dark:border-dark-border text-[#137fec] focus:ring-[#137fec]" />
             <label htmlFor="insurance" className="text-sm text-slate-700 dark:text-slate-200">Include cargo insurance</label>
           </div>
-          <div className="flex gap-3 justify-end pt-4 border-t border-slate-200">
+          <div className="flex gap-3 justify-end pt-4 border-t border-slate-200 dark:border-dark-border">
             <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-100 dark:hover:bg-dark-elevated rounded-lg font-semibold">Cancel</button>
             <button type="submit" className="px-4 py-2 bg-[#137fec] text-white rounded-lg font-semibold hover:bg-[#137fec]/90">Submit Quote Request</button>
           </div>

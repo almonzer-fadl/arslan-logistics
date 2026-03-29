@@ -33,7 +33,7 @@ export default function CarrierAccordion({ carrier, onEdit }: CarrierAccordionPr
   }[carrier.category] || carrier.category;
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+    <div className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 dark:border-dark-border overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => setIsExpanded(!isExpanded)}>
         <div className="flex items-center gap-4 flex-1">
@@ -44,13 +44,13 @@ export default function CarrierAccordion({ carrier, onEdit }: CarrierAccordionPr
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-              <h3 className="font-bold text-slate-900">{carrier.name}</h3>
+              <h3 className="font-bold text-slate-900 dark:text-white">{carrier.name}</h3>
               <span className="text-[10px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded uppercase font-semibold">{categoryLabel}</span>
               {carrier.sudan_available && (
                 <span className="text-[10px] text-green-600 bg-green-50 px-2 py-0.5 rounded font-semibold">🇸🇩 Sudan</span>
               )}
             </div>
-            <div className="flex items-center gap-3 text-xs text-slate-500">
+            <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
               {carrier.website && <span className="truncate max-w-[200px]">{carrier.website.replace(/https?:\/\//, "")}</span>}
               {carrier.coverage?.length > 0 && <span className="hidden md:inline">· {carrier.coverage.slice(0, 3).join(", ")}{carrier.coverage.length > 3 ? ` +${carrier.coverage.length - 3}` : ""}</span>}
             </div>
@@ -62,11 +62,11 @@ export default function CarrierAccordion({ carrier, onEdit }: CarrierAccordionPr
 
       {/* Expanded */}
       {isExpanded && (
-        <div className="border-t border-slate-200 p-6 bg-slate-50">
+        <div className="border-t border-slate-200 dark:border-dark-border p-6 bg-slate-50">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Portal Login */}
             <div>
-              <h4 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
                 <span className="material-symbols-outlined text-[20px]">vpn_key</span>
                 Portal Login
               </h4>
@@ -82,7 +82,7 @@ export default function CarrierAccordion({ carrier, onEdit }: CarrierAccordionPr
                     <div>
                       <label className="text-xs text-slate-400 uppercase tracking-wider">Username</label>
                       <div className="flex items-center gap-2 mt-1">
-                        <input type="text" readOnly value={credentials.username} className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm" />
+                        <input type="text" readOnly value={credentials.username} className="flex-1 px-3 py-2 bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border rounded-lg text-sm" />
                         <button onClick={(e) => { e.stopPropagation(); copyToClipboard(credentials.username || ""); }} className="p-2 text-slate-400 hover:text-[#137fec]" title="Copy">
                           <span className="material-symbols-outlined text-[20px]">content_copy</span>
                         </button>
@@ -91,7 +91,7 @@ export default function CarrierAccordion({ carrier, onEdit }: CarrierAccordionPr
                     <div>
                       <label className="text-xs text-slate-400 uppercase tracking-wider">Password</label>
                       <div className="flex items-center gap-2 mt-1">
-                        <input type={showPassword ? "text" : "password"} readOnly value={credentials.password || ""} className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm" />
+                        <input type={showPassword ? "text" : "password"} readOnly value={credentials.password || ""} className="flex-1 px-3 py-2 bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border rounded-lg text-sm" />
                         <button onClick={(e) => { e.stopPropagation(); setShowPassword(!showPassword); }} className="p-2 text-slate-400 hover:text-[#137fec]" title={showPassword ? "Hide" : "Show"}>
                           <span className="material-symbols-outlined text-[20px]">{showPassword ? "visibility_off" : "visibility"}</span>
                         </button>
@@ -109,7 +109,7 @@ export default function CarrierAccordion({ carrier, onEdit }: CarrierAccordionPr
 
             {/* Contact Info */}
             <div>
-              <h4 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
                 <span className="material-symbols-outlined text-[20px]">person</span>
                 Contact Information
               </h4>
@@ -117,7 +117,7 @@ export default function CarrierAccordion({ carrier, onEdit }: CarrierAccordionPr
                 {carrier.sales_rep_name && (
                   <div>
                     <label className="text-xs text-slate-400 uppercase tracking-wider">Sales Rep</label>
-                    <p className="text-sm text-slate-900 mt-1">{carrier.sales_rep_name}</p>
+                    <p className="text-sm text-slate-900 dark:text-white mt-1">{carrier.sales_rep_name}</p>
                   </div>
                 )}
                 {(carrier.contact_email || carrier.sales_rep_email) && (
@@ -147,14 +147,14 @@ export default function CarrierAccordion({ carrier, onEdit }: CarrierAccordionPr
 
           {/* Notes */}
           {carrier.notes && (
-            <div className="mt-4 pt-4 border-t border-slate-200">
+            <div className="mt-4 pt-4 border-t border-slate-200 dark:border-dark-border">
               <label className="text-xs text-slate-400 uppercase tracking-wider">Notes</label>
               <p className="text-sm text-slate-600 mt-1">{carrier.notes}</p>
             </div>
           )}
 
           {/* Actions */}
-          <div className="flex gap-2 mt-4 pt-4 border-t border-slate-200">
+          <div className="flex gap-2 mt-4 pt-4 border-t border-slate-200 dark:border-dark-border">
             <button onClick={(e) => { e.stopPropagation(); onEdit(); }} className="px-4 py-2 text-sm font-semibold text-[#137fec] hover:bg-[#137fec]/5 rounded-lg transition-colors flex items-center gap-1">
               <span className="material-symbols-outlined text-[18px]">edit</span>
               Edit Details

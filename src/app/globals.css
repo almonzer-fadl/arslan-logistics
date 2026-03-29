@@ -27,6 +27,32 @@ body {
   font-family: var(--font-inter), system-ui, sans-serif;
 }
 
+/* Dark mode form inputs */
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: var(--color-dark-elevated);
+  border-color: var(--color-dark-border);
+  color: #e6edf3;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #6b7280;
+}
+
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+  border-color: #137fec;
+}
+
+/* Dark mode for readonly inputs */
+.dark input[readonly] {
+  background-color: var(--color-dark-bg);
+  color: #8b949e;
+}
+
 /* Custom checkbox styling for login page */
 .custom-checkbox-tick {
   --checkbox-tick-svg: url('data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27rgb(255,255,255)%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3cpath d=%27M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z%27/%3e%3c/svg%3e');

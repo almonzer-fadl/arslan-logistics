@@ -52,15 +52,15 @@ export default function ConfirmDialog({
             </span>
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{title}</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white dark:text-white">{title}</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{message}</p>
           </div>
         </div>
-        <div className="flex gap-3 justify-end mt-6 pt-4 border-t border-slate-100 dark:border-dark-border">
+        <div className="flex gap-3 justify-end mt-6 pt-4 border-t border-slate-100 dark:border-dark-border dark:border-dark-border">
           <button
             onClick={onCancel}
             disabled={loading}
-            className="px-4 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50"
+            className="px-4 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50"
           >
             {cancelLabel}
           </button>

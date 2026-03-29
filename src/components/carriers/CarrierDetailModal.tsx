@@ -43,10 +43,10 @@ export default function CarrierDetailModal({ carrier, onClose, onEdit, onDelete 
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-1">
-              <h2 className="text-xl font-black text-slate-900">{carrier.name}</h2>
+              <h2 className="text-xl font-black text-slate-900 dark:text-white">{carrier.name}</h2>
               <StatusBadge status={carrier.status} />
             </div>
-            <div className="flex items-center gap-2 text-sm text-slate-500">
+            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
               <span className="material-symbols-outlined text-[16px]">{getCategoryIcon(carrier.category)}</span>
               <span>{getCategoryLabel(carrier.category)}</span>
               {carrier.sudan_available && (
@@ -59,7 +59,7 @@ export default function CarrierDetailModal({ carrier, onClose, onEdit, onDelete 
         {/* Quick Links */}
         <div className="flex flex-wrap gap-2">
           {carrier.website && (
-            <a href={carrier.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-200 transition-colors">
+            <a href={carrier.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 dark:bg-dark-elevated text-slate-700 dark:text-slate-300 rounded-lg text-sm font-semibold hover:bg-slate-200 transition-colors">
               <span className="material-symbols-outlined text-[16px]">language</span>
               Website
             </a>
@@ -71,7 +71,7 @@ export default function CarrierDetailModal({ carrier, onClose, onEdit, onDelete 
             </a>
           )}
           {carrier.contact_form_url && (
-            <a href={carrier.contact_form_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-4 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-semibold hover:bg-green-100 transition-colors">
+            <a href={carrier.contact_form_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-4 py-2 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg text-sm font-semibold hover:bg-green-100 transition-colors">
               <span className="material-symbols-outlined text-[16px]">request_quote</span>
               Request Quote
             </a>
@@ -81,32 +81,32 @@ export default function CarrierDetailModal({ carrier, onClose, onEdit, onDelete 
         {/* Two-column layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Portal Credentials */}
-          <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
+          <div className="bg-slate-50 dark:bg-dark-elevated rounded-xl p-5 border border-slate-200 dark:border-dark-border">
             <div className="flex items-center justify-between mb-4">
               <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                 <span className="material-symbols-outlined text-[18px]">vpn_key</span>
                 Portal Credentials
               </h5>
               {creds && (
-                <span className="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">AES-256</span>
+                <span className="text-[10px] bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 rounded-full font-bold">AES-256</span>
               )}
             </div>
 
             {creds ? (
               <div className="space-y-3">
                 <div>
-                  <label className="text-xs text-slate-500 mb-1 block">Username</label>
-                  <div className="flex items-center gap-2 bg-white px-3 py-2.5 rounded-lg border border-slate-200">
-                    <span className="text-sm text-slate-900 flex-1 font-mono">{showCredentials ? creds.username : "••••••••••••"}</span>
+                  <label className="text-xs text-slate-500 dark:text-slate-400 mb-1 block">Username</label>
+                  <div className="flex items-center gap-2 bg-white dark:bg-dark-card px-3 py-2.5 rounded-lg border border-slate-200 dark:border-dark-border">
+                    <span className="text-sm text-slate-900 dark:text-white flex-1 font-mono">{showCredentials ? creds.username : "••••••••••••"}</span>
                     <button onClick={() => copyToClipboard(creds!.username || "")} className="text-slate-400 hover:text-[#137fec] transition-colors" title="Copy">
                       <span className="material-symbols-outlined text-[18px]">content_copy</span>
                     </button>
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs text-slate-500 mb-1 block">Password</label>
-                  <div className="flex items-center gap-2 bg-white px-3 py-2.5 rounded-lg border border-slate-200">
-                    <span className="text-sm text-slate-900 flex-1 font-mono">
+                  <label className="text-xs text-slate-500 dark:text-slate-400 mb-1 block">Password</label>
+                  <div className="flex items-center gap-2 bg-white dark:bg-dark-card px-3 py-2.5 rounded-lg border border-slate-200 dark:border-dark-border">
+                    <span className="text-sm text-slate-900 dark:text-white flex-1 font-mono">
                       {showCredentials && showPw ? creds.password : "••••••••••••"}
                     </span>
                     <button onClick={() => { setShowCredentials(true); setShowPw(!showPw); }} className="text-slate-400 hover:text-[#137fec] transition-colors" title={showPw ? "Hide" : "Show"}>
@@ -128,15 +128,15 @@ export default function CarrierDetailModal({ carrier, onClose, onEdit, onDelete 
               </div>
             ) : (
               <div className="text-center py-4">
-                <span className="material-symbols-outlined text-slate-300 text-3xl mb-2 block">lock_open</span>
-                <p className="text-sm text-slate-400">No credentials stored</p>
+                <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 text-3xl mb-2 block">lock_open</span>
+                <p className="text-sm text-slate-400 dark:text-slate-500">No credentials stored</p>
                 {onEdit && <button onClick={onEdit} className="text-sm font-semibold text-[#137fec] mt-2 hover:underline">Add credentials</button>}
               </div>
             )}
           </div>
 
           {/* Contact Info */}
-          <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
+          <div className="bg-slate-50 dark:bg-dark-elevated rounded-xl p-5 border border-slate-200 dark:border-dark-border">
             <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2 mb-4">
               <span className="material-symbols-outlined text-[18px]">person</span>
               Primary Contact
@@ -150,8 +150,8 @@ export default function CarrierDetailModal({ carrier, onClose, onEdit, onDelete 
                       <span className="material-symbols-outlined text-[#137fec] text-[20px]">person</span>
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-slate-900">{carrier.sales_rep_name}</p>
-                      <p className="text-[10px] text-slate-500 uppercase">Account Manager</p>
+                      <p className="text-sm font-bold text-slate-900 dark:text-white">{carrier.sales_rep_name}</p>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Account Manager</p>
                     </div>
                   </div>
                 )}
@@ -174,8 +174,8 @@ export default function CarrierDetailModal({ carrier, onClose, onEdit, onDelete 
               </div>
             ) : (
               <div className="text-center py-4">
-                <span className="material-symbols-outlined text-slate-300 text-3xl mb-2 block">person_off</span>
-                <p className="text-sm text-slate-400">No contact info yet</p>
+                <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 text-3xl mb-2 block">person_off</span>
+                <p className="text-sm text-slate-400 dark:text-slate-500">No contact info yet</p>
                 {onEdit && <button onClick={onEdit} className="text-sm font-semibold text-[#137fec] mt-2 hover:underline">Add contact</button>}
               </div>
             )}
@@ -188,7 +188,7 @@ export default function CarrierDetailModal({ carrier, onClose, onEdit, onDelete 
             <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Coverage Areas</h5>
             <div className="flex flex-wrap gap-2">
               {carrier.coverage.map((area) => (
-                <span key={area} className="text-xs bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full font-medium">
+                <span key={area} className="text-xs bg-slate-100 dark:bg-dark-elevated text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-full font-medium">
                   {area}
                 </span>
               ))}
@@ -198,18 +198,18 @@ export default function CarrierDetailModal({ carrier, onClose, onEdit, onDelete 
 
         {/* Notes */}
         {carrier.notes && (
-          <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
+          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 rounded-xl p-4">
             <h5 className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-1.5 flex items-center gap-1">
               <span className="material-symbols-outlined text-[16px]">sticky_note_2</span>
               Notes
             </h5>
-            <p className="text-sm text-slate-700 leading-relaxed">{carrier.notes}</p>
+            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{carrier.notes}</p>
           </div>
         )}
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between pt-4 border-t border-slate-200">
-          <div className="flex gap-2 text-[11px] text-slate-400">
+        <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-dark-border">
+          <div className="flex gap-2 text-[11px] text-slate-400 dark:text-slate-500">
             <span>Added {new Date(carrier.created_at).toLocaleDateString()}</span>
             <span>·</span>
             <span>Updated {new Date(carrier.updated_at).toLocaleDateString()}</span>
@@ -218,7 +218,7 @@ export default function CarrierDetailModal({ carrier, onClose, onEdit, onDelete 
             {onDelete && (
               <button
                 onClick={onDelete}
-                className="px-3 py-1.5 text-sm text-red-500 hover:bg-red-50 rounded-lg transition-colors font-medium flex items-center gap-1"
+                className="px-3 py-1.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors font-medium flex items-center gap-1"
               >
                 <span className="material-symbols-outlined text-[16px]">delete</span>
                 Delete

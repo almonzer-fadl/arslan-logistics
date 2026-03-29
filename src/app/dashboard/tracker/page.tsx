@@ -75,12 +75,12 @@ export default function TrackerPage() {
   return (
     <div className="flex h-[calc(100vh-64px)] overflow-hidden">
       {/* Sidebar: Live Shipments */}
-      <aside className="w-80 lg:w-96 bg-white border-r border-slate-200 flex flex-col z-40">
-        <div className="p-4 border-b border-slate-200">
+      <aside className="w-80 lg:w-96 bg-white dark:bg-dark-card border-r border-slate-200 dark:border-dark-border flex flex-col z-40">
+        <div className="p-4 border-b border-slate-200 dark:border-dark-border">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-lg font-bold text-slate-900">{t.tracker.liveShipments}</h1>
-              <p className="text-xs text-slate-500">
+              <h1 className="text-lg font-bold text-slate-900 dark:text-white">{t.tracker.liveShipments}</h1>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 {t.tracker.tracking} {shipments.length} {t.tracker.containersGlobally}
               </p>
             </div>
@@ -94,7 +94,7 @@ export default function TrackerPage() {
               className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
                 filter === "all"
                   ? "bg-[#137fec] text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  : "bg-slate-100 dark:bg-dark-elevated text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-dark-elevated"
               }`}
             >
               {t.common.all}
@@ -104,7 +104,7 @@ export default function TrackerPage() {
               className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
                 filter === "at_sea"
                   ? "bg-[#137fec] text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  : "bg-slate-100 dark:bg-dark-elevated text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-dark-elevated"
               }`}
             >
               {t.tracker.atSea} ({atSeaCount})
@@ -114,7 +114,7 @@ export default function TrackerPage() {
               className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
                 filter === "delayed"
                   ? "bg-[#137fec] text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  : "bg-slate-100 dark:bg-dark-elevated text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-dark-elevated"
               }`}
             >
               {t.tracker.delayed} ({delayedCount})
@@ -134,7 +134,7 @@ export default function TrackerPage() {
                   className={`p-4 rounded-xl cursor-pointer transition-all ${
                     isActive
                       ? "border-2 border-[#137fec] bg-[#137fec]/5"
-                      : "border border-slate-100 bg-white hover:border-slate-300"
+                      : "border border-slate-100 dark:border-dark-border bg-white dark:bg-dark-card hover:border-slate-300 dark:hover:border-slate-500"
                   }`}
                 >
                   <div className="flex justify-between items-start mb-2">
@@ -149,30 +149,30 @@ export default function TrackerPage() {
                     </span>
                     <StatusBadge status={s.status} />
                   </div>
-                  <h3 className="text-sm font-semibold text-slate-900">
+                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
                     {s.vessel_name || s.forwarders?.name || "Unknown Vessel"}
                   </h3>
                   <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500">
                     <div className="flex flex-col">
                       <span className="uppercase font-medium text-[9px] text-slate-400">{t.quotes.origin}</span>
-                      <span className="font-semibold text-slate-700">{s.origin_port}</span>
+                      <span className="font-semibold text-slate-700 dark:text-slate-200 dark:text-slate-200">{s.origin_port}</span>
                     </div>
-                    <span className="material-symbols-outlined text-slate-300">trending_flat</span>
+                    <span className="material-symbols-outlined text-slate-300 dark:text-slate-600">trending_flat</span>
                     <div className="flex flex-col text-right">
                       <span className="uppercase font-medium text-[9px] text-slate-400">{t.quotes.destination}</span>
-                      <span className="font-semibold text-slate-700">{s.destination_port}</span>
+                      <span className="font-semibold text-slate-700 dark:text-slate-200 dark:text-slate-200">{s.destination_port}</span>
                     </div>
                   </div>
-                  <div className="mt-3 pt-3 border-t border-slate-100 flex justify-between items-end">
+                  <div className="mt-3 pt-3 border-t border-slate-100 dark:border-dark-border flex justify-between items-end">
                     <div className="text-[10px]">
-                      <p className="text-slate-400 uppercase">{t.tracker.estArrival}</p>
-                      <p className="font-bold text-slate-700">
+                      <p className="text-slate-400 dark:text-slate-500 uppercase">{t.tracker.estArrival}</p>
+                      <p className="font-bold text-slate-700 dark:text-slate-200 dark:text-slate-200">
                         {s.arrival_date ? new Date(s.arrival_date).toLocaleDateString() : "TBD"}
                       </p>
                     </div>
                     <div className="text-[10px] text-right">
-                      <p className="text-slate-400 uppercase">{t.tracker.lastUpdate}</p>
-                      <p className="text-slate-700">
+                      <p className="text-slate-400 dark:text-slate-500 uppercase">{t.tracker.lastUpdate}</p>
+                      <p className="text-slate-700 dark:text-slate-200">
                         {Math.floor(Math.random() * 60)} mins ago
                       </p>
                     </div>
@@ -182,8 +182,8 @@ export default function TrackerPage() {
             })
           ) : (
             <div className="p-12 text-center">
-              <span className="material-symbols-outlined text-slate-300 text-6xl mb-4 block">sailing</span>
-              <h4 className="text-lg font-bold text-slate-900 mb-2">{t.empty.noResults}</h4>
+              <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 text-6xl mb-4 block">sailing</span>
+              <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{t.empty.noResults}</h4>
               <p className="text-slate-500">{t.empty.tryAdjustingFilters}</p>
             </div>
           )}
@@ -219,7 +219,7 @@ export default function TrackerPage() {
             <>
               <div className="absolute top-[40%] left-[65%] -translate-x-1/2 -translate-y-1/2 group">
                 <div className="relative cursor-pointer">
-                  <div className="h-10 w-10 bg-white rounded-lg shadow-xl border-2 border-[#137fec] flex items-center justify-center animate-pulse">
+                  <div className="h-10 w-10 bg-white dark:bg-dark-card rounded-lg shadow-xl border-2 border-[#137fec] flex items-center justify-center animate-pulse">
                     <span className="material-symbols-outlined text-[#137fec]">directions_boat</span>
                   </div>
                   <div className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
@@ -230,12 +230,12 @@ export default function TrackerPage() {
 
               {/* Additional Vessels */}
               <div className="absolute top-[35%] left-[45%] -translate-x-1/2 -translate-y-1/2">
-                <div className="h-8 w-8 bg-white rounded-lg shadow-lg border border-slate-200 flex items-center justify-center">
+                <div className="h-8 w-8 bg-white dark:bg-dark-card rounded-lg shadow-lg border border-slate-200 dark:border-dark-border flex items-center justify-center">
                   <span className="material-symbols-outlined text-slate-600 text-sm">directions_boat</span>
                 </div>
               </div>
               <div className="absolute top-[55%] left-[25%] -translate-x-1/2 -translate-y-1/2">
-                <div className="h-8 w-8 bg-white rounded-lg shadow-lg border border-slate-200 flex items-center justify-center">
+                <div className="h-8 w-8 bg-white dark:bg-dark-card rounded-lg shadow-lg border border-slate-200 dark:border-dark-border flex items-center justify-center">
                   <span className="material-symbols-outlined text-slate-600 text-sm">directions_boat</span>
                 </div>
               </div>
@@ -246,14 +246,14 @@ export default function TrackerPage() {
         {/* Detailed Tooltip (Selected Shipment) */}
         {selectedShipment && (
           <div className="absolute top-[40%] left-[65%] mt-12 -translate-x-1/2 z-20">
-            <div className="bg-white rounded-xl shadow-2xl border border-slate-200 w-72 p-4 animate-in fade-in slide-in-from-top-4 duration-300">
+            <div className="bg-white dark:bg-dark-card rounded-xl shadow-2xl border border-slate-200 dark:border-dark-border w-72 p-4 animate-in fade-in slide-in-from-top-4 duration-300">
               <div className="flex justify-between items-center mb-3">
                 <div className="flex items-center gap-2">
                   <div className="h-8 w-8 rounded bg-slate-100 flex items-center justify-center">
                     <span className="material-symbols-outlined text-[#137fec]">info</span>
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900">
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">
                       {selectedShipment.booking_reference ||
                         selectedShipment.container_id ||
                         selectedShipment.id.substring(0, 11).toUpperCase()}
@@ -265,37 +265,37 @@ export default function TrackerPage() {
                 </div>
                 <button
                   onClick={() => setSelectedShipment(null)}
-                  className="text-slate-400 hover:text-slate-600"
+                  className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
                 >
                   <span className="material-symbols-outlined text-sm">close</span>
                 </button>
               </div>
               <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="bg-slate-50 p-2 rounded-lg">
+                <div className="bg-slate-50 dark:bg-dark-elevated p-2 rounded-lg">
                   <p className="text-[9px] uppercase text-slate-400 font-semibold mb-1">
                     {t.tracker.currentSpeed}
                   </p>
-                  <p className="text-sm font-bold text-slate-900">
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">
                     {(Math.random() * 20 + 10).toFixed(1)} kts
                   </p>
                 </div>
-                <div className="bg-slate-50 p-2 rounded-lg">
+                <div className="bg-slate-50 dark:bg-dark-elevated p-2 rounded-lg">
                   <p className="text-[9px] uppercase text-slate-400 font-semibold mb-1">
                     {t.tracker.lastSignal}
                   </p>
-                  <p className="text-sm font-bold text-slate-900">
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">
                     {Math.floor(Math.random() * 10)}m ago
                   </p>
                 </div>
-                <div className="bg-slate-50 p-2 rounded-lg">
+                <div className="bg-slate-50 dark:bg-dark-elevated p-2 rounded-lg">
                   <p className="text-[9px] uppercase text-slate-400 font-semibold mb-1">
                     {t.tracker.course}
                   </p>
-                  <p className="text-sm font-bold text-slate-900">
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">
                     {Math.floor(Math.random() * 360)}° W
                   </p>
                 </div>
-                <div className="bg-slate-50 p-2 rounded-lg">
+                <div className="bg-slate-50 dark:bg-dark-elevated p-2 rounded-lg">
                   <p className="text-[9px] uppercase text-slate-400 font-semibold mb-1">
                     {t.tracker.weather}
                   </p>
@@ -309,14 +309,14 @@ export default function TrackerPage() {
                     {Math.floor(Math.random() * 40 + 40)}%
                   </span>
                 </div>
-                <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-slate-100 dark:bg-dark-elevated rounded-full overflow-hidden">
                   <div
                     className="bg-[#137fec] h-full"
                     style={{ width: `${Math.floor(Math.random() * 40 + 40)}%` }}
                   />
                 </div>
               </div>
-              <button className="w-full mt-4 py-2 border border-slate-200 rounded-lg text-xs font-semibold hover:bg-slate-50 transition-colors">
+              <button className="w-full mt-4 py-2 border border-slate-200 dark:border-dark-border rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-dark-elevated transition-colors">
                 {t.tracker.fullTrackingHistory}
               </button>
             </div>
@@ -325,21 +325,21 @@ export default function TrackerPage() {
 
         {/* Floating Map Controls */}
         <div className="absolute right-6 top-6 flex flex-col gap-3">
-          <div className="flex flex-col bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden">
-            <button className="p-3 hover:bg-slate-50 border-b border-slate-200 text-slate-600">
+          <div className="flex flex-col bg-white dark:bg-dark-card rounded-lg shadow-xl border border-slate-200 dark:border-dark-border overflow-hidden">
+            <button className="p-3 hover:bg-slate-50 dark:hover:bg-dark-elevated border-b border-slate-200 dark:border-dark-border text-slate-600 dark:text-slate-300">$
               <span className="material-symbols-outlined">add</span>
             </button>
-            <button className="p-3 hover:bg-slate-50 text-slate-600">
+            <button className="p-3 hover:bg-slate-50 text-slate-600 dark:text-slate-300">$
               <span className="material-symbols-outlined">remove</span>
             </button>
           </div>
-          <button className="p-3 bg-white rounded-lg shadow-xl border border-slate-200 text-slate-600 hover:text-[#137fec] transition-colors">
+          <button className="p-3 bg-white dark:bg-dark-card rounded-lg shadow-xl border border-slate-200 dark:border-dark-border text-slate-600 hover:text-[#137fec] transition-colors">
             <span className="material-symbols-outlined">my_location</span>
           </button>
         </div>
 
         {/* Layer Toggles */}
-        <div className="absolute left-6 bottom-6 flex items-center gap-2 p-1 bg-white rounded-xl shadow-2xl border border-slate-200">
+        <div className="absolute left-6 bottom-6 flex items-center gap-2 p-1 bg-white dark:bg-dark-card rounded-xl shadow-2xl border border-slate-200 dark:border-dark-border">
           <button className="flex items-center gap-2 px-4 py-2 bg-[#137fec] text-white rounded-lg text-xs font-bold">
             <span className="material-symbols-outlined text-sm">map</span>
             {t.tracker.standard}
@@ -359,26 +359,26 @@ export default function TrackerPage() {
         </div>
 
         {/* Legend */}
-        <div className="absolute right-6 bottom-6 p-4 bg-white/90 backdrop-blur rounded-xl border border-slate-200 shadow-xl">
-          <h5 className="text-[10px] font-bold text-slate-400 uppercase mb-3">
+        <div className="absolute right-6 bottom-6 p-4 bg-white/90 dark:bg-dark-card/90 backdrop-blur rounded-xl border border-slate-200 shadow-xl">
+          <h5 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase mb-3">
             {t.tracker.carrierFleetLegend}
           </h5>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-[#137fec]" />
-              <span className="text-xs font-medium text-slate-700">Maersk Line</span>
+              <span className="text-xs font-medium text-slate-700 dark:text-slate-300 dark:text-slate-200">Maersk Line</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-yellow-500" />
-              <span className="text-xs font-medium text-slate-700">MSC</span>
+              <span className="text-xs font-medium text-slate-700 dark:text-slate-300 dark:text-slate-200">MSC</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-blue-900" />
-              <span className="text-xs font-medium text-slate-700">CMA CGM</span>
+              <span className="text-xs font-medium text-slate-700 dark:text-slate-300 dark:text-slate-200">CMA CGM</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-red-600" />
-              <span className="text-xs font-medium text-slate-700">Hapag-Lloyd</span>
+              <span className="text-xs font-medium text-slate-700 dark:text-slate-300 dark:text-slate-200">Hapag-Lloyd</span>
             </div>
           </div>
         </div>

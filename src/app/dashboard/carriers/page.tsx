@@ -138,8 +138,8 @@ export default function CarriersPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Carrier Directory</h1>
-          <p className="text-slate-500 mt-1">Manage carrier portals, credentials, and account representatives.</p>
+          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Carrier Directory</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Manage carrier portals, credentials, and account representatives.</p>
         </div>
         {canEdit && (
           <button
@@ -188,14 +188,14 @@ export default function CarriersPage() {
 
           <div className="flex flex-wrap items-center gap-3">
             {/* Status Filter */}
-            <div className="flex bg-slate-100 p-1 rounded-lg">
+            <div className="flex bg-slate-100 dark:bg-dark-elevated p-1 rounded-lg">
               {(["all", "active", "pending", "inactive"] as const).map((f) => (
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
                   className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all capitalize ${
                     filter === f
-                      ? "bg-white text-[#137fec] shadow-sm"
+                      ? "bg-white dark:bg-dark-card text-[#137fec] shadow-sm"
                       : "text-slate-500 hover:text-slate-700 dark:text-slate-300"
                   }`}
                 >
@@ -218,16 +218,16 @@ export default function CarriersPage() {
             </select>
 
             {/* View Toggle */}
-            <div className="flex bg-slate-100 p-1 rounded-lg">
+            <div className="flex bg-slate-100 dark:bg-dark-elevated p-1 rounded-lg">
               <button
                 onClick={() => setViewMode("grid")}
-                className={`p-1.5 rounded-md transition-all ${viewMode === "grid" ? "bg-white text-[#137fec] shadow-sm" : "text-slate-400 dark:text-slate-400"}`}
+                className={`p-1.5 rounded-md transition-all ${viewMode === "grid" ? "bg-white dark:bg-dark-card text-[#137fec] shadow-sm" : "text-slate-400 dark:text-slate-400"}`}
               >
                 <span className="material-symbols-outlined text-[20px]">grid_view</span>
               </button>
               <button
                 onClick={() => setViewMode("list")}
-                className={`p-1.5 rounded-md transition-all ${viewMode === "list" ? "bg-white text-[#137fec] shadow-sm" : "text-slate-400 dark:text-slate-400"}`}
+                className={`p-1.5 rounded-md transition-all ${viewMode === "list" ? "bg-white dark:bg-dark-card text-[#137fec] shadow-sm" : "text-slate-400 dark:text-slate-400"}`}
               >
                 <span className="material-symbols-outlined text-[20px]">view_list</span>
               </button>
@@ -261,7 +261,7 @@ export default function CarriersPage() {
                 <div
                   key={carrier.id}
                   onClick={() => setDetailCarrier(carrier)}
-                  className="flex items-center gap-5 p-5 hover:bg-slate-50 transition-colors cursor-pointer group"
+                  className="flex items-center gap-5 p-5 hover:bg-slate-50 dark:hover:bg-dark-elevated transition-colors cursor-pointer group"
                 >
                   <div className={`w-12 h-12 rounded-lg ${mono.bg} ${mono.text} flex items-center justify-center font-black text-sm shadow-sm shrink-0`}>
                     {getInitials(carrier.name)}
@@ -269,8 +269,8 @@ export default function CarriersPage() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <h4 className="font-bold text-slate-900 group-hover:text-[#137fec] transition-colors">{carrier.name}</h4>
-                      <span className="text-[10px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded uppercase font-semibold">{getCategoryLabel(carrier.category)}</span>
+                      <h4 className="font-bold text-slate-900 dark:text-white group-hover:text-[#137fec] transition-colors">{carrier.name}</h4>
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-dark-elevated px-2 py-0.5 rounded uppercase font-semibold">{getCategoryLabel(carrier.category)}</span>
                       {carrier.sudan_available && (
                         <span className="text-[10px] text-green-600 bg-green-50 px-2 py-0.5 rounded font-semibold">🇸🇩 Sudan</span>
                       )}
@@ -287,7 +287,7 @@ export default function CarriersPage() {
                     {hasCreds ? (
                       <span className="material-symbols-outlined text-emerald-500 text-[18px]" title="Credentials stored">lock</span>
                     ) : (
-                      <span className="material-symbols-outlined text-slate-300 text-[18px]" title="No credentials">lock_open</span>
+                      <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 text-[18px]" title="No credentials">lock_open</span>
                     )}
                   </div>
 
@@ -299,7 +299,7 @@ export default function CarriersPage() {
                         href={carrier.dashboard_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 text-slate-400 hover:text-[#137fec] transition-colors"
+                        className="p-2 text-slate-400 dark:text-slate-500 hover:text-[#137fec] transition-colors"
                         title="Open Portal"
                       >
                         <span className="material-symbols-outlined text-[20px]">open_in_new</span>
@@ -308,7 +308,7 @@ export default function CarriersPage() {
                     {canEdit && (
                       <button
                         onClick={() => handleEditClick(carrier)}
-                        className="p-2 text-slate-400 hover:text-[#137fec] transition-colors"
+                        className="p-2 text-slate-400 dark:text-slate-500 hover:text-[#137fec] transition-colors"
                         title="Edit"
                       >
                         <span className="material-symbols-outlined text-[20px]">edit</span>
@@ -316,7 +316,7 @@ export default function CarriersPage() {
                     )}
                   </div>
 
-                  <span className="material-symbols-outlined text-slate-300 group-hover:text-[#137fec] transition-colors">
+                  <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 group-hover:text-[#137fec] transition-colors">
                     chevron_right
                   </span>
                 </div>
@@ -326,11 +326,11 @@ export default function CarriersPage() {
         )
       ) : (
         <div className="bg-white dark:bg-dark-card p-16 rounded-xl border border-slate-200 text-center shadow-sm">
-          <span className="material-symbols-outlined text-slate-200 text-7xl mb-4 block">corporate_fare</span>
-          <h4 className="text-lg font-bold text-slate-900 mb-2">
+          <span className="material-symbols-outlined text-slate-200 dark:text-slate-600 text-7xl mb-4 block">corporate_fare</span>
+          <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
             {searchQuery || filter !== "all" || categoryFilter !== "all" ? "No carriers match your filters" : "No carriers yet"}
           </h4>
-          <p className="text-slate-500 mb-6">
+          <p className="text-slate-500 dark:text-slate-400 mb-6">
             {searchQuery || filter !== "all" || categoryFilter !== "all"
               ? "Try adjusting your search or filters"
               : "Add your first carrier to start managing your logistics network"}

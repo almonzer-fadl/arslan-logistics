@@ -30,11 +30,11 @@ const statusConfig = {
 };
 
 const colorClasses = {
-  green: "bg-green-100 text-green-700",
-  blue: "bg-blue-100 text-blue-700",
-  amber: "bg-amber-100 text-amber-700",
-  red: "bg-red-100 text-red-700",
-  slate: "bg-slate-100 text-slate-600",
+  green: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
+  blue: "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400",
+  amber: "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400",
+  red: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400",
+  slate: "bg-slate-100 dark:bg-slate-700/50 text-slate-600 dark:text-slate-400",
 };
 
 export default function StatusBadge({ status, variant = "default" }: StatusBadgeProps) {

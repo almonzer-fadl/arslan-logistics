@@ -335,7 +335,7 @@ function ShipmentsPage() {
             <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Cargo Description *</span>
             <textarea required rows={3} value={newShipment.cargo_description} onChange={(e) => setNewShipment({ ...newShipment, cargo_description: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="Describe the cargo..." />
           </label>
-          <div className="flex gap-3 justify-end pt-4 border-t border-slate-200">
+          <div className="flex gap-3 justify-end pt-4 border-t border-slate-200 dark:border-dark-border">
             <button type="button" onClick={() => setShowNewModal(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-100 dark:hover:bg-dark-elevated rounded-lg font-semibold">Cancel</button>
             <button type="submit" className="px-4 py-2 bg-[#137fec] text-white rounded-lg font-semibold hover:bg-[#137fec]/90">Create Shipment</button>
           </div>
