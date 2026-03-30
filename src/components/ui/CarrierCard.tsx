@@ -76,6 +76,17 @@ export default function CarrierCard({ carrier, onClick, onEditClick }: CarrierCa
                 <span className="material-symbols-outlined text-emerald-500 text-[16px]">lock</span>
                 <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold uppercase">Credentials Stored</span>
               </>
+            ) : carrier.website ? (
+              <a
+                href={carrier.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 hover:opacity-80 transition-opacity"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <span className="material-symbols-outlined text-[#137fec] text-[16px]">language</span>
+                <span className="text-[10px] text-[#137fec] font-semibold uppercase">Visit Website</span>
+              </a>
             ) : (
               <>
                 <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 text-[16px]">lock_open</span>
@@ -84,6 +95,26 @@ export default function CarrierCard({ carrier, onClick, onEditClick }: CarrierCa
             )}
           </div>
           <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
+            {carrier.category === "regional" && carrier.contact_phone && (
+              <a
+                href={`tel:${carrier.contact_phone}`}
+                className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-emerald-500 hover:bg-emerald-500/5 transition-colors"
+                title={carrier.contact_phone}
+              >
+                <span className="material-symbols-outlined text-[18px]">call</span>
+              </a>
+            )}
+            {carrier.category === "regional" && (carrier.contact_form_url || carrier.contact_email) && (
+              <a
+                href={carrier.contact_form_url || `mailto:${carrier.contact_email}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-[#137fec] hover:bg-[#137fec]/5 transition-colors"
+                title={carrier.contact_form_url ? "Contact Form" : carrier.contact_email}
+              >
+                <span className="material-symbols-outlined text-[18px]">{carrier.contact_form_url ? "description" : "mail"}</span>
+              </a>
+            )}
             {carrier.dashboard_url && (
               <a
                 href={carrier.dashboard_url}

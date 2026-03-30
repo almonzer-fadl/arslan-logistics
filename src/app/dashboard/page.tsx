@@ -31,8 +31,19 @@ export default function DashboardPage() {
   }, []);
 
   const topCarriers = forwarders
-    .filter((f) => ["active", "approved"].includes(f.status))
-    .slice(0, 4);
+    .filter((f) => ["active", "approved", "not_contacted"].includes(f.status))
+    .sort((a, b) => {
+      const aTurkish = a.category === "regional" && a.coverage?.some((c) => c.toLowerCase().includes("turkey"));
+      const bTurkish = b.category === "regional" && b.coverage?.some((c) => c.toLowerCase().includes("turkey"));
+      if (aTurkish && !bTurkish) return -1;
+      if (!aTurkish && bTurkish) return 1;
+      const aActive = ["active", "approved"].includes(a.status);
+      const bActive = ["active", "approved"].includes(b.status);
+      if (aActive && !bActive) return -1;
+      if (!aActive && bActive) return 1;
+      return 0;
+    })
+    .slice(0, 8);
   const activeShipments = shipments
     .filter((s) => !["cancelled", "delivered"].includes(s.status))
     .slice(0, 10);
@@ -80,7 +91,7 @@ export default function DashboardPage() {
           </div>
 
           {topCarriers.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {topCarriers.map((carrier) => (
                 <CarrierCard
                   key={carrier.id}
