@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
-import { Deck } from "@deck.gl/core";
-import { ScatterplotLayer, ArcLayer, TextLayer, IconLayer } from "@deck.gl/layers";
 import { MapboxOverlay } from "@deck.gl/mapbox";
+import { ScatterplotLayer, ArcLayer, TextLayer } from "@deck.gl/layers";
 import type { Shipment } from "@/lib/types";
 import { PORTS, resolvePort, getPortCoords, type Port } from "@/config/ports";
 
@@ -20,43 +18,41 @@ interface ShipmentMapProps {
 
 // Status → color mapping
 const STATUS_COLORS: Record<string, [number, number, number]> = {
-  booked: [100, 116, 139],       // slate
-  in_transit: [19, 127, 236],    // primary blue
-  on_vessel: [19, 127, 236],     // primary blue
-  port_arrival: [245, 158, 11],  // amber
-  customs: [245, 158, 11],       // amber
-  arrived: [16, 185, 129],       // emerald
-  delivered: [16, 185, 129],     // emerald
-  cancelled: [239, 68, 68],      // red
+  booked: [100, 116, 139],
+  in_transit: [19, 127, 236],
+  on_vessel: [19, 127, 236],
+  port_arrival: [245, 158, 11],
+  customs: [245, 158, 11],
+  arrived: [16, 185, 129],
+  delivered: [16, 185, 129],
+  cancelled: [239, 68, 68],
 };
 
-// Interpolate points along a great circle arc for smooth curves
-function interpolateArc(
-  start: [number, number],
-  end: [number, number],
-  numPoints = 50
-): [number, number][] {
-  const points: [number, number][] = [];
-  for (let i = 0; i <= numPoints; i++) {
-    const t = i / numPoints;
-    const lon = start[0] + (end[0] - start[0]) * t;
-    const lat = start[1] + (end[1] - start[1]) * t;
-    points.push([lon, lat]);
-  }
-  return points;
-}
+// Primary Arslan corridor connections (always visible)
+const CORRIDOR_ROUTES: { from: string; to: string; label: string; color: [number, number, number, number] }[] = [
+  { from: "istanbul", to: "port_sudan", label: "Turkey → Sudan", color: [19, 127, 236, 50] },
+  { from: "istanbul", to: "jeddah", label: "Turkey → Saudi", color: [19, 127, 236, 50] },
+  { from: "mersin", to: "port_sudan", label: "Turkey → Sudan", color: [19, 127, 236, 35] },
+  { from: "jeddah", to: "port_sudan", label: "Saudi → Sudan", color: [245, 158, 11, 50] },
+  { from: "dammam", to: "port_sudan", label: "Saudi → Sudan", color: [245, 158, 11, 35] },
+  { from: "shanghai", to: "port_sudan", label: "China → Sudan", color: [16, 185, 129, 40] },
+  { from: "shanghai", to: "jeddah", label: "China → Saudi", color: [16, 185, 129, 35] },
+  { from: "rotterdam", to: "istanbul", label: "Europe → Turkey", color: [139, 92, 246, 40] },
+  { from: "hamburg", to: "istanbul", label: "Europe → Turkey", color: [139, 92, 246, 35] },
+  { from: "istanbul", to: "jebel_ali", label: "Turkey → UAE", color: [19, 127, 236, 30] },
+  { from: "jebel_ali", to: "port_sudan", label: "UAE → Sudan", color: [245, 158, 11, 30] },
+  { from: "shenzhen", to: "jeddah", label: "China → Saudi", color: [16, 185, 129, 30] },
+];
 
-// Estimate vessel position along route based on status
+// Estimate vessel position along route
 function estimateVesselPosition(
   shipment: ShipmentWithForwarder,
   origin: [number, number],
   destination: [number, number]
 ): [number, number] | null {
-  const activeStatuses = ["in_transit", "on_vessel"];
-  if (!activeStatuses.includes(shipment.status)) return null;
+  if (!["in_transit", "on_vessel"].includes(shipment.status)) return null;
 
-  // Calculate progress based on dates if available
-  let progress = 0.5; // default midpoint
+  let progress = 0.5;
   if (shipment.departure_date && shipment.arrival_date) {
     const dep = new Date(shipment.departure_date).getTime();
     const arr = new Date(shipment.arrival_date).getTime();
@@ -83,7 +79,6 @@ export default function ShipmentMap({
   const overlayRef = useRef<MapboxOverlay | null>(null);
   const [mapReady, setMapReady] = useState(false);
 
-  // Map style URLs (free tile providers)
   const lightStyle = "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json";
   const darkStyle = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
 
@@ -94,7 +89,7 @@ export default function ShipmentMap({
     const map = new maplibregl.Map({
       container: mapContainer.current,
       style: darkMode ? darkStyle : lightStyle,
-      center: [40, 25], // Center on Red Sea / Middle East region
+      center: [40, 25],
       zoom: 3.5,
       minZoom: 2,
       maxZoom: 12,
@@ -102,10 +97,7 @@ export default function ShipmentMap({
     });
 
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
-    map.addControl(
-      new maplibregl.AttributionControl({ compact: true }),
-      "bottom-left"
-    );
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-left");
 
     const overlay = new MapboxOverlay({
       interleaved: false,
@@ -122,52 +114,64 @@ export default function ShipmentMap({
       map.remove();
       mapRef.current = null;
       overlayRef.current = null;
+      setMapReady(false);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update map style when dark mode changes
+  // Update style on dark mode toggle
   useEffect(() => {
     if (!mapRef.current || !mapReady) return;
     mapRef.current.setStyle(darkMode ? darkStyle : lightStyle);
   }, [darkMode, mapReady]);
 
-  // Build and update deck.gl layers
+  // Build layers
   useEffect(() => {
     if (!overlayRef.current || !mapReady) return;
 
-    // --- Resolve shipment routes ---
-    const routes: {
-      shipment: ShipmentWithForwarder;
-      origin: [number, number];
-      destination: [number, number];
-    }[] = [];
+    const portMap = new Map<string, Port>();
+    for (const p of PORTS) portMap.set(p.id, p);
 
-    for (const s of shipments) {
-      const o = getPortCoords(s.origin_port);
-      const d = getPortCoords(s.destination_port);
-      if (o && d) routes.push({ shipment: s, origin: o, destination: d });
-    }
+    // --- 1. Corridor arcs (always visible, subtle background routes) ---
+    const corridorData = CORRIDOR_ROUTES.map((r) => {
+      const from = portMap.get(r.from);
+      const to = portMap.get(r.to);
+      if (!from || !to) return null;
+      return { origin: [from.lon, from.lat] as [number, number], destination: [to.lon, to.lat] as [number, number], color: r.color, label: r.label };
+    }).filter(Boolean) as { origin: [number, number]; destination: [number, number]; color: [number, number, number, number]; label: string }[];
 
-    // --- Port markers layer ---
-    // Collect unique ports that appear in shipments
-    const usedPortIds = new Set<string>();
-    for (const s of shipments) {
-      const op = resolvePort(s.origin_port);
-      const dp = resolvePort(s.destination_port);
-      if (op) usedPortIds.add(op.id);
-      if (dp) usedPortIds.add(dp.id);
-    }
-    const usedPorts = PORTS.filter((p) => usedPortIds.has(p.id));
+    const corridorArcLayer = new ArcLayer({
+      id: "corridor-arcs",
+      data: corridorData,
+      getSourcePosition: (d) => d.origin,
+      getTargetPosition: (d) => d.destination,
+      getSourceColor: (d) => d.color,
+      getTargetColor: (d) => d.color,
+      getWidth: 1.5,
+      widthMinPixels: 1,
+      widthMaxPixels: 3,
+      greatCircle: true,
+    });
 
-    const portLayer = new ScatterplotLayer({
-      id: "port-markers",
-      data: usedPorts,
-      getPosition: (d: Port) => [d.lon, d.lat],
-      getRadius: 6000,
-      radiusMinPixels: 5,
-      radiusMaxPixels: 12,
-      getFillColor: darkMode ? [255, 255, 255, 200] : [30, 41, 59, 200],
-      getLineColor: [19, 127, 236, 255],
+    // --- 2. All ports (always visible) ---
+    // Categorize ports for visual hierarchy
+    const primaryPortIds = new Set(["istanbul", "port_sudan", "jeddah", "shanghai", "rotterdam"]);
+    const secondaryPortIds = new Set(["mersin", "izmir", "ambarli", "dammam", "shenzhen", "hamburg", "jebel_ali"]);
+
+    // Split ports into layers for visual hierarchy
+    const primaryPorts = PORTS.filter((p) => primaryPortIds.has(p.id));
+    const secondaryPorts = PORTS.filter((p) => secondaryPortIds.has(p.id));
+    const tertiaryPorts = PORTS.filter((p) => !primaryPortIds.has(p.id) && !secondaryPortIds.has(p.id));
+
+    const primaryPortLayer = new ScatterplotLayer({
+      id: "primary-ports",
+      data: primaryPorts,
+      getPosition: (d: Port) => [d.lon, d.lat] as [number, number],
+      getRadius: 8000,
+      radiusMinPixels: 6,
+      radiusMaxPixels: 14,
+      getFillColor: darkMode ? [19, 127, 236, 220] : [19, 127, 236, 200],
+      getLineColor: [255, 255, 255, 200] as [number, number, number, number],
       getLineWidth: 2,
       lineWidthMinPixels: 2,
       stroked: true,
@@ -175,44 +179,92 @@ export default function ShipmentMap({
       pickable: true,
     });
 
+    const secondaryPortLayer = new ScatterplotLayer({
+      id: "secondary-ports",
+      data: secondaryPorts,
+      getPosition: (d: Port) => [d.lon, d.lat] as [number, number],
+      getRadius: 5000,
+      radiusMinPixels: 4,
+      radiusMaxPixels: 10,
+      getFillColor: darkMode ? [148, 163, 184, 180] : [100, 116, 139, 160],
+      getLineColor: darkMode ? [255, 255, 255, 60] : [255, 255, 255, 100],
+      getLineWidth: 1,
+      lineWidthMinPixels: 1,
+      stroked: true,
+      filled: true,
+      pickable: true,
+    });
+
+    const tertiaryPortLayer = new ScatterplotLayer({
+      id: "tertiary-ports",
+      data: tertiaryPorts,
+      getPosition: (d: Port) => [d.lon, d.lat] as [number, number],
+      getRadius: 3500,
+      radiusMinPixels: 3,
+      radiusMaxPixels: 8,
+      getFillColor: darkMode ? [100, 116, 139, 120] : [148, 163, 184, 120],
+      getLineColor: darkMode ? [255, 255, 255, 40] : [255, 255, 255, 80],
+      getLineWidth: 1,
+      lineWidthMinPixels: 1,
+      stroked: true,
+      filled: true,
+      pickable: true,
+    });
+
+    // Port labels (primary + secondary only)
+    const labelPorts = PORTS.filter((p) => primaryPortIds.has(p.id) || secondaryPortIds.has(p.id));
     const portLabelLayer = new TextLayer({
       id: "port-labels",
-      data: usedPorts,
-      getPosition: (d: Port) => [d.lon, d.lat],
+      data: labelPorts,
+      getPosition: (d: Port) => [d.lon, d.lat] as [number, number],
       getText: (d: Port) => d.city,
-      getSize: 12,
-      getColor: darkMode ? [200, 200, 200, 255] : [30, 41, 59, 255],
+      getSize: (d: Port) => primaryPortIds.has(d.id) ? 13 : 11,
+      getColor: (d: Port) => {
+        if (primaryPortIds.has(d.id)) return darkMode ? [255, 255, 255, 230] : [15, 23, 42, 230];
+        return darkMode ? [180, 180, 180, 200] : [71, 85, 105, 200];
+      },
       getAngle: 0,
       getTextAnchor: "start" as const,
       getAlignmentBaseline: "center" as const,
-      getPixelOffset: [12, 0],
+      getPixelOffset: [10, 0],
       fontFamily: "Inter, system-ui, sans-serif",
       fontWeight: 600,
       outlineWidth: 2,
-      outlineColor: darkMode ? [13, 17, 23, 200] : [255, 255, 255, 200],
+      outlineColor: darkMode ? [13, 17, 23, 220] : [255, 255, 255, 220],
       billboard: false,
-      sizeMinPixels: 10,
-      sizeMaxPixels: 14,
+      sizeMinPixels: 9,
+      sizeMaxPixels: 15,
     });
 
-    // --- Route arc layers ---
-    const arcLayer = new ArcLayer({
-      id: "route-arcs",
+    // --- 3. Shipment routes (on top of corridors, brighter) ---
+    const routes: {
+      shipment: ShipmentWithForwarder;
+      origin: [number, number];
+      destination: [number, number];
+    }[] = [];
+    for (const s of shipments) {
+      const o = getPortCoords(s.origin_port);
+      const d = getPortCoords(s.destination_port);
+      if (o && d) routes.push({ shipment: s, origin: o, destination: d });
+    }
+
+    const shipmentArcLayer = new ArcLayer({
+      id: "shipment-arcs",
       data: routes,
       getSourcePosition: (d) => d.origin,
       getTargetPosition: (d) => d.destination,
       getSourceColor: (d) => {
         const isSelected = selectedShipment?.id === d.shipment.id;
         const color = STATUS_COLORS[d.shipment.status] || [100, 116, 139];
-        return [...color, isSelected ? 255 : 100] as [number, number, number, number];
+        return [...color, isSelected ? 255 : 160] as [number, number, number, number];
       },
       getTargetColor: (d) => {
         const isSelected = selectedShipment?.id === d.shipment.id;
         const color = STATUS_COLORS[d.shipment.status] || [100, 116, 139];
-        return [...color, isSelected ? 255 : 100] as [number, number, number, number];
+        return [...color, isSelected ? 255 : 160] as [number, number, number, number];
       },
-      getWidth: (d) => (selectedShipment?.id === d.shipment.id ? 4 : 2),
-      widthMinPixels: 1,
+      getWidth: (d) => (selectedShipment?.id === d.shipment.id ? 4 : 2.5),
+      widthMinPixels: 1.5,
       widthMaxPixels: 6,
       greatCircle: true,
       pickable: true,
@@ -226,12 +278,8 @@ export default function ShipmentMap({
       },
     });
 
-    // --- Vessel position layer (active shipments only) ---
-    const vessels: {
-      shipment: ShipmentWithForwarder;
-      position: [number, number];
-    }[] = [];
-
+    // --- 4. Vessel positions ---
+    const vessels: { shipment: ShipmentWithForwarder; position: [number, number] }[] = [];
     for (const r of routes) {
       const pos = estimateVesselPosition(r.shipment, r.origin, r.destination);
       if (pos) vessels.push({ shipment: r.shipment, position: pos });
@@ -246,9 +294,11 @@ export default function ShipmentMap({
       radiusMaxPixels: 16,
       getFillColor: (d) => {
         const isSelected = selectedShipment?.id === d.shipment.id;
-        return isSelected ? [19, 127, 236, 255] : [19, 127, 236, 180];
+        return isSelected
+          ? ([19, 127, 236, 255] as [number, number, number, number])
+          : ([19, 127, 236, 200] as [number, number, number, number]);
       },
-      getLineColor: [255, 255, 255, 255],
+      getLineColor: [255, 255, 255, 255] as [number, number, number, number],
       getLineWidth: 2,
       lineWidthMinPixels: 2,
       stroked: true,
@@ -257,12 +307,9 @@ export default function ShipmentMap({
       onClick: ({ object }) => {
         if (object) onSelectShipment(object.shipment);
       },
-      updateTriggers: {
-        getFillColor: [selectedShipment?.id],
-      },
+      updateTriggers: { getFillColor: [selectedShipment?.id] },
     });
 
-    // Vessel pulse ring for selected
     const selectedVessel = vessels.find((v) => v.shipment.id === selectedShipment?.id);
     const pulseLayer = new ScatterplotLayer({
       id: "vessel-pulse",
@@ -271,15 +318,14 @@ export default function ShipmentMap({
       getRadius: 18000,
       radiusMinPixels: 18,
       radiusMaxPixels: 30,
-      getFillColor: [19, 127, 236, 40],
-      getLineColor: [19, 127, 236, 100],
+      getFillColor: [19, 127, 236, 40] as [number, number, number, number],
+      getLineColor: [19, 127, 236, 100] as [number, number, number, number],
       getLineWidth: 1,
       lineWidthMinPixels: 1,
       stroked: true,
       filled: true,
     });
 
-    // Vessel name labels
     const vesselLabelLayer = new TextLayer({
       id: "vessel-labels",
       data: vessels,
@@ -289,7 +335,9 @@ export default function ShipmentMap({
         d.shipment.booking_reference ||
         d.shipment.id.substring(0, 8).toUpperCase(),
       getSize: 11,
-      getColor: darkMode ? [255, 255, 255, 220] : [19, 127, 236, 255],
+      getColor: darkMode
+        ? ([255, 255, 255, 220] as [number, number, number, number])
+        : ([19, 127, 236, 255] as [number, number, number, number]),
       getAngle: 0,
       getTextAnchor: "start" as const,
       getAlignmentBaseline: "center" as const,
@@ -297,18 +345,20 @@ export default function ShipmentMap({
       fontFamily: "Inter, system-ui, sans-serif",
       fontWeight: 700,
       outlineWidth: 2,
-      outlineColor: darkMode ? [13, 17, 23, 220] : [255, 255, 255, 220],
+      outlineColor: darkMode
+        ? ([13, 17, 23, 220] as [number, number, number, number])
+        : ([255, 255, 255, 220] as [number, number, number, number]),
       billboard: false,
       sizeMinPixels: 10,
       sizeMaxPixels: 13,
     });
 
-    // --- Origin/destination highlights for selected shipment ---
+    // --- 5. Selected shipment endpoints ---
     const selectedRoute = routes.find((r) => r.shipment.id === selectedShipment?.id);
     const endpointData = selectedRoute
       ? [
-          { position: selectedRoute.origin, type: "origin" },
-          { position: selectedRoute.destination, type: "destination" },
+          { position: selectedRoute.origin, type: "origin" as const },
+          { position: selectedRoute.destination, type: "destination" as const },
         ]
       : [];
 
@@ -320,8 +370,10 @@ export default function ShipmentMap({
       radiusMinPixels: 8,
       radiusMaxPixels: 14,
       getFillColor: (d) =>
-        d.type === "origin" ? [19, 127, 236, 200] : [16, 185, 129, 200],
-      getLineColor: [255, 255, 255, 255],
+        d.type === "origin"
+          ? ([19, 127, 236, 200] as [number, number, number, number])
+          : ([16, 185, 129, 200] as [number, number, number, number]),
+      getLineColor: [255, 255, 255, 255] as [number, number, number, number],
       getLineWidth: 3,
       lineWidthMinPixels: 2,
       stroked: true,
@@ -330,9 +382,12 @@ export default function ShipmentMap({
 
     overlayRef.current.setProps({
       layers: [
-        arcLayer,
-        portLayer,
+        corridorArcLayer,
+        tertiaryPortLayer,
+        secondaryPortLayer,
+        primaryPortLayer,
         portLabelLayer,
+        shipmentArcLayer,
         endpointLayer,
         pulseLayer,
         vesselLayer,
@@ -344,30 +399,22 @@ export default function ShipmentMap({
   // Fly to selected shipment
   useEffect(() => {
     if (!mapRef.current || !selectedShipment || !mapReady) return;
-
     const origin = getPortCoords(selectedShipment.origin_port);
     const dest = getPortCoords(selectedShipment.destination_port);
     if (!origin || !dest) return;
 
-    // Fly to midpoint of the route
-    const midLon = (origin[0] + dest[0]) / 2;
-    const midLat = (origin[1] + dest[1]) / 2;
-
-    // Calculate zoom based on distance
-    const lonDiff = Math.abs(origin[0] - dest[0]);
-    const latDiff = Math.abs(origin[1] - dest[1]);
-    const maxDiff = Math.max(lonDiff, latDiff);
-    const zoom = maxDiff > 80 ? 2.5 : maxDiff > 40 ? 3.5 : maxDiff > 20 ? 4.5 : 5.5;
-
     mapRef.current.flyTo({
-      center: [midLon, midLat],
-      zoom,
+      center: [(origin[0] + dest[0]) / 2, (origin[1] + dest[1]) / 2],
+      zoom: Math.abs(origin[0] - dest[0]) > 80 ? 2.5 : Math.abs(origin[0] - dest[0]) > 40 ? 3.5 : Math.abs(origin[0] - dest[0]) > 20 ? 4.5 : 5.5,
       duration: 1200,
       essential: true,
     });
   }, [selectedShipment, mapReady]);
 
   return (
-    <div ref={mapContainer} className="absolute inset-0" />
+    <div
+      ref={mapContainer}
+      style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, width: "100%", height: "100%" }}
+    />
   );
 }
