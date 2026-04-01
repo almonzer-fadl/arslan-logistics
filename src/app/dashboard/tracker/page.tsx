@@ -7,6 +7,7 @@ import type { Shipment } from "@/lib/types";
 import { useTranslation } from "@/lib/i18n";
 import { useTheme } from "@/components/ui/ThemeProvider";
 import StatusBadge from "@/components/ui/StatusBadge";
+import { getCarrierTrackingUrl, getVesselSearchUrl } from "@/lib/tracking-urls";
 
 const ShipmentMap = dynamic(() => import("@/components/map/ShipmentMap"), {
   ssr: false,
@@ -171,11 +172,29 @@ export default function TrackerPage() {
                         {s.arrival_date ? new Date(s.arrival_date).toLocaleDateString() : "TBD"}
                       </p>
                     </div>
-                    <div className="text-[10px] text-right">
-                      <p className="text-slate-400 dark:text-slate-500 uppercase">{t.tracker.lastUpdate}</p>
-                      <p className="text-slate-700 dark:text-slate-200">
-                        {Math.floor(Math.random() * 60)} mins ago
-                      </p>
+                    <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                      {s.vessel_name && (
+                        <a
+                          href={getVesselSearchUrl(s.vessel_name)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1 rounded text-slate-400 dark:text-slate-500 hover:text-[#137fec] hover:bg-[#137fec]/5 transition-colors"
+                          title={`Track ${s.vessel_name} on MarineTraffic`}
+                        >
+                          <span className="material-symbols-outlined text-[16px]">sailing</span>
+                        </a>
+                      )}
+                      {s.booking_reference && s.forwarders?.name && getCarrierTrackingUrl(s.forwarders.name, s.booking_reference) && (
+                        <a
+                          href={getCarrierTrackingUrl(s.forwarders.name, s.booking_reference)!}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1 rounded text-slate-400 dark:text-slate-500 hover:text-[#137fec] hover:bg-[#137fec]/5 transition-colors"
+                          title="Track container"
+                        >
+                          <span className="material-symbols-outlined text-[16px]">package_2</span>
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -272,17 +291,42 @@ export default function TrackerPage() {
                 </div>
               )}
 
-              {selectedShipment.tracking_url && (
-                <a
-                  href={selectedShipment.tracking_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-2 border border-[#137fec] rounded-lg text-xs font-semibold text-[#137fec] hover:bg-[#137fec]/5 transition-colors flex items-center justify-center gap-2"
-                >
-                  <span className="material-symbols-outlined text-sm">open_in_new</span>
-                  {t.tracker.fullTrackingHistory}
-                </a>
-              )}
+              {/* Tracking Links */}
+              <div className="flex gap-2">
+                {selectedShipment.vessel_name && (
+                  <a
+                    href={getVesselSearchUrl(selectedShipment.vessel_name)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-2 bg-[#137fec] rounded-lg text-xs font-semibold text-white hover:bg-[#137fec]/90 transition-colors flex items-center justify-center gap-1.5"
+                  >
+                    <span className="material-symbols-outlined text-sm">sailing</span>
+                    Live Vessel
+                  </a>
+                )}
+                {selectedShipment.booking_reference && selectedShipment.forwarder_name && getCarrierTrackingUrl(selectedShipment.forwarder_name, selectedShipment.booking_reference) && (
+                  <a
+                    href={getCarrierTrackingUrl(selectedShipment.forwarder_name, selectedShipment.booking_reference)!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-2 border border-[#137fec] rounded-lg text-xs font-semibold text-[#137fec] hover:bg-[#137fec]/5 transition-colors flex items-center justify-center gap-1.5"
+                  >
+                    <span className="material-symbols-outlined text-sm">package_2</span>
+                    Track Container
+                  </a>
+                )}
+                {selectedShipment.tracking_url && (
+                  <a
+                    href={selectedShipment.tracking_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-2 border border-slate-200 dark:border-dark-border rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-dark-elevated transition-colors flex items-center justify-center gap-1.5"
+                  >
+                    <span className="material-symbols-outlined text-sm">open_in_new</span>
+                    Carrier Portal
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         )}
