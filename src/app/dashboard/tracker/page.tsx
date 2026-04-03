@@ -20,6 +20,18 @@ const ShipmentMap = dynamic(() => import("@/components/map/ShipmentMap"), {
 
 type ShipmentWithForwarder = Shipment & { forwarders?: { name: string } };
 
+// Extract vessel name from notes field (format: "Vessel: NAME")
+function getVesselName(s: ShipmentWithForwarder): string | null {
+  if (s.vessel_name) return s.vessel_name;
+  const match = s.notes?.match(/[Vv]essel:\s*(.+?)(?:\n|$)/);
+  return match?.[1]?.trim() || null;
+}
+
+// Get carrier name from forwarder join or forwarder_name field
+function getCarrierName(s: ShipmentWithForwarder): string {
+  return s.forwarders?.name || s.forwarder_name || "";
+}
+
 export default function TrackerPage() {
   const { t } = useTranslation();
   const { theme } = useTheme();
@@ -152,7 +164,7 @@ export default function TrackerPage() {
                     <StatusBadge status={s.status} />
                   </div>
                   <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
-                    {s.vessel_name || s.forwarders?.name || "Unknown Vessel"}
+                    {getVesselName(s) || s.forwarders?.name || "Unknown Vessel"}
                   </h3>
                   <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
                     <div className="flex flex-col">
@@ -173,20 +185,20 @@ export default function TrackerPage() {
                       </p>
                     </div>
                     <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-                      {s.vessel_name && (
+                      {getVesselName(s) && (
                         <a
-                          href={getVesselSearchUrl(s.vessel_name)}
+                          href={getVesselSearchUrl(getVesselName(s)!)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="p-1 rounded text-slate-400 dark:text-slate-500 hover:text-[#137fec] hover:bg-[#137fec]/5 transition-colors"
-                          title={`Track ${s.vessel_name} on MarineTraffic`}
+                          title={`Track ${getVesselName(s)} on MarineTraffic`}
                         >
                           <span className="material-symbols-outlined text-[16px]">sailing</span>
                         </a>
                       )}
-                      {s.booking_reference && s.forwarders?.name && getCarrierTrackingUrl(s.forwarders.name, s.booking_reference) && (
+                      {s.booking_reference && getCarrierName(s) && getCarrierTrackingUrl(getCarrierName(s), s.booking_reference) && (
                         <a
-                          href={getCarrierTrackingUrl(s.forwarders.name, s.booking_reference)!}
+                          href={getCarrierTrackingUrl(getCarrierName(s), s.booking_reference)!}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="p-1 rounded text-slate-400 dark:text-slate-500 hover:text-[#137fec] hover:bg-[#137fec]/5 transition-colors"
@@ -240,7 +252,7 @@ export default function TrackerPage() {
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-slate-900 dark:text-white">
-                      {selectedShipment.vessel_name ||
+                      {getVesselName(selectedShipment) ||
                         selectedShipment.booking_reference ||
                         selectedShipment.id.substring(0, 11).toUpperCase()}
                     </h4>
@@ -293,9 +305,9 @@ export default function TrackerPage() {
 
               {/* Tracking Links */}
               <div className="flex gap-2">
-                {selectedShipment.vessel_name && (
+                {getVesselName(selectedShipment) && (
                   <a
-                    href={getVesselSearchUrl(selectedShipment.vessel_name)}
+                    href={getVesselSearchUrl(getVesselName(selectedShipment)!)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 py-2 bg-[#137fec] rounded-lg text-xs font-semibold text-white hover:bg-[#137fec]/90 transition-colors flex items-center justify-center gap-1.5"
@@ -304,9 +316,9 @@ export default function TrackerPage() {
                     Live Vessel
                   </a>
                 )}
-                {selectedShipment.booking_reference && selectedShipment.forwarder_name && getCarrierTrackingUrl(selectedShipment.forwarder_name, selectedShipment.booking_reference) && (
+                {selectedShipment.booking_reference && getCarrierName(selectedShipment) && getCarrierTrackingUrl(getCarrierName(selectedShipment), selectedShipment.booking_reference) && (
                   <a
-                    href={getCarrierTrackingUrl(selectedShipment.forwarder_name, selectedShipment.booking_reference)!}
+                    href={getCarrierTrackingUrl(getCarrierName(selectedShipment), selectedShipment.booking_reference)!}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 py-2 border border-[#137fec] rounded-lg text-xs font-semibold text-[#137fec] hover:bg-[#137fec]/5 transition-colors flex items-center justify-center gap-1.5"
