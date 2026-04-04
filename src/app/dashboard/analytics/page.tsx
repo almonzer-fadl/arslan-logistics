@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "@/lib/i18n";
 import { getShipments, getQuotes } from "@/lib/supabase/api";
 import type { Shipment, Quote } from "@/lib/types";
 import { AnalyticsSkeleton } from "@/components/ui/Skeleton";
 
 export default function AnalyticsPage() {
+  const { t } = useTranslation();
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,17 +70,17 @@ export default function AnalyticsPage() {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Financial Analytics</h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">Freight spend analysis, carrier performance, and route insights.</p>
+        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{t.analytics.pageTitle}</h1>
+        <p className="text-slate-500 dark:text-slate-400 mt-1">{t.analytics.pageSubtitle}</p>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
-          { label: "Total Freight Spend", value: `$${totalSpend.toLocaleString("en-US", { minimumFractionDigits: 2 })}`, icon: "payments", color: "blue" },
-          { label: "Total Revenue", value: `$${totalRevenue.toLocaleString("en-US", { minimumFractionDigits: 2 })}`, icon: "account_balance", color: "green" },
-          { label: "Pending Quotes", value: pendingQuotes.toString(), icon: "pending", color: "amber" },
-          { label: "Quote Acceptance", value: totalQuotes > 0 ? `${Math.round((acceptedQuotes / totalQuotes) * 100)}%` : "0%", icon: "thumb_up", color: "purple" },
+          { label: t.analytics.totalFreightSpend, value: `$${totalSpend.toLocaleString("en-US", { minimumFractionDigits: 2 })}`, icon: "payments", color: "blue" },
+          { label: t.analytics.totalRevenue, value: `$${totalRevenue.toLocaleString("en-US", { minimumFractionDigits: 2 })}`, icon: "account_balance", color: "green" },
+          { label: t.analytics.pendingQuotes, value: pendingQuotes.toString(), icon: "pending", color: "amber" },
+          { label: t.analytics.quoteAcceptance, value: totalQuotes > 0 ? `${Math.round((acceptedQuotes / totalQuotes) * 100)}%` : "0%", icon: "thumb_up", color: "purple" },
         ].map((kpi) => (
           <div key={kpi.label} className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 dark:border-dark-border p-5">
             <div className="flex items-center gap-3 mb-3">
@@ -95,7 +97,7 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Carrier Spend Breakdown */}
         <div className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 dark:border-dark-border p-6">
-          <h3 className="font-bold text-slate-900 dark:text-white mb-4">Spend by Carrier</h3>
+          <h3 className="font-bold text-slate-900 dark:text-white mb-4">{t.analytics.spendByCarrier}</h3>
           {topCarriers.length > 0 ? (
             <div className="space-y-4">
               {topCarriers.map(([name, amount]) => (
@@ -111,13 +113,13 @@ export default function AnalyticsPage() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-slate-400 dark:text-slate-400 text-center py-8">No shipment data yet</p>
+            <p className="text-sm text-slate-400 dark:text-slate-400 text-center py-8">{t.analytics.noShipmentData}</p>
           )}
         </div>
 
         {/* Top Routes */}
         <div className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 dark:border-dark-border p-6">
-          <h3 className="font-bold text-slate-900 dark:text-white mb-4">Top Routes</h3>
+          <h3 className="font-bold text-slate-900 dark:text-white mb-4">{t.analytics.topRoutes}</h3>
           {topRoutes.length > 0 ? (
             <div className="space-y-3">
               {topRoutes.map(([route, count], i) => (
@@ -125,19 +127,19 @@ export default function AnalyticsPage() {
                   <span className="text-lg font-black text-[#137fec] w-8 text-center">#{i + 1}</span>
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-slate-900 dark:text-white">{route}</p>
-                    <p className="text-xs text-slate-400 dark:text-slate-400">{count} shipment{count > 1 ? "s" : ""}</p>
+                    <p className="text-xs text-slate-400 dark:text-slate-400">{count} {count > 1 ? t.analytics.shipments : t.analytics.shipment}</p>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-slate-400 dark:text-slate-400 text-center py-8">No route data yet</p>
+            <p className="text-sm text-slate-400 dark:text-slate-400 text-center py-8">{t.analytics.noRouteData}</p>
           )}
         </div>
 
         {/* Monthly Spend */}
         <div className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 dark:border-dark-border p-6">
-          <h3 className="font-bold text-slate-900 dark:text-white mb-4">Monthly Spend</h3>
+          <h3 className="font-bold text-slate-900 dark:text-white mb-4">{t.analytics.monthlySpend}</h3>
           {Object.keys(monthlySpend).length > 0 ? (
             <div className="space-y-3">
               {Object.entries(monthlySpend).map(([month, amount]) => (
@@ -148,20 +150,20 @@ export default function AnalyticsPage() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-slate-400 dark:text-slate-400 text-center py-8">No data yet</p>
+            <p className="text-sm text-slate-400 dark:text-slate-400 text-center py-8">{t.analytics.noDataYet}</p>
           )}
         </div>
 
         {/* Shipment Status Breakdown */}
         <div className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 dark:border-dark-border p-6">
-          <h3 className="font-bold text-slate-900 dark:text-white mb-4">Shipment Status</h3>
+          <h3 className="font-bold text-slate-900 dark:text-white mb-4">{t.analytics.shipmentStatus}</h3>
           <div className="space-y-3">
             {[
-              { label: "Delivered", count: deliveredCount, color: "bg-green-500" },
-              { label: "In Transit", count: inTransitCount, color: "bg-blue-500" },
-              { label: "Booked", count: shipments.filter((s) => s.status === "booked").length, color: "bg-slate-400" },
-              { label: "At Port", count: shipments.filter((s) => ["port_arrival", "customs"].includes(s.status)).length, color: "bg-amber-500" },
-              { label: "Cancelled", count: shipments.filter((s) => s.status === "cancelled").length, color: "bg-red-500" },
+              { label: t.analytics.delivered, count: deliveredCount, color: "bg-green-500" },
+              { label: t.analytics.inTransit, count: inTransitCount, color: "bg-blue-500" },
+              { label: t.analytics.booked, count: shipments.filter((s) => s.status === "booked").length, color: "bg-slate-400" },
+              { label: t.analytics.atPort, count: shipments.filter((s) => ["port_arrival", "customs"].includes(s.status)).length, color: "bg-amber-500" },
+              { label: t.analytics.cancelled, count: shipments.filter((s) => s.status === "cancelled").length, color: "bg-red-500" },
             ].filter((s) => s.count > 0).map((stat) => (
               <div key={stat.label} className="flex items-center gap-3">
                 <span className={`w-3 h-3 rounded-full ${stat.color}`} />
@@ -169,7 +171,7 @@ export default function AnalyticsPage() {
                 <span className="text-sm font-bold text-slate-900 dark:text-white">{stat.count}</span>
               </div>
             ))}
-            {shipments.length === 0 && <p className="text-sm text-slate-400 dark:text-slate-400 text-center py-4">No shipments yet</p>}
+            {shipments.length === 0 && <p className="text-sm text-slate-400 dark:text-slate-400 text-center py-4">{t.analytics.noShipmentsYet}</p>}
           </div>
         </div>
       </div>

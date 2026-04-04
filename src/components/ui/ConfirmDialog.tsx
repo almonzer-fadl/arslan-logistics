@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useTranslation } from "@/lib/i18n";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -18,13 +19,16 @@ export default function ConfirmDialog({
   isOpen,
   title,
   message,
-  confirmLabel = "Delete",
-  cancelLabel = "Cancel",
+  confirmLabel,
+  cancelLabel,
   danger = true,
   loading = false,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const { t } = useTranslation();
+  const resolvedConfirmLabel = confirmLabel || t.common.delete;
+  const resolvedCancelLabel = cancelLabel || t.common.cancel;
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) onCancel();
@@ -62,7 +66,7 @@ export default function ConfirmDialog({
             disabled={loading}
             className="px-4 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50"
           >
-            {cancelLabel}
+            {resolvedCancelLabel}
           </button>
           <button
             onClick={onConfirm}
@@ -74,7 +78,7 @@ export default function ConfirmDialog({
             }`}
           >
             {loading && <div className="animate-spin h-4 w-4 border-2 border-white/30 border-t-white rounded-full" />}
-            {confirmLabel}
+            {resolvedConfirmLabel}
           </button>
         </div>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
+import { useTranslation } from "@/lib/i18n";
 import { getShipments, getForwarders, upsertShipment } from "@/lib/supabase/api";
 import type { Shipment, Forwarder } from "@/lib/types";
 import StatusBadge from "@/components/ui/StatusBadge";
@@ -22,6 +23,7 @@ export default function ShipmentsPageWrapper() {
 }
 
 function ShipmentsPage() {
+  const { t } = useTranslation();
   const { canEdit } = useUser();
   const searchParams = useSearchParams();
   const [shipments, setShipments] = useState<(Shipment & { forwarders?: { name: string } })[]>([]);
@@ -145,18 +147,18 @@ function ShipmentsPage() {
       {/* Header */}
       <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Shipment Tracking & Management</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Real-time monitoring of your global sea freight operations.</p>
+          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{t.shipments.title}</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">{t.shipments.subtitle}</p>
         </div>
         <div className="flex gap-3">
           <button onClick={exportCSV} className="flex items-center gap-2 rounded-lg bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:hover:bg-dark-elevated">
             <span className="material-symbols-outlined text-xl">download</span>
-            Export Report
+            {t.shipments.exportReport}
           </button>
           {canEdit && (
             <button onClick={() => setShowNewModal(true)} className="flex items-center gap-2 rounded-lg bg-[#137fec] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#137fec]/90">
               <span className="material-symbols-outlined text-xl">add</span>
-              New Shipment
+              {t.shipments.newShipment}
             </button>
           )}
         </div>
@@ -172,12 +174,12 @@ function ShipmentsPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-dark-elevated border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm"
-                placeholder="Search by Container ID, Carrier, or Route..."
+                placeholder={t.shipments.searchShipments}
               />
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Filter By:</span>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{t.shipments.filterBy}</span>
             <div className="flex bg-slate-100 dark:bg-dark-elevated p-1 rounded-lg">
               {(["all", "shipped", "to_ship"] as const).map((f) => (
                 <button
@@ -185,7 +187,7 @@ function ShipmentsPage() {
                   onClick={() => setFilter(f)}
                   className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${filter === f ? "bg-white dark:bg-dark-card text-[#137fec] shadow-sm" : "text-slate-600 hover:text-slate-900"}`}
                 >
-                  {f === "all" ? "All" : f === "shipped" ? "Shipped" : "To Ship"}
+                  {f === "all" ? t.shipments.all : f === "shipped" ? t.shipments.shipped : t.shipments.toShip}
                 </button>
               ))}
             </div>
@@ -196,10 +198,10 @@ function ShipmentsPage() {
       {/* Stats Footer */}
       <div className="flex flex-wrap gap-6 mb-6">
         {[
-          { icon: "directions_boat", color: "blue", count: shipments.filter((s) => ["in_transit", "on_vessel"].includes(s.status)).length, label: "In Transit" },
-          { icon: "warehouse", color: "amber", count: shipments.filter((s) => ["port_arrival", "customs"].includes(s.status)).length, label: "At Port" },
-          { icon: "task_alt", color: "green", count: shipments.filter((s) => s.status === "delivered").length, label: "Delivered" },
-          { icon: "error", color: "red", count: shipments.filter((s) => s.status === "cancelled").length, label: "Cancelled" },
+          { icon: "directions_boat", color: "blue", count: shipments.filter((s) => ["in_transit", "on_vessel"].includes(s.status)).length, label: t.shipments.inTransit },
+          { icon: "warehouse", color: "amber", count: shipments.filter((s) => ["port_arrival", "customs"].includes(s.status)).length, label: t.shipments.atPort },
+          { icon: "task_alt", color: "green", count: shipments.filter((s) => s.status === "delivered").length, label: t.shipments.delivered },
+          { icon: "error", color: "red", count: shipments.filter((s) => s.status === "cancelled").length, label: t.shipments.cancelled },
         ].map((stat) => (
           <div key={stat.label} className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-lg bg-${stat.color}-50 flex items-center justify-center text-${stat.color}-600`}>
@@ -220,12 +222,12 @@ function ShipmentsPage() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50 dark:bg-dark-bg border-b border-slate-200 dark:border-dark-border">
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Container ID</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Carrier</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Route</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Status</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">ETA</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Cost</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">{t.shipments.containerId}</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">{t.shipments.carrier}</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">{t.shipments.route}</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">{t.common.status}</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">{t.shipments.eta}</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">{t.shipments.cost}</th>
                   <th className="px-6 py-4"></th>
                 </tr>
               </thead>
@@ -251,7 +253,7 @@ function ShipmentsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4"><StatusBadge status={s.status} /></td>
-                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">{s.arrival_date ? new Date(s.arrival_date).toLocaleDateString() : "TBD"}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">{s.arrival_date ? new Date(s.arrival_date).toLocaleDateString() : t.shipments.tbd}</td>
                     <td className="px-6 py-4 text-sm font-bold text-slate-900 dark:text-white">${s.cost_usd.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
                     <td className="px-6 py-4 text-right">
                       <button className="text-slate-400 hover:text-[#137fec] transition-colors">
@@ -265,38 +267,38 @@ function ShipmentsPage() {
           ) : (
             <div className="p-12 text-center">
               <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 text-6xl mb-4 block">inventory_2</span>
-              <h4 className="text-lg font-bold text-slate-900 mb-2">No Shipments Found</h4>
-              <p className="text-slate-500 dark:text-slate-400">Add a shipment or adjust your filters</p>
+              <h4 className="text-lg font-bold text-slate-900 mb-2">{t.shipments.emptyStateTitle}</h4>
+              <p className="text-slate-500 dark:text-slate-400">{t.shipments.emptyStateMessage}</p>
             </div>
           )}
         </div>
       </div>
 
       {/* New Shipment Modal */}
-      <Modal isOpen={showNewModal} onClose={() => setShowNewModal(false)} title="New Shipment" maxWidth="xl">
+      <Modal isOpen={showNewModal} onClose={() => setShowNewModal(false)} title={t.shipments.newShipment} maxWidth="xl">
         <form onSubmit={handleCreate} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Carrier *</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t.shipments.carrierLabel}</span>
               <select required value={newShipment.forwarder_id} onChange={(e) => setNewShipment({ ...newShipment, forwarder_id: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
-                <option value="">Select carrier...</option>
+                <option value="">{t.shipments.selectCarrier}</option>
                 {forwarders.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
               </select>
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Booking Reference</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t.shipments.bookingReference}</span>
               <input type="text" value={newShipment.booking_reference} onChange={(e) => setNewShipment({ ...newShipment, booking_reference: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., MEDU6102831" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Origin Port *</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t.shipments.originPortRequired}</span>
               <input type="text" required value={newShipment.origin_port} onChange={(e) => setNewShipment({ ...newShipment, origin_port: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., Shanghai (CNSHA)" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Destination Port *</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t.shipments.destinationPortRequired}</span>
               <input type="text" required value={newShipment.destination_port} onChange={(e) => setNewShipment({ ...newShipment, destination_port: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., Port Sudan (SDPZU)" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Container Type</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t.shipments.containerType}</span>
               <select value={newShipment.container_type} onChange={(e) => setNewShipment({ ...newShipment, container_type: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
                 <option>20ft Standard</option>
                 <option>40ft Standard</option>
@@ -305,39 +307,39 @@ function ShipmentsPage() {
               </select>
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Vessel Name</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t.shipments.vesselName}</span>
               <input type="text" value={newShipment.vessel_name} onChange={(e) => setNewShipment({ ...newShipment, vessel_name: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="e.g., MSC LORETO" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Departure Date</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t.shipments.departureDate}</span>
               <input type="date" value={newShipment.departure_date} onChange={(e) => setNewShipment({ ...newShipment, departure_date: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">ETA</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t.shipments.eta}</span>
               <input type="date" value={newShipment.arrival_date} onChange={(e) => setNewShipment({ ...newShipment, arrival_date: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Cost (USD) *</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t.shipments.costUsd}</span>
               <input type="number" required step="0.01" value={newShipment.cost_usd} onChange={(e) => setNewShipment({ ...newShipment, cost_usd: parseFloat(e.target.value) || 0 })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" />
             </label>
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Status</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t.common.status}</span>
               <select value={newShipment.status} onChange={(e) => setNewShipment({ ...newShipment, status: e.target.value as Shipment["status"] })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]">
-                <option value="booked">Booked</option>
-                <option value="in_transit">In Transit</option>
-                <option value="on_vessel">On Vessel</option>
-                <option value="port_arrival">Port Arrival</option>
-                <option value="delivered">Delivered</option>
+                <option value="booked">{t.shipments.booked}</option>
+                <option value="in_transit">{t.shipments.inTransit}</option>
+                <option value="on_vessel">{t.shipments.onVessel}</option>
+                <option value="port_arrival">{t.shipments.portArrival}</option>
+                <option value="delivered">{t.shipments.delivered}</option>
               </select>
             </label>
           </div>
           <label className="flex flex-col gap-2">
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Cargo Description *</span>
-            <textarea required rows={3} value={newShipment.cargo_description} onChange={(e) => setNewShipment({ ...newShipment, cargo_description: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder="Describe the cargo..." />
+            <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t.shipments.cargoDescriptionRequired}</span>
+            <textarea required rows={3} value={newShipment.cargo_description} onChange={(e) => setNewShipment({ ...newShipment, cargo_description: e.target.value })} className="px-3 py-2 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-[#137fec] focus:border-[#137fec]" placeholder={t.shipments.cargoPlaceholder} />
           </label>
           <div className="flex gap-3 justify-end pt-4 border-t border-slate-200 dark:border-dark-border">
-            <button type="button" onClick={() => setShowNewModal(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-100 dark:hover:bg-dark-elevated rounded-lg font-semibold">Cancel</button>
-            <button type="submit" className="px-4 py-2 bg-[#137fec] text-white rounded-lg font-semibold hover:bg-[#137fec]/90">Create Shipment</button>
+            <button type="button" onClick={() => setShowNewModal(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-100 dark:hover:bg-dark-elevated rounded-lg font-semibold">{t.common.cancel}</button>
+            <button type="submit" className="px-4 py-2 bg-[#137fec] text-white rounded-lg font-semibold hover:bg-[#137fec]/90">{t.shipments.createShipment}</button>
           </div>
         </form>
       </Modal>

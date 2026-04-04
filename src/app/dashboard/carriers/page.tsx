@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "@/lib/i18n";
 import { getForwarders, upsertForwarder, updateForwarder, deleteForwarder } from "@/lib/supabase/api";
 import type { Forwarder } from "@/lib/types";
 import StatusBadge from "@/components/ui/StatusBadge";
@@ -16,6 +17,7 @@ import { useUser } from "@/contexts/UserContext";
 import { CarriersSkeleton } from "@/components/ui/Skeleton";
 
 export default function CarriersPage() {
+  const { t } = useTranslation();
   const { canEdit } = useUser();
   const [carriers, setCarriers] = useState<Forwarder[]>([]);
   const [loading, setLoading] = useState(true);
@@ -138,8 +140,8 @@ export default function CarriersPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Carrier Directory</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Manage carrier portals, credentials, and account representatives.</p>
+          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{t.carriers.directoryTitle}</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">{t.carriers.directorySubtitle}</p>
         </div>
         {canEdit && (
           <button
@@ -147,7 +149,7 @@ export default function CarriersPage() {
             className="bg-[#137fec] text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-[#137fec]/90 transition-all shadow-lg shadow-[#137fec]/20"
           >
             <span className="material-symbols-outlined">add</span>
-            Add New Carrier
+            {t.carriers.addNewCarrier}
           </button>
         )}
       </div>
@@ -155,10 +157,10 @@ export default function CarriersPage() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {[
-          { label: "Total Carriers", count: stats.total, icon: "corporate_fare", color: "bg-slate-50 text-slate-600 dark:text-slate-400 dark:text-slate-400" },
-          { label: "Authenticated", count: stats.active, icon: "verified", color: "bg-emerald-50 text-emerald-600" },
-          { label: "Pending Setup", count: stats.pending, icon: "hourglass_top", color: "bg-amber-50 text-amber-600" },
-          { label: "Sudan Ready", count: stats.sudan, icon: "flag", color: "bg-blue-50 text-blue-600" },
+          { label: t.carriers.totalCarriers, count: stats.total, icon: "corporate_fare", color: "bg-slate-50 text-slate-600 dark:text-slate-400 dark:text-slate-400" },
+          { label: t.carriers.authenticated, count: stats.active, icon: "verified", color: "bg-emerald-50 text-emerald-600" },
+          { label: t.carriers.pendingSetup, count: stats.pending, icon: "hourglass_top", color: "bg-amber-50 text-amber-600" },
+          { label: t.carriers.sudanReady, count: stats.sudan, icon: "flag", color: "bg-blue-50 text-blue-600" },
         ].map((s) => (
           <div key={s.label} className="bg-white dark:bg-dark-card rounded-xl border border-slate-200 p-4 flex items-center gap-3 shadow-sm">
             <div className={`w-11 h-11 rounded-lg flex items-center justify-center ${s.color}`}>
@@ -182,7 +184,7 @@ export default function CarriersPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 rounded-lg focus:ring-[#137fec] focus:border-[#137fec] text-sm"
-              placeholder="Search by name, website, or coverage area..."
+              placeholder={t.carriers.searchPlaceholder}
             />
           </div>
 
@@ -210,11 +212,11 @@ export default function CarriersPage() {
               onChange={(e) => setCategoryFilter(e.target.value as typeof categoryFilter)}
               className="text-xs font-medium px-3 py-2 bg-slate-50 dark:bg-dark-bg border border-slate-200 rounded-lg text-slate-600 focus:ring-[#137fec] focus:border-[#137fec]"
             >
-              <option value="all">All Categories</option>
-              <option value="global">Global</option>
-              <option value="regional">Regional</option>
-              <option value="africa">Africa</option>
-              <option value="roro">RORO</option>
+              <option value="all">{t.carriers.allCategories}</option>
+              <option value="global">{t.carriers.global}</option>
+              <option value="regional">{t.carriers.regional}</option>
+              <option value="africa">{t.carriers.africa}</option>
+              <option value="roro">{t.carriers.roro}</option>
             </select>
 
             {/* View Toggle */}
@@ -328,12 +330,12 @@ export default function CarriersPage() {
         <div className="bg-white dark:bg-dark-card p-16 rounded-xl border border-slate-200 text-center shadow-sm">
           <span className="material-symbols-outlined text-slate-200 dark:text-slate-600 text-7xl mb-4 block">corporate_fare</span>
           <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
-            {searchQuery || filter !== "all" || categoryFilter !== "all" ? "No carriers match your filters" : "No carriers yet"}
+            {searchQuery || filter !== "all" || categoryFilter !== "all" ? t.carriers.noCarriersMatch : t.carriers.noCarriersYet}
           </h4>
           <p className="text-slate-500 dark:text-slate-400 mb-6">
             {searchQuery || filter !== "all" || categoryFilter !== "all"
-              ? "Try adjusting your search or filters"
-              : "Add your first carrier to start managing your logistics network"}
+              ? t.carriers.tryAdjusting
+              : t.carriers.addFirstCarrier}
           </p>
           {!searchQuery && filter === "all" && categoryFilter === "all" && (
             <button
@@ -341,7 +343,7 @@ export default function CarriersPage() {
               className="inline-flex items-center gap-2 bg-[#137fec] text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-[#137fec]/90 transition-colors"
             >
               <span className="material-symbols-outlined">add</span>
-              Add Carrier
+              {t.carriers.addCarrier}
             </button>
           )}
         </div>
@@ -368,9 +370,9 @@ export default function CarriersPage() {
 
       <ConfirmDialog
         isOpen={!!deleteTarget}
-        title="Delete Carrier"
-        message="This will permanently delete this carrier and all associated credentials. This action cannot be undone."
-        confirmLabel="Delete Carrier"
+        title={t.carriers.deleteConfirmTitle}
+        message={t.carriers.deleteConfirmMessageFull}
+        confirmLabel={t.carriers.deleteCarrier}
         loading={deleting}
         onConfirm={handleDeleteConfirm}
         onCancel={() => setDeleteTarget(null)}

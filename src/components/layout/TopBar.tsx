@@ -59,7 +59,7 @@ export default function TopBar() {
               <h1 className="text-slate-900 dark:text-white font-bold text-sm leading-tight">
                 Arslan Integrated
               </h1>
-              <p className="text-slate-400 dark:text-slate-400 text-[11px]">Solutions Portal</p>
+              <p className="text-slate-400 dark:text-slate-400 text-[11px]">{t.common.solutionsPortal}</p>
             </div>
           </Link>
 
@@ -95,7 +95,7 @@ export default function TopBar() {
               </span>
               <input
                 className="pl-9 pr-4 py-2 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-lg text-sm text-slate-900 dark:text-white focus:ring-[#137fec] focus:border-[#137fec] w-56 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
-                placeholder="Search tracking #..."
+                placeholder={t.common.searchTracking}
                 type="text"
               />
             </div>
@@ -104,7 +104,7 @@ export default function TopBar() {
             <button
               onClick={toggleTheme}
               className="p-2 text-slate-400 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors"
-              aria-label="Toggle dark mode"
+              aria-label={t.common.toggleDarkMode}
             >
               <span className="material-symbols-outlined text-[22px]">
                 {theme === "dark" ? "light_mode" : "dark_mode"}

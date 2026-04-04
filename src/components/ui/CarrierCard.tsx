@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "@/lib/i18n";
 import StatusBadge from "./StatusBadge";
 import type { Forwarder } from "@/lib/types";
 import { getMonogram, getInitials, getCategoryIcon, getCategoryLabel } from "@/lib/carrier-utils";
@@ -12,6 +13,7 @@ interface CarrierCardProps {
 }
 
 export default function CarrierCard({ carrier, onClick, onEditClick }: CarrierCardProps) {
+  const { t } = useTranslation();
   const mono = getMonogram(carrier.name);
   const linked = ["active", "approved"].includes(carrier.status);
 
@@ -74,7 +76,7 @@ export default function CarrierCard({ carrier, onClick, onEditClick }: CarrierCa
             {hasCreds ? (
               <>
                 <span className="material-symbols-outlined text-emerald-500 text-[16px]">lock</span>
-                <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold uppercase">Credentials Stored</span>
+                <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold uppercase">{t.carriers.credentialsStored}</span>
               </>
             ) : carrier.website ? (
               <a
@@ -85,12 +87,12 @@ export default function CarrierCard({ carrier, onClick, onEditClick }: CarrierCa
                 onClick={(e) => e.stopPropagation()}
               >
                 <span className="material-symbols-outlined text-[#137fec] text-[16px]">language</span>
-                <span className="text-[10px] text-[#137fec] font-semibold uppercase">Visit Website</span>
+                <span className="text-[10px] text-[#137fec] font-semibold uppercase">{t.carriers.visitWebsite}</span>
               </a>
             ) : (
               <>
                 <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 text-[16px]">lock_open</span>
-                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold uppercase">No Credentials</span>
+                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold uppercase">{t.carriers.noCredentials}</span>
               </>
             )}
           </div>

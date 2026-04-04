@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "@/lib/i18n";
 import Link from "next/link";
 import StatusBadge from "./StatusBadge";
 
@@ -25,6 +26,8 @@ export default function ShipmentRow({
   eta,
   cost,
 }: ShipmentRowProps) {
+  const { t } = useTranslation();
+
   return (
     <tr className="hover:bg-slate-50 dark:hover:bg-dark-elevated transition-colors cursor-pointer border-l-4 border-l-transparent hover:border-l-[#137fec]">
       <td className="px-6 py-4">
@@ -47,7 +50,7 @@ export default function ShipmentRow({
       <td className="px-6 py-4">
         <StatusBadge status={status} variant="shipment" />
       </td>
-      <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{eta || "TBD"}</td>
+      <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{eta || t.shipments.tbd}</td>
       <td className="px-6 py-4 text-sm font-bold text-slate-900 dark:text-white">
         ${cost.toLocaleString("en-US", { minimumFractionDigits: 2 })}
       </td>
