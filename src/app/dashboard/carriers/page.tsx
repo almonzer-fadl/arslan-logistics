@@ -15,6 +15,7 @@ import { decryptCredentials } from "@/lib/encryption";
 import { getMonogram, getInitials, getCategoryIcon, getCategoryLabel } from "@/lib/carrier-utils";
 import { useUser } from "@/contexts/UserContext";
 import { CarriersSkeleton } from "@/components/ui/Skeleton";
+import PortalSplitView from "@/components/carriers/PortalSplitView";
 
 export default function CarriersPage() {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ export default function CarriersPage() {
   const [carriers, setCarriers] = useState<Forwarder[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [showPortalView, setShowPortalView] = useState(false);
   const [editingCarrier, setEditingCarrier] = useState<Forwarder | null>(null);
   const [editUsername, setEditUsername] = useState("");
   const [editPassword, setEditPassword] = useState("");
@@ -144,13 +146,22 @@ export default function CarriersPage() {
           <p className="text-slate-500 dark:text-slate-400 mt-1">{t.carriers.directorySubtitle}</p>
         </div>
         {canEdit && (
-          <button
-            onClick={() => setIsAddModalOpen(true)}
-            className="bg-[#137fec] text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-[#137fec]/90 transition-all shadow-lg shadow-[#137fec]/20"
-          >
-            <span className="material-symbols-outlined">add</span>
-            {t.carriers.addNewCarrier}
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowPortalView(true)}
+              className="bg-purple-600 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-purple-700 transition-all shadow-lg shadow-purple-600/20"
+            >
+              <span className="material-symbols-outlined">tab_group</span>
+              Portal View
+            </button>
+            <button
+              onClick={() => setIsAddModalOpen(true)}
+              className="bg-[#137fec] text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-[#137fec]/90 transition-all shadow-lg shadow-[#137fec]/20"
+            >
+              <span className="material-symbols-outlined">add</span>
+              {t.carriers.addNewCarrier}
+            </button>
+          </div>
         )}
       </div>
 
@@ -377,6 +388,9 @@ export default function CarriersPage() {
         onConfirm={handleDeleteConfirm}
         onCancel={() => setDeleteTarget(null)}
       />
+
+      {/* Portal Split View */}
+      {showPortalView && <PortalSplitView onClose={() => setShowPortalView(false)} />}
     </div>
   );
 }
