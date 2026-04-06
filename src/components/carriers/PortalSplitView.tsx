@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { X, Maximize2, Minimize2, Grid, Columns } from 'lucide-react';
 
 interface Portal {
   id: string;
@@ -89,14 +88,14 @@ export default function PortalSplitView({ onClose }: PortalSplitViewProps) {
               className={`p-2 rounded ${layout === '2x1' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
               title="2 Portals"
             >
-              <Columns className="w-4 h-4" />
+              <span className="material-symbols-outlined text-base">view_column</span>
             </button>
             <button
               onClick={() => setLayout('2x2')}
               className={`p-2 rounded ${layout === '2x2' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
               title="4 Portals"
             >
-              <Grid className="w-4 h-4" />
+              <span className="material-symbols-outlined text-base">grid_view</span>
             </button>
           </div>
 
@@ -119,7 +118,7 @@ export default function PortalSplitView({ onClose }: PortalSplitViewProps) {
           onClick={onClose}
           className="text-gray-400 hover:text-white"
         >
-          <X className="w-6 h-6" />
+          <span className="material-symbols-outlined text-2xl">close</span>
         </button>
       </div>
 
@@ -138,18 +137,18 @@ export default function PortalSplitView({ onClose }: PortalSplitViewProps) {
                     onClick={() => toggleFullscreen(index)}
                     className="p-2 bg-gray-700 hover:bg-gray-600 rounded text-white"
                   >
-                    <Minimize2 className="w-4 h-4" />
+                    <span className="material-symbols-outlined text-base">fullscreen_exit</span>
                   </button>
                   <button
                     onClick={() => removePortal(index)}
                     className="p-2 bg-red-600 hover:bg-red-700 rounded text-white"
                   >
-                    <X className="w-4 h-4" />
+                    <span className="material-symbols-outlined text-base">close</span>
                   </button>
                 </div>
                 {portal && (
                   <iframe
-                    ref={el => iframeRefs.current[index] = el}
+                    ref={el => { iframeRefs.current[index] = el; }}
                     src={portal.url}
                     className="w-full h-full rounded"
                     title={portal.carrierName}
@@ -180,7 +179,7 @@ export default function PortalSplitView({ onClose }: PortalSplitViewProps) {
                         }}
                         className="p-1 bg-gray-700 hover:bg-gray-600 rounded text-white"
                       >
-                        <Maximize2 className="w-3 h-3" />
+                        <span className="material-symbols-outlined text-xs">fullscreen</span>
                       </button>
                       <button
                         onClick={(e) => {
@@ -189,14 +188,14 @@ export default function PortalSplitView({ onClose }: PortalSplitViewProps) {
                         }}
                         className="p-1 bg-red-600 hover:bg-red-700 rounded text-white"
                       >
-                        <X className="w-3 h-3" />
+                        <span className="material-symbols-outlined text-xs">close</span>
                       </button>
                     </div>
                   </div>
 
                   {/* iframe */}
                   <iframe
-                    ref={el => iframeRefs.current[index] = el}
+                    ref={el => { iframeRefs.current[index] = el; }}
                     src={portal.url}
                     className="w-full h-full rounded"
                     title={portal.carrierName}
