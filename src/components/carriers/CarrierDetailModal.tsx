@@ -12,9 +12,10 @@ interface CarrierDetailModalProps {
   onClose: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
+  onOpenPortal?: (name: string, url: string) => void;
 }
 
-export default function CarrierDetailModal({ carrier, onClose, onEdit, onDelete }: CarrierDetailModalProps) {
+export default function CarrierDetailModal({ carrier, onClose, onEdit, onDelete, onOpenPortal }: CarrierDetailModalProps) {
   const [showCredentials, setShowCredentials] = useState(false);
   const [showPw, setShowPw] = useState(false);
 
@@ -65,10 +66,24 @@ export default function CarrierDetailModal({ carrier, onClose, onEdit, onDelete 
             </a>
           )}
           {carrier.dashboard_url && (
-            <a href={carrier.dashboard_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#137fec]/10 text-[#137fec] rounded-lg text-sm font-bold hover:bg-[#137fec]/20 transition-colors">
-              <span className="material-symbols-outlined text-[16px]">open_in_new</span>
-              Open Portal
-            </a>
+            <>
+              <a href={carrier.dashboard_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#137fec]/10 text-[#137fec] rounded-lg text-sm font-bold hover:bg-[#137fec]/20 transition-colors">
+                <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+                Open Portal
+              </a>
+              {onOpenPortal && (
+                <button
+                  onClick={() => {
+                    onOpenPortal(carrier.name, carrier.dashboard_url!);
+                    onClose();
+                  }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-bold hover:bg-purple-700 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-[16px]">tab_group</span>
+                  Split View
+                </button>
+              )}
+            </>
           )}
           {carrier.contact_form_url && (
             <a href={carrier.contact_form_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-4 py-2 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg text-sm font-semibold hover:bg-green-100 transition-colors">

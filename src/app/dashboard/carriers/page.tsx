@@ -23,7 +23,7 @@ export default function CarriersPage() {
   const [carriers, setCarriers] = useState<Forwarder[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [showPortalView, setShowPortalView] = useState(false);
+  const [portalViewCarrier, setPortalViewCarrier] = useState<{ name: string; url: string; } | null>(null);
   const [editingCarrier, setEditingCarrier] = useState<Forwarder | null>(null);
   const [editUsername, setEditUsername] = useState("");
   const [editPassword, setEditPassword] = useState("");
@@ -148,7 +148,7 @@ export default function CarriersPage() {
         {canEdit && (
           <div className="flex gap-3">
             <button
-              onClick={() => setShowPortalView(true)}
+              onClick={() => setPortalViewCarrier({}  as { name: string; url: string; })}
               className="bg-purple-600 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-purple-700 transition-all shadow-lg shadow-purple-600/20"
             >
               <span className="material-symbols-outlined">tab_group</span>
@@ -366,6 +366,7 @@ export default function CarriersPage() {
         onClose={() => setDetailCarrier(null)}
         onEdit={canEdit ? () => { const c = detailCarrier; setDetailCarrier(null); if (c) handleEditClick(c); } : undefined}
         onDelete={canEdit ? () => { if (detailCarrier) handleDeleteRequest(detailCarrier.id); } : undefined}
+        onOpenPortal={(name, url) => setPortalViewCarrier({ name, url })}
       />
 
       {/* Add/Edit Modals */}
@@ -390,7 +391,12 @@ export default function CarriersPage() {
       />
 
       {/* Portal Split View */}
-      {showPortalView && <PortalSplitView onClose={() => setShowPortalView(false)} />}
+      {portalViewCarrier && (
+        <PortalSplitView
+          onClose={() => setPortalViewCarrier(null)}
+          initialCarrier={portalViewCarrier.name ? portalViewCarrier : undefined}
+        />
+      )}
     </div>
   );
 }
