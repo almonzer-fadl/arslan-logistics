@@ -148,7 +148,7 @@ export default function CarriersPage() {
         {canEdit && (
           <div className="flex gap-3">
             <button
-              onClick={() => setPortalViewCarrier({}  as { name: string; url: string; })}
+              onClick={() => setPortalViewCarrier({ name: '', url: '' })}
               className="bg-purple-600 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-purple-700 transition-all shadow-lg shadow-purple-600/20"
             >
               <span className="material-symbols-outlined">tab_group</span>
@@ -394,7 +394,7 @@ export default function CarriersPage() {
       {portalViewCarrier && (
         <PortalSplitView
           onClose={() => setPortalViewCarrier(null)}
-          initialCarrier={portalViewCarrier.name ? portalViewCarrier : undefined}
+          initialCarrier={portalViewCarrier.name && portalViewCarrier.url ? portalViewCarrier : undefined}
         />
       )}
     </div>

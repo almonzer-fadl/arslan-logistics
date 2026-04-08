@@ -16,27 +16,23 @@ interface PortalSplitViewProps {
 
 export default function PortalSplitView({ onClose, initialCarrier }: PortalSplitViewProps) {
   const [layout, setLayout] = useState<'2x1' | '2x2'>('2x2');
-  const [portals, setPortals] = useState<Portal[]>([]);
-  const [initialized, setInitialized] = useState(false);
+  const [portals, setPortals] = useState<Portal[]>(() => {
+    // Initialize with carrier if provided
+    if (initialCarrier?.name && initialCarrier?.url) {
+      return [{
+        id: `${initialCarrier.name}-${Date.now()}`,
+        carrierName: initialCarrier.name,
+        url: initialCarrier.url,
+        slot: 0
+      }];
+    }
+    return [];
+  });
   const [focusedSlot, setFocusedSlot] = useState<number>(0);
   const [fullscreenSlot, setFullscreenSlot] = useState<number | null>(null);
   const iframeRefs = useRef<(HTMLIFrameElement | null)[]>([]);
 
   const maxSlots = layout === '2x2' ? 4 : 2;
-
-  // Initialize with carrier if provided
-  useEffect(() => {
-    if (initialCarrier && !initialized) {
-      const newPortal: Portal = {
-        id: `${initialCarrier.name}-${Date.now()}`,
-        carrierName: initialCarrier.name,
-        url: initialCarrier.url,
-        slot: 0
-      };
-      setPortals([newPortal]);
-      setInitialized(true);
-    }
-  }, [initialCarrier, initialized]);
 
   // Keyboard shortcuts
   useEffect(() => {
