@@ -19,10 +19,12 @@ export default function PortalSplitView({ onClose, initialCarrier }: PortalSplit
   const [portals, setPortals] = useState<Portal[]>(() => {
     // Initialize with carrier if provided
     if (initialCarrier?.name && initialCarrier?.url) {
+      // Use proxy to bypass X-Frame-Options
+      const proxyUrl = `/api/proxy?url=${encodeURIComponent(initialCarrier.url)}`;
       return [{
         id: `${initialCarrier.name}-${Date.now()}`,
         carrierName: initialCarrier.name,
-        url: initialCarrier.url,
+        url: proxyUrl,
         slot: 0
       }];
     }
@@ -57,10 +59,13 @@ export default function PortalSplitView({ onClose, initialCarrier }: PortalSplit
   const addPortal = (carrierName: string, url: string) => {
     if (portals.length >= maxSlots) return;
     
+    // Use proxy to bypass X-Frame-Options
+    const proxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
+    
     const newPortal: Portal = {
       id: `${carrierName}-${Date.now()}`,
       carrierName,
-      url,
+      url: proxyUrl,
       slot: portals.length
     };
     
