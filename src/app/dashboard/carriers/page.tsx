@@ -16,6 +16,7 @@ import { getMonogram, getInitials, getCategoryIcon, getCategoryLabel } from "@/l
 import { useUser } from "@/contexts/UserContext";
 import { CarriersSkeleton } from "@/components/ui/Skeleton";
 import PortalSplitView from "@/components/carriers/PortalSplitView";
+import PortalPopupView from "@/components/carriers/PortalPopupView";
 
 export default function CarriersPage() {
   const { t } = useTranslation();
@@ -24,6 +25,7 @@ export default function CarriersPage() {
   const [loading, setLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [portalViewCarrier, setPortalViewCarrier] = useState<{ name: string; url: string; } | null>(null);
+  const [portalViewMode, setPortalViewMode] = useState<'iframe' | 'popup'>('popup'); // Default to popup
   const [editingCarrier, setEditingCarrier] = useState<Forwarder | null>(null);
   const [editUsername, setEditUsername] = useState("");
   const [editPassword, setEditPassword] = useState("");
@@ -390,9 +392,15 @@ export default function CarriersPage() {
         onCancel={() => setDeleteTarget(null)}
       />
 
-      {/* Portal Split View */}
-      {portalViewCarrier && (
+      {/* Portal Views */}
+      {portalViewCarrier && portalViewMode === 'iframe' && (
         <PortalSplitView
+          onClose={() => setPortalViewCarrier(null)}
+          initialCarrier={portalViewCarrier.name && portalViewCarrier.url ? portalViewCarrier : undefined}
+        />
+      )}
+      {portalViewCarrier && portalViewMode === 'popup' && (
+        <PortalPopupView
           onClose={() => setPortalViewCarrier(null)}
           initialCarrier={portalViewCarrier.name && portalViewCarrier.url ? portalViewCarrier : undefined}
         />
