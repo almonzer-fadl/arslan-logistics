@@ -6,7 +6,37 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "electron:dev": "NODE_ENV=development electron electron/main.js",
+    "electron:build": "next build && next export && electron-builder",
+    "electron:build:mac": "next build && next export && electron-builder --mac",
+    "electron:build:win": "next build && next export && electron-builder --win",
+    "electron:build:linux": "next build && next export && electron-builder --linux",
+    "electron:build:all": "next build && next export && electron-builder --mac --win --linux"
+  },
+  "main": "electron/main.js",
+  "build": {
+    "appId": "com.arslan.logistics",
+    "productName": "Arslan Logistics",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*",
+      "electron/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.business",
+      "icon": "public/icon.icns"
+    },
+    "win": {
+      "icon": "public/icon.ico",
+      "target": ["nsis"]
+    },
+    "linux": {
+      "icon": "public/icon.png",
+      "target": ["AppImage", "deb"]
+    }
   },
   "dependencies": {
     "@deck.gl/core": "^9.2.10",
@@ -28,6 +58,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "electron": "^33.3.0",
+    "electron-builder": "^25.1.8",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
