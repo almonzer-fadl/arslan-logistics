@@ -58,9 +58,10 @@ export default function PortalPopupView({ onClose, initialCarrier }: PortalPopup
         if (popup.window && !popup.window.closed) {
           return true;
         }
+        console.log('Window closed, removing from list:', popup.carrierName);
         return false;
       }));
-    }, 1000);
+    }, 2000); // Check every 2 seconds instead of 1
 
     return () => {
       if (checkInterval.current) clearInterval(checkInterval.current);
@@ -82,24 +83,32 @@ export default function PortalPopupView({ onClose, initialCarrier }: PortalPopup
     const slot = popups.length;
     const position = getWindowPosition(slot);
     
-    const features = `width=${position.width},height=${position.height},left=${position.left},top=${position.top},menubar=no,toolbar=no,location=yes,status=yes,scrollbars=yes,resizable=yes`;
+    const features = `width=${position.width},height=${position.height},left=${position.left},top=${position.top},menubar=no,toolbar=yes,location=yes,status=yes,scrollbars=yes,resizable=yes`;
     
     const newWindow = window.open(url, `_blank_${carrierName}_${Date.now()}`, features);
     
-    if (!newWindow) {
-      alert('Popup blocked! Please allow popups for this site.');
+    if (!newWindow || newWindow.closed) {
+      alert('Popup blocked! Please:\n1. Click the popup blocker icon in your address bar\n2. Allow popups for this site\n3. Try again');
       return;
     }
 
-    const newPopup: PopupWindow = {
-      id: `${carrierName}-${Date.now()}`,
-      carrierName,
-      url,
-      window: newWindow,
-      slot
-    };
+    // Give window time to initialize before checking if closed
+    setTimeout(() => {
+      if (newWindow.closed) {
+        console.warn('Window closed immediately after opening:', carrierName);
+        return;
+      }
 
-    setPopups(prev => [...prev, newPopup]);
+      const newPopup: PopupWindow = {
+        id: `${carrierName}-${Date.now()}`,
+        carrierName,
+        url,
+        window: newWindow,
+        slot
+      };
+
+      setPopups(prev => [...prev, newPopup]);
+    }, 100);
   };
 
   const closePopup = (id: string) => {
