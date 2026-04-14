@@ -17,6 +17,7 @@ import { useUser } from "@/contexts/UserContext";
 import { CarriersSkeleton } from "@/components/ui/Skeleton";
 import PortalSplitView from "@/components/carriers/PortalSplitView";
 import PortalPopupView from "@/components/carriers/PortalPopupView";
+import PortalWebviewSplitView from "@/components/carriers/PortalWebviewSplitView";
 
 export default function CarriersPage() {
   const { t } = useTranslation();
@@ -393,18 +394,35 @@ export default function CarriersPage() {
       />
 
       {/* Portal Views */}
-      {portalViewCarrier && portalViewMode === 'iframe' && (
-        <PortalSplitView
-          onClose={() => setPortalViewCarrier(null)}
-          initialCarrier={portalViewCarrier.name && portalViewCarrier.url ? portalViewCarrier : undefined}
-        />
-      )}
-      {portalViewCarrier && portalViewMode === 'popup' && (
-        <PortalPopupView
-          onClose={() => setPortalViewCarrier(null)}
-          initialCarrier={portalViewCarrier.name && portalViewCarrier.url ? portalViewCarrier : undefined}
-        />
-      )}
+      {portalViewCarrier && (() => {
+        const isElectron = typeof window !== 'undefined' && window.electron?.isElectron;
+        const carrier = portalViewCarrier.name && portalViewCarrier.url ? portalViewCarrier : undefined;
+
+        if (isElectron) {
+          return (
+            <PortalWebviewSplitView
+              onClose={() => setPortalViewCarrier(null)}
+              initialCarrier={carrier}
+            />
+          );
+        }
+
+        if (portalViewMode === 'iframe') {
+          return (
+            <PortalSplitView
+              onClose={() => setPortalViewCarrier(null)}
+              initialCarrier={carrier}
+            />
+          );
+        }
+
+        return (
+          <PortalPopupView
+            onClose={() => setPortalViewCarrier(null)}
+            initialCarrier={carrier}
+          />
+        );
+      })()}
     </div>
   );
 }
